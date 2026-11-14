@@ -40,7 +40,8 @@ faster model.
   of them (1,632 ms median).
 - **What we accept:** about 20× Haiku's cost per call. That is $0.35 instead of $0.02 per 100 calls, or
   about 2 cents more per empty-court campaign: small next to messaging cost and a $120 booking.
-- **What we'd change next:** fix the 400-token limit and rerun. Haiku already scores 5.0 on every
+- **What we'd change next:** fix the 400-token limit (done Nov 14, `rally/llm.py` now allows 2,000) and
+  rerun the benchmark. Haiku already scores 5.0 on every
   reply-reading task and is fastest there, so if its drafts pass after the fix it becomes the pick: faster
   and about 20× cheaper. gpt-6-luna stays the tested fallback; the code switches provider by model name.
 - Safety does not depend on the model: Python, not the model, makes every state change, and an

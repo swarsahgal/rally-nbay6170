@@ -161,6 +161,8 @@ def test_live_request_shape_with_mock_transport():
     assert record["ok"] == 1 and record["input_tokens"] == 321
     assert sent[0]["output_config"]["format"]["type"] == "json_schema"
     assert "<player_reply>" in sent[0]["messages"][0]["content"]   # reply is delimited as untrusted data
+    # Regression for golden-case failure F3: at 400 tokens Haiku's thinking cut invite drafts off.
+    assert sent[0]["max_tokens"] >= 2000
 
 
 def test_tier_benchmark_pipeline_runs_in_mock_mode():
@@ -210,3 +212,4 @@ def test_openai_request_shape_with_mock_transport():
                                          load_policy().excerpt("escalation"), STOP_WORDS)
     assert interp.intent == ReplyIntent.TENTATIVE and record["ok"] == 1 and record["input_tokens"] == 410
     assert sent[0]["text"]["format"]["type"] == "json_schema" and sent[0]["text"]["format"]["strict"] is True
+    assert sent[0]["max_output_tokens"] >= 2000   # reasoning tokens share this budget

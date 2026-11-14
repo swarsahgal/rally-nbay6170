@@ -57,10 +57,11 @@ the manager dashboard used in the demo video.
 1. **Empty-court outreach does not move on to approved backups** (golden case G16). After two yes and
    two no, Rally escalates to the manager instead of inviting the remaining approved players.
    Safe, but a court can stay unsold.
-2. **Live invite drafts are often cut off** (G10, G14; `scripts/golden/check_draft_tokens.py`).
-   `claude-haiku-5-5` spends part of the 400-token output limit in `rally/llm.py` `_structured()` on
-   thinking, so 14 of 21 live drafts were truncated and Rally fell back to its fixed template (a safe
-   fallback). A 2,000-token limit fixed it in a separate check.
+2. **Live invite drafts were often cut off** (G10, G14). `claude-haiku-5-5` spent part of the 400-token
+   output limit on thinking, so 14 of 21 live drafts were truncated and Rally fell back to its fixed
+   template (a safe fallback). **Fixed Nov 14:** the limit is now 2,000 tokens (`rally/llm.py`,
+   `MAX_OUTPUT_TOKENS`), with a regression check in `tests/test_llm_cases.py`. The benchmark and golden
+   cases are being rerun on the fixed code.
 3. **Empty-court template wording** says the first four YES replies "get the spots" without saying
    the game depends on four players booking (G14).
 4. Minor, all safe: a send requested before approval raises an error instead of being logged (G08);

@@ -162,16 +162,21 @@ class LLMService:
             self._client = openai.OpenAI(api_key=self.api_key)
         return self._client
 
+    # Output budget per call. Claude Haiku 5.5 and the GPT models spend part of it thinking before they
+    # answer; at 400 tokens Haiku's invite drafts were cut off (golden-case failure F3). Callers only pay
+    # for tokens actually used, so a generous ceiling costs nothing extra.
+    MAX_OUTPUT_TOKENS = 2000
+
     def _structured(self, system: str, user: str, schema):
         """One schema-constrained call on either provider. Returns (parsed object, input tokens, output tokens)."""
         if getattr(self, "provider", "anthropic") == "openai":
             resp = self._openai().responses.parse(model=self.model, instructions=system, input=user,
-                                                  text_format=schema, max_output_tokens=2000)  # GPT reasoning tokens count here
+                                                  text_format=schema, max_output_tokens=self.MAX_OUTPUT_TOKENS)
             parsed = resp.output_parsed
             if parsed is None:
                 raise ValueError(f"no parsed output (status={getattr(resp, 'status', None)})")
             return parsed, resp.usage.input_tokens, resp.usage.output_tokens
-        resp = self._anthropic().messages.parse(model=self.model, max_tokens=400, system=system,
+        resp = self._anthropic().messages.parse(model=self.model, max_tokens=self.MAX_OUTPUT_TOKENS, system=system,
                                                 messages=[{"role": "user", "content": user}], output_format=schema)
         if resp.stop_reason == "refusal" or resp.parsed_output is None:
             raise ValueError(f"no parsed output (stop_reason={resp.stop_reason})")
