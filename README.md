@@ -1,5 +1,7 @@
 # Rally: HW2 demo (NBAY 6170)
 
+**Live app:** https://rally-nbay6170.streamlit.app · **Evaluator guide:** [EVALUATION.md](EVALUATION.md)
+
 Rally helps a padel club fill unused court capacity. It **detects** two kinds of opportunity
 automatically, **ranks** suitable players with transparent rules, waits for a **manager to approve**
 a specific outreach, **coordinates** replies (Claude reads them into a strict schema; Python decides

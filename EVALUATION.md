@@ -5,6 +5,9 @@ seats, ranks players with fixed rules, waits for a manager's approval, reads pla
 Claude into a strict schema, and counts a booking only when the (mock) booking provider verifies it.
 `README.md` has the full design; this page is the short path to checking it.
 
+A hosted copy runs at https://rally-nbay6170.streamlit.app (it may take about 30 seconds to wake up;
+visitors share one demo database, so use "Reset demo data" in the sidebar first).
+
 ## Verify in about 2 minutes, no API key needed
 
 ```bash
