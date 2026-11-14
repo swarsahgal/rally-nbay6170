@@ -18,7 +18,8 @@ should be false.
 | gpt-6-luna | small | 1,688 ms | 2,495 ms | 672 / 94 | $0.011 | 5.00 | 10 / 10 | 0 |
 | gpt-6.1-sol | mid | 2,123 ms | 2,784 ms | 672 / 63 | $0.197 | 5.00 | 10 / 10 | 0 |
 
-Raw files: `outputs/tier_benchmark_summary.md` and `outputs/tier_benchmark_runs.csv` (every call).
+Raw files, one pair per provider run: `outputs/tier_benchmark_summary_openai.md` and
+`outputs/tier_benchmark_runs_openai.csv` (every call, with each model's output), and the same `_claude` pair.
 Prices: `data/model_pricing.yaml`. Formula (PRD section 9): `cost_per_100 = mean(input_tokens × input_rate +
 output_tokens × output_rate) × 100`.
 
