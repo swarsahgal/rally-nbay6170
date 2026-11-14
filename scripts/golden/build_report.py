@@ -189,7 +189,9 @@ OTHER_GAPS = [
             "invited the player (runner: FAIL; judge: 2/5; evidence in "
             "live-claude-haiku-5-5-before-g14-g16-fix/). Now the drafting prompt requires the condition, the "
             "template states it, and validate_invite_text rejects an empty-court invite that omits it or promises a "
-            "spot, so a non-compliant LLM draft falls back to the template."),
+            "spot, so a non-compliant LLM draft falls back to the template. Retest Nov 14 (live Haiku): G14 PARTIAL "
+            "(score 4); the judge confirms the draft says the game only proceeds if four players agree and book. "
+            "Its 2/5 is now only for the $30 price (see G10/G14 below)."),
     ("G04", "Offline backup parser only: “start at 7” is escalated without a proposed time. The live LLM returned "
             "19:00 and passed."),
     ("G08", "A send requested before approval is impossible, but the denied attempt raises an error and is not "

@@ -2,7 +2,7 @@
   "case_id": "G14",
   "title": "Empty-court invitation does not guarantee a game",
   "run": "live-claude-haiku-5-5",
-  "generated_at": "2026-11-14T15:25:07",
+  "generated_at": "2026-11-14T15:37:24",
   "parser": "Claude · claude-haiku-5-5",
   "llm_mode": "live",
   "model": "claude-haiku-5-5",
@@ -38,64 +38,64 @@
           "seats": 4,
           "game_type": "new game for four",
           "price_per_player_usd": 30,
+          "duration_minutes": 90,
+          "booking_condition": "The game only goes ahead if 4 players reply YES and book; it is confirmed once the booking is paid.",
           "reply_options": "YES to join, NO to pass",
           "opt_out_line": "Reply STOP to opt out."
         }
       },
       "result": {
-        "text": "Hi {first_name}, you're invited to a new padel game at Northpoint Padel. Today (Tue Nov 10) 2:30–4:00 PM on Court 1, level 2.7–3.3, $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out.",
+        "text": "Hi {first_name}, Northpoint Padel has a new game for four today (Tue Nov 10) 2:30–4:00 PM on Court 1, level 2.7–3.3, $30 per player. The game only goes ahead if 4 players say YES and book. Reply YES to join, NO to pass. Reply STOP to opt out.",
         "source": "llm:claude-haiku-5-5"
       }
     }
   ],
   "actual_model_output": {
-    "draft": "Hi {first_name}, you're invited to a new padel game at Northpoint Padel. Today (Tue Nov 10) 2:30–4:00 PM on Court 1, level 2.7–3.3, $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out.",
+    "draft": "Hi {first_name}, Northpoint Padel has a new game for four today (Tue Nov 10) 2:30–4:00 PM on Court 1, level 2.7–3.3, $30 per player. The game only goes ahead if 4 players say YES and book. Reply YES to join, NO to pass. Reply STOP to opt out.",
     "source": "llm:claude-haiku-5-5"
   },
   "assertions": [
     {
       "assertion": "mentions_day_time=true (Tuesday, 2:30 PM)",
-      "actual": "Hi {first_name}, you're invited to a new padel game at Northpoint Padel. Today (Tue Nov 10) 2:30–4:00 PM on Court 1, level 2.7–3.3, $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out.",
+      "actual": "Hi {first_name}, Northpoint Padel has a new game for four today (Tue Nov 10) 2:30–4:00 PM on Court 1, level 2.7–3.3, $30 per player. The game only goes ahead if 4 players say YES and book. Reply YES to join, NO to pass. Reply STOP to opt out.",
       "status": "PASS",
       "kind": "core",
       "note": ""
     },
     {
       "assertion": "mentions Court 1",
-      "actual": "Hi {first_name}, you're invited to a new padel game at Northpoint Padel. Today (Tue Nov 10) 2:30–4:00 PM on Court 1, level 2.7–3.3, $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out.",
+      "actual": "Hi {first_name}, Northpoint Padel has a new game for four today (Tue Nov 10) 2:30–4:00 PM on Court 1, level 2.7–3.3, $30 per player. The game only goes ahead if 4 players say YES and book. Reply YES to join, NO to pass. Reply STOP to opt out.",
       "status": "PASS",
       "kind": "core",
       "note": ""
     },
     {
       "assertion": "mentions_90_minutes=true",
-      "actual": "Hi {first_name}, you're invited to a new padel game at Northpoint Padel. Today (Tue Nov 10) 2:30–4:00 PM on Court 1, level 2.7–3.3, $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out.",
+      "actual": "Hi {first_name}, Northpoint Padel has a new game for four today (Tue Nov 10) 2:30–4:00 PM on Court 1, level 2.7–3.3, $30 per player. The game only goes ahead if 4 players say YES and book. Reply YES to join, NO to pass. Reply STOP to opt out.",
       "status": "EQUIVALENT",
       "kind": "minor",
       "note": "States the 2:30–4:00 PM range (90 minutes) but not '90 minutes'"
     },
     {
       "assertion": "asks for interest in forming the group",
-      "actual": "Hi {first_name}, you're invited to a new padel game at Northpoint Padel. Today (Tue Nov 10) 2:30–4:00 PM on Court 1, level 2.7–3.3, $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out.",
+      "actual": "Hi {first_name}, Northpoint Padel has a new game for four today (Tue Nov 10) 2:30–4:00 PM on Court 1, level 2.7–3.3, $30 per player. The game only goes ahead if 4 players say YES and book. Reply YES to join, NO to pass. Reply STOP to opt out.",
       "status": "PASS",
       "kind": "core",
       "note": ""
     },
     {
       "assertion": "clearly says the game depends on enough players and on booking confirmation",
-      "actual": "Hi {first_name}, you're invited to a new padel game at Northpoint Padel. Today (Tue Nov 10) 2:30–4:00 PM on Court 1, level 2.7–3.3, $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out.",
-      "status": "FAIL",
+      "actual": "Hi {first_name}, Northpoint Padel has a new game for four today (Tue Nov 10) 2:30–4:00 PM on Court 1, level 2.7–3.3, $30 per player. The game only goes ahead if 4 players say YES and book. Reply YES to join, NO to pass. Reply STOP to opt out.",
+      "status": "PASS",
       "kind": "core",
-      "note": "No condition is stated: the text does not say the game only goes ahead once four players confirm and the booking is completed"
+      "note": ""
     },
     {
       "assertion": "guaranteed_booking=false",
-      "actual": [
-        "you're in"
-      ],
-      "status": "FAIL",
+      "actual": [],
+      "status": "PASS",
       "kind": "core",
-      "note": "Wording promises spots before any booking is made"
+      "note": ""
     },
     {
       "assertion": "no invented confirmed teammates",
@@ -400,7 +400,7 @@
       "to_state": null,
       "detail": {
         "source": "llm:claude-haiku-5-5",
-        "template": "Hi {first_name}, you're invited to a new padel game at Northpoint Padel. Today (Tue Nov 10) 2:30–4:00 PM on Court 1, level 2.7–3.3, $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out."
+        "template": "Hi {first_name}, Northpoint Padel has a new game for four today (Tue Nov 10) 2:30–4:00 PM on Court 1, level 2.7–3.3, $30 per player. The game only goes ahead if 4 players say YES and book. Reply YES to join, NO to pass. Reply STOP to opt out."
       }
     }
   ],
@@ -408,17 +408,17 @@
     {
       "call_id": 1,
       "sim_ts": "2026-11-10T10:50:00-05:00",
-      "real_ts": "2026-11-14T20:25:07+00:00",
+      "real_ts": "2026-11-14T20:37:24+00:00",
       "purpose": "draft_invite",
       "mode": "live",
       "model": "claude-haiku-5-5",
-      "latency_ms": 3809,
-      "input_tokens": 596,
-      "output_tokens": 671,
+      "latency_ms": 2874,
+      "input_tokens": 714,
+      "output_tokens": 652,
       "ok": 1,
       "error": null,
-      "request": "{\"club\": \"Northpoint Padel\", \"court\": \"Court 1\", \"when\": \"today (Tue Nov 10) 2:30–4:00 PM\", \"date\": \"Tue Nov 10\", \"time\": \"2:30–4:00 PM\", \"level\": \"2.7–3.3\", \"seats\": 4, \"game_type\": \"new game for four\", \"price_per_player_usd\": 30, \"reply_options\": \"YES to join, NO to pass\", \"opt_out_line\": \"Reply STOP to opt out.\"}",
-      "response": "{\"message\": \"Hi {first_name}, you're invited to a new padel game at Northpoint Padel. Today (Tue Nov 10) 2:30–4:00 PM on Court 1, level 2.7–3.3, $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out.\", \"validation_problems\": []}",
+      "request": "{\"club\": \"Northpoint Padel\", \"court\": \"Court 1\", \"when\": \"today (Tue Nov 10) 2:30–4:00 PM\", \"date\": \"Tue Nov 10\", \"time\": \"2:30–4:00 PM\", \"level\": \"2.7–3.3\", \"seats\": 4, \"game_type\": \"new game for four\", \"price_per_player_usd\": 30, \"duration_minutes\": 90, \"booking_condition\": \"The game only goes ahead if 4 players reply YES and book; it is confirmed once the booking is paid.\", \"reply_options\": \"YES to join, NO to pass\", \"opt_out_line\": \"Reply STOP to opt out.\"}",
+      "response": "{\"message\": \"Hi {first_name}, Northpoint Padel has a new game for four today (Tue Nov 10) 2:30–4:00 PM on Court 1, level 2.7–3.3, $30 per player. The game only goes ahead if 4 players say YES and book. Reply YES to join, NO to pass. Reply STOP to opt out.\", \"validation_problems\": []}",
       "campaign_id": null,
       "invite_id": null
     }

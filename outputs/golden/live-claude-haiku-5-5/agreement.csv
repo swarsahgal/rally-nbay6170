@@ -1,11 +1,11 @@
 case_id,benchmark_task,team_score,team_score_source,judge_score,abs_difference,exact,within_one
-G01,T01,5,SUGGESTED (unconfirmed),4,1,0,1
+G01,T01,5,SUGGESTED (unconfirmed),5,0,1,1
 G02,T02,5,SUGGESTED (unconfirmed),5,0,1,1
 G03,T03,5,SUGGESTED (unconfirmed),5,0,1,1
 G04,T04,5,SUGGESTED (unconfirmed),5,0,1,1
 G05,T06,5,SUGGESTED (unconfirmed),5,0,1,1
 G09,T08,5,SUGGESTED (unconfirmed),5,0,1,1
 G10,T09,4,SUGGESTED (unconfirmed),2,2,0,0
-G14,T10,3,SUGGESTED (unconfirmed),2,1,0,1
+G14,T10,4,SUGGESTED (unconfirmed),2,2,0,0
 G15,T05,5,SUGGESTED (unconfirmed),5,0,1,1
 G19,T07,5,SUGGESTED (unconfirmed),5,0,1,1

@@ -2,7 +2,7 @@
   "case_id": "G15",
   "title": "“Who else is playing?” is a question, not acceptance",
   "run": "live-claude-haiku-5-5",
-  "generated_at": "2026-11-14T15:25:12",
+  "generated_at": "2026-11-14T15:37:28",
   "parser": "Claude · claude-haiku-5-5",
   "llm_mode": "live",
   "model": "claude-haiku-5-5",
@@ -38,7 +38,8 @@
           "P034"
         ],
         "max_sends": 6,
-        "template": "Hi {first_name}, Northpoint Padel has a game today (Tue Nov 10) 2:30–4:00 PM on Court 1 for level 2.7–3.3. It's $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out.",
+        "first_wave": null,
+        "template": "Hi {first_name}, you're invited to a padel game at Northpoint Padel, Court 1, today (Tue Nov 10) 2:30–4:00 PM, level 2.7–3.3. $30 per player. The game only goes ahead if 4 players reply YES and book. Reply YES to join, NO to pass. Reply STOP to opt out.",
         "template_source": "llm:claude-haiku-5-5"
       },
       "result": "CMP-EC-20261110-1430-C1-1"
@@ -69,9 +70,9 @@
           "purpose": "parse_reply",
           "mode": "live",
           "model": "claude-haiku-5-5",
-          "latency_ms": 907,
-          "input_tokens": 1519,
-          "output_tokens": 62,
+          "latency_ms": 1329,
+          "input_tokens": 1544,
+          "output_tokens": 61,
           "ok": 1,
           "error": null,
           "request": {
@@ -80,7 +81,7 @@
               "court": "Court 1",
               "date": "Tue Nov 10",
               "time": "2:30–4:00 PM",
-              "invitation_text": "Hi Ruth, Northpoint Padel has a game today (Tue Nov 10) 2:30–4:00 PM on Court 1 for level 2.7–3.3. It's $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out."
+              "invitation_text": "Hi Ruth, you're invited to a padel game at Northpoint Padel, Court 1, today (Tue Nov 10) 2:30–4:00 PM, level 2.7–3.3. $30 per player. The game only goes ahead if 4 players reply YES and book. Reply YES to join, NO to pass. Reply STOP to opt out."
             },
             "reply": "Who else is playing?"
           },
@@ -216,42 +217,42 @@
         "player_id": "P030",
         "direction": "out",
         "kind": "invite",
-        "body": "Hi Ruth, Northpoint Padel has a game today (Tue Nov 10) 2:30–4:00 PM on Court 1 for level 2.7–3.3. It's $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out."
+        "body": "Hi Ruth, you're invited to a padel game at Northpoint Padel, Court 1, today (Tue Nov 10) 2:30–4:00 PM, level 2.7–3.3. $30 per player. The game only goes ahead if 4 players reply YES and book. Reply YES to join, NO to pass. Reply STOP to opt out."
       },
       {
         "sim_ts": "2026-11-10T10:50:00-05:00",
         "player_id": "P035",
         "direction": "out",
         "kind": "invite",
-        "body": "Hi Carmen, Northpoint Padel has a game today (Tue Nov 10) 2:30–4:00 PM on Court 1 for level 2.7–3.3. It's $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out."
+        "body": "Hi Carmen, you're invited to a padel game at Northpoint Padel, Court 1, today (Tue Nov 10) 2:30–4:00 PM, level 2.7–3.3. $30 per player. The game only goes ahead if 4 players reply YES and book. Reply YES to join, NO to pass. Reply STOP to opt out."
       },
       {
         "sim_ts": "2026-11-10T10:50:00-05:00",
         "player_id": "P031",
         "direction": "out",
         "kind": "invite",
-        "body": "Hi Felipe, Northpoint Padel has a game today (Tue Nov 10) 2:30–4:00 PM on Court 1 for level 2.7–3.3. It's $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out."
+        "body": "Hi Felipe, you're invited to a padel game at Northpoint Padel, Court 1, today (Tue Nov 10) 2:30–4:00 PM, level 2.7–3.3. $30 per player. The game only goes ahead if 4 players reply YES and book. Reply YES to join, NO to pass. Reply STOP to opt out."
       },
       {
         "sim_ts": "2026-11-10T10:50:00-05:00",
         "player_id": "P033",
         "direction": "out",
         "kind": "invite",
-        "body": "Hi Gabriel, Northpoint Padel has a game today (Tue Nov 10) 2:30–4:00 PM on Court 1 for level 2.7–3.3. It's $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out."
+        "body": "Hi Gabriel, you're invited to a padel game at Northpoint Padel, Court 1, today (Tue Nov 10) 2:30–4:00 PM, level 2.7–3.3. $30 per player. The game only goes ahead if 4 players reply YES and book. Reply YES to join, NO to pass. Reply STOP to opt out."
       },
       {
         "sim_ts": "2026-11-10T10:50:00-05:00",
         "player_id": "P032",
         "direction": "out",
         "kind": "invite",
-        "body": "Hi Anika, Northpoint Padel has a game today (Tue Nov 10) 2:30–4:00 PM on Court 1 for level 2.7–3.3. It's $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out."
+        "body": "Hi Anika, you're invited to a padel game at Northpoint Padel, Court 1, today (Tue Nov 10) 2:30–4:00 PM, level 2.7–3.3. $30 per player. The game only goes ahead if 4 players reply YES and book. Reply YES to join, NO to pass. Reply STOP to opt out."
       },
       {
         "sim_ts": "2026-11-10T10:50:00-05:00",
         "player_id": "P034",
         "direction": "out",
         "kind": "invite",
-        "body": "Hi Yuki, Northpoint Padel has a game today (Tue Nov 10) 2:30–4:00 PM on Court 1 for level 2.7–3.3. It's $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out."
+        "body": "Hi Yuki, you're invited to a padel game at Northpoint Padel, Court 1, today (Tue Nov 10) 2:30–4:00 PM, level 2.7–3.3. $30 per player. The game only goes ahead if 4 players reply YES and book. Reply YES to join, NO to pass. Reply STOP to opt out."
       },
       {
         "sim_ts": "2026-11-10T10:50:00-05:00",
@@ -541,7 +542,7 @@
       "to_state": null,
       "detail": {
         "source": "llm:claude-haiku-5-5",
-        "template": "Hi {first_name}, Northpoint Padel has a game today (Tue Nov 10) 2:30–4:00 PM on Court 1 for level 2.7–3.3. It's $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out."
+        "template": "Hi {first_name}, you're invited to a padel game at Northpoint Padel, Court 1, today (Tue Nov 10) 2:30–4:00 PM, level 2.7–3.3. $30 per player. The game only goes ahead if 4 players reply YES and book. Reply YES to join, NO to pass. Reply STOP to opt out."
       }
     },
     {
@@ -571,7 +572,7 @@
         "expires_at": "2026-11-10T13:45:00-05:00",
         "strategy": "batch",
         "message_source": "llm:claude-haiku-5-5",
-        "message_template": "Hi {first_name}, Northpoint Padel has a game today (Tue Nov 10) 2:30–4:00 PM on Court 1 for level 2.7–3.3. It's $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out."
+        "message_template": "Hi {first_name}, you're invited to a padel game at Northpoint Padel, Court 1, today (Tue Nov 10) 2:30–4:00 PM, level 2.7–3.3. $30 per player. The game only goes ahead if 4 players reply YES and book. Reply YES to join, NO to pass. Reply STOP to opt out."
       }
     },
     {
@@ -599,7 +600,7 @@
       "detail": {
         "player_id": "P030",
         "name": "Ruth Abrams",
-        "message_id": "MSG-f8e4ae6763",
+        "message_id": "MSG-7a9f23d87a",
         "channel": "simulated_sms",
         "reply_deadline": "2026-11-10T11:10:00-05:00",
         "send_number": 1,
@@ -619,7 +620,7 @@
       "detail": {
         "player_id": "P035",
         "name": "Carmen Flores",
-        "message_id": "MSG-ad9d468676",
+        "message_id": "MSG-1de48fdd0c",
         "channel": "simulated_sms",
         "reply_deadline": "2026-11-10T11:10:00-05:00",
         "send_number": 2,
@@ -639,7 +640,7 @@
       "detail": {
         "player_id": "P031",
         "name": "Felipe Duarte",
-        "message_id": "MSG-c260cfe7e5",
+        "message_id": "MSG-892300e3a7",
         "channel": "simulated_whatsapp",
         "reply_deadline": "2026-11-10T11:10:00-05:00",
         "send_number": 3,
@@ -659,7 +660,7 @@
       "detail": {
         "player_id": "P033",
         "name": "Gabriel Nunes",
-        "message_id": "MSG-e448808830",
+        "message_id": "MSG-dafb9d9ac4",
         "channel": "simulated_sms",
         "reply_deadline": "2026-11-10T11:10:00-05:00",
         "send_number": 4,
@@ -679,7 +680,7 @@
       "detail": {
         "player_id": "P032",
         "name": "Anika Sharma",
-        "message_id": "MSG-551e183407",
+        "message_id": "MSG-564069c2b5",
         "channel": "simulated_sms",
         "reply_deadline": "2026-11-10T11:10:00-05:00",
         "send_number": 5,
@@ -699,7 +700,7 @@
       "detail": {
         "player_id": "P034",
         "name": "Yuki Ito",
-        "message_id": "MSG-003a23a700",
+        "message_id": "MSG-dfd2f49ccf",
         "channel": "simulated_whatsapp",
         "reply_deadline": "2026-11-10T11:10:00-05:00",
         "send_number": 6,
@@ -793,16 +794,16 @@
     {
       "call_id": 2,
       "sim_ts": "2026-11-10T10:50:00-05:00",
-      "real_ts": "2026-11-14T20:25:12+00:00",
+      "real_ts": "2026-11-14T20:37:28+00:00",
       "purpose": "parse_reply",
       "mode": "live",
       "model": "claude-haiku-5-5",
-      "latency_ms": 907,
-      "input_tokens": 1519,
-      "output_tokens": 62,
+      "latency_ms": 1329,
+      "input_tokens": 1544,
+      "output_tokens": 61,
       "ok": 1,
       "error": null,
-      "request": "{\"invitation\": {\"club\": \"Northpoint Padel\", \"court\": \"Court 1\", \"date\": \"Tue Nov 10\", \"time\": \"2:30–4:00 PM\", \"invitation_text\": \"Hi Ruth, Northpoint Padel has a game today (Tue Nov 10) 2:30–4:00 PM on Court 1 for level 2.7–3.3. It's $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out.\"}, \"reply\": \"Who else is playing?\"}",
+      "request": "{\"invitation\": {\"club\": \"Northpoint Padel\", \"court\": \"Court 1\", \"date\": \"Tue Nov 10\", \"time\": \"2:30–4:00 PM\", \"invitation_text\": \"Hi Ruth, you're invited to a padel game at Northpoint Padel, Court 1, today (Tue Nov 10) 2:30–4:00 PM, level 2.7–3.3. $30 per player. The game only goes ahead if 4 players reply YES and book. Reply YES to join, NO to pass. Reply STOP to opt out.\"}, \"reply\": \"Who else is playing?\"}",
       "response": "{\"intent\": \"QUESTION\", \"alternative_time\": null, \"requires_manager\": true, \"safe_to_progress\": false, \"summary\": \"The player asks who else is playing in the game.\"}",
       "campaign_id": "CMP-EC-20261110-1430-C1-1",
       "invite_id": "CMP-EC-20261110-1430-C1-1:P030"
@@ -810,17 +811,17 @@
     {
       "call_id": 1,
       "sim_ts": "2026-11-10T10:50:00-05:00",
-      "real_ts": "2026-11-14T20:25:11+00:00",
+      "real_ts": "2026-11-14T20:37:27+00:00",
       "purpose": "draft_invite",
       "mode": "live",
       "model": "claude-haiku-5-5",
-      "latency_ms": 3130,
-      "input_tokens": 596,
-      "output_tokens": 455,
+      "latency_ms": 2497,
+      "input_tokens": 714,
+      "output_tokens": 458,
       "ok": 1,
       "error": null,
-      "request": "{\"club\": \"Northpoint Padel\", \"court\": \"Court 1\", \"when\": \"today (Tue Nov 10) 2:30–4:00 PM\", \"date\": \"Tue Nov 10\", \"time\": \"2:30–4:00 PM\", \"level\": \"2.7–3.3\", \"seats\": 4, \"game_type\": \"new game for four\", \"price_per_player_usd\": 30, \"reply_options\": \"YES to join, NO to pass\", \"opt_out_line\": \"Reply STOP to opt out.\"}",
-      "response": "{\"message\": \"Hi {first_name}, Northpoint Padel has a game today (Tue Nov 10) 2:30–4:00 PM on Court 1 for level 2.7–3.3. It's $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out.\", \"validation_problems\": []}",
+      "request": "{\"club\": \"Northpoint Padel\", \"court\": \"Court 1\", \"when\": \"today (Tue Nov 10) 2:30–4:00 PM\", \"date\": \"Tue Nov 10\", \"time\": \"2:30–4:00 PM\", \"level\": \"2.7–3.3\", \"seats\": 4, \"game_type\": \"new game for four\", \"price_per_player_usd\": 30, \"duration_minutes\": 90, \"booking_condition\": \"The game only goes ahead if 4 players reply YES and book; it is confirmed once the booking is paid.\", \"reply_options\": \"YES to join, NO to pass\", \"opt_out_line\": \"Reply STOP to opt out.\"}",
+      "response": "{\"message\": \"Hi {first_name}, you're invited to a padel game at Northpoint Padel, Court 1, today (Tue Nov 10) 2:30–4:00 PM, level 2.7–3.3. $30 per player. The game only goes ahead if 4 players reply YES and book. Reply YES to join, NO to pass. Reply STOP to opt out.\", \"validation_problems\": []}",
       "campaign_id": null,
       "invite_id": null
     }
