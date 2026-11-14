@@ -183,6 +183,10 @@ def f3(c: dict) -> dict:
             "retest": " ".join(parts) or "Not retested."}
 
 
+PRICE_NOTE = ("Both disagreements (G10, G14) are the judge treating the $30/player price as invented; the team "
+              "kept it on purpose (see G10/G14 under Other gaps).")
+
+
 OTHER_GAPS = [
     ("G14 (fixed Nov 14)", "Empty-court invites did not say the game depends on four players saying yes and "
             "booking: the template said the first 4 YES replies “get the spots”, and the live Haiku draft simply "
@@ -199,9 +203,15 @@ OTHER_GAPS = [
     ("G12", "No retry limit: Rally re-checks the provider on every clock tick while UNVERIFIED (never confirms)."),
     ("G18", "Inbound replies have no event ID; a duplicate is parsed again but causes no second link or seat."),
     ("G11/G20", "State names differ from the spec (ESCALATED for CANCELLED_UNAVAILABLE; CANCELLED for STOPPED)."),
-    ("G10/G14", "Invites state the $30/player price from club_policy.yaml. The runner scores this as equivalent "
-                "(it is Rally's verified price source); the judge scored it as an invented price (2/5) because the "
-                "fixtures say no price was supplied. The team must decide which reading is right."),
+    ("G10/G14 (team decision: keep the price)", "Invites state “$30/player”. The judge scored both cases 2/5 "
+                "because the golden fixtures say no price was supplied and list an invented price as forbidden. The "
+                "team decided to keep the price. It is not invented: Rally computes it in code from the club's own "
+                "settings (data/club_policy.yaml: $80/hour court rate × 90 min ÷ 4 players = $30), passes it to the "
+                "model as an allowed fact, and validate_invite_text rejects any invite that quotes a different number, "
+                "so the model cannot change it. We think a player should know the cost before saying yes, and quoting "
+                "it up front avoids a drop-off at the booking link. The runner scores these as EQUIVALENT (score 4) "
+                "and we leave the judge's 2/5 as recorded; this one disagreement explains the judge's 8/10 "
+                "agreement. Removing the price from invites would make both cases match the fixtures exactly.")
 ]
 
 
@@ -229,7 +239,7 @@ def markdown(c: dict) -> str:
     if p.get("agreement"):
         a = p["agreement"]
         L += [f"Judge model {a['judge_model']} (Rally used {c['parser']}). Exact agreement {a['exact_agreement']}, "
-              f"within one point {a['within_one_agreement']}. Team scores: {a['team_scores']}."]
+              f"within one point {a['within_one_agreement']}. Team scores: {a['team_scores']}.", "", PRICE_NOTE]
     else:
         L += ["NOT EXECUTED: no judge results in this run folder (the judge needs an API key)."]
     L += ["", "## Observed failure patterns"]
@@ -358,6 +368,7 @@ def docx(c: dict, path: Path):
                           f"{a['exact_agreement']} ({a['exact_agreement_pct']}%), within one point "
                           f"{a['within_one_agreement']} ({a['within_one_agreement_pct']}%). Team scores: "
                           f"{a['team_scores']}.")
+        doc.add_paragraph(PRICE_NOTE)
         if not a["judge_model"].startswith("gpt-"):
             doc.add_paragraph("The planned OpenAI judge (gpt-6.1-sol) could not be reached from the evaluation "
                               "workspace, so Claude Sonnet 5.5 judged; it is a different, larger model than Rally's "

@@ -73,8 +73,12 @@ the manager dashboard used in the demo video.
    Pre-fix evidence for 1 and 3: `outputs/golden/live-claude-haiku-5-5-before-g14-g16-fix/`.
 4. Minor, all safe: a send requested before approval raises an error instead of being logged (G08);
    no retry limit while the provider is down (G12); no message IDs for deduplicating repeated
-   replies (G18); invites state a $30 price from `club_policy.yaml`, which the golden fixtures assume
-   is not supplied (G10, G14).
+   replies (G18).
+5. **Price in invites (G10, G14): a deliberate team decision.** Invites say "$30/player"; the golden fixtures
+   assume no price is supplied, so the independent judge scores both cases 2/5 for an invented price. We kept
+   it: Rally computes it in code from the club's settings ($80/hour × 90 min ÷ 4, `data/club_policy.yaml`),
+   gives it to the model as an allowed fact, and `validate_invite_text` rejects any other number. Players
+   should know the cost before saying yes. This is the only reason judge agreement is 8/10 rather than 10/10.
 
 A conditional yes ("I'm in if Daniela is playing") was once parsed as a firm yes by the offline
 parser. That is fixed and covered by a regression test and golden case G09.
