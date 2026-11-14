@@ -5,6 +5,6 @@
   "exact_agreement_pct": 80.0,
   "within_one_agreement": "8/10",
   "within_one_agreement_pct": 80.0,
-  "team_scores": "UNCONFIRMED: at least one team score is still the runner's suggestion",
+  "team_scores": "confirmed by the team",
   "judge_errors": []
 }

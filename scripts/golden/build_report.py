@@ -133,6 +133,12 @@ def failures(c: dict) -> list[dict]:
     ]
 
 
+def reviewers(c: dict) -> str:
+    from collections import Counter
+    n = Counter(r["team_reviewer"].strip() for r in c["rows"] if r["team_reviewer"].strip())
+    return ", ".join(f"{k} {v} cases" for k, v in n.most_common())
+
+
 def g_off(c: dict, case: str) -> str:
     off = c.get("offline")
     if not off:
@@ -183,8 +189,9 @@ def f3(c: dict) -> dict:
             "retest": " ".join(parts) or "Not retested."}
 
 
-PRICE_NOTE = ("Both disagreements (G10, G14) are the judge treating the $30/player price as invented; the team "
-              "kept it on purpose (see G10/G14 under Other gaps).")
+PRICE_NOTE = ("Both disagreements (G10: team 5, judge 2; G14: team 4, judge 2) come from the judge treating the "
+              "$30/player price as invented. The team kept the price on purpose (see G10/G14 under Other gaps); on "
+              "every other judged case the team and the judge gave the same score.")
 
 
 OTHER_GAPS = [
@@ -224,8 +231,8 @@ def markdown(c: dict) -> str:
           f"{c['executed']} of {c['n']} cases executed against Rally's own workflow code: {c['counts']['PASS']} pass, "
           f"{c['counts']['PARTIAL']} partial, {c['counts']['FAIL']} fail, {c['counts']['NOT_EXECUTED']} not executed. "
           f"Forbidden actions observed: {len(c['forbidden']) or 'none'}. Parser in this run: {c['parser']}.",
-          f"Team scores confirmed: {c['confirmed']}/{c['n']} (scores marked * are the runner's suggestion, "
-          f"pending team review). Mean score: {c['mean']}.", ""]
+          f"Team scores confirmed: {c['confirmed']}/{c['n']}" + (f" (reviewers: {reviewers(c)})" if c['confirmed'] == c['n']
+          else " (scores marked * are the runner's suggestion, pending team review)") + f". Mean score: {c['mean']}.", ""]
     if not c["is_live"]:
         L += ["**This run used Rally's offline backup parser and fixed templates, not the live LLM.** Cases that read "
               "replies or draft invites must be rerun with `--live` before submission.", ""]
@@ -325,7 +332,8 @@ def docx(c: dict, path: Path):
         f"{c['executed']} of {c['n']} cases executed. Forbidden actions observed in: {', '.join(c['forbidden'])}.")
     doc.add_paragraph(
         f"Parser and drafter in this run: {c['parser']}. Team scores confirmed: {c['confirmed']}/{c['n']} "
-        f"(a * marks the runner's suggested score, pending team review). Mean score {c['mean']}/5.")
+        + (f"(all {c['n']} reviewed and confirmed by the team: {reviewers(c)}). " if c['confirmed'] == c['n'] else
+           "(a * marks the runner's suggested score, pending team review). ") + f"Mean score {c['mean']}/5.")
     if not c["is_live"]:
         para = doc.add_paragraph()
         r = para.add_run("This run used Rally's offline backup parser and fixed templates, not the live LLM. "
