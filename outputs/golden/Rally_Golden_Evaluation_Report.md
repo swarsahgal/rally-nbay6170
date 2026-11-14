@@ -1,5 +1,5 @@
 # Rally golden-dataset evaluation: 20 end-to-end cases
-Team 3 · NBAY 6170 · generated November 10, 2026 from `outputs/golden/live-claude-haiku-5-5`
+Team 3 · NBAY 6170 · generated November 14, 2026 from `outputs/golden/live-claude-haiku-5-5`
 
 ## Result
 20 of 20 cases executed against Rally's own workflow code: 13 pass, 5 partial, 2 fail, 0 not executed. Forbidden actions observed: none. Parser in this run: Claude · claude-haiku-5-5.
@@ -31,7 +31,7 @@ Team scores confirmed: 0/20 (scores marked * are the runner's suggestion, pendin
 | G20 | Revoked approval blocks the next scheduled send | PASS | 5* | — | traces/G20.json |
 
 ## Independent judge
-Judge model claude-sonnet-5-5 (Rally used Claude · claude-haiku-5-5). Exact agreement 8/10, within one point 9/10. Team scores: UNCONFIRMED: at least one team score is still the runner's suggestion.
+Judge model gpt-6.1-sol (Rally used Claude · claude-haiku-5-5). Exact agreement 8/10, within one point 9/10. Team scores: UNCONFIRMED: at least one team score is still the runner's suggestion.
 
 ## Observed failure patterns
 ### F1 · Conditional yes read as a firm yes (development log, fixed)
@@ -40,7 +40,7 @@ Judge model claude-sonnet-5-5 (Rally used Claude · claude-haiku-5-5). Exact agr
 - Root cause: The parser's ‘maybe’ keyword list had no conditional words (if, unless, as long as).
 - Consequence: A booking link for a player who has not committed; the seat could be lost to a no-show.
 - Fix: Added if/unless/as long as to the TENTATIVE rule; regression test added to tests/test_llm_cases.py; golden case G09 covers it end to end.
-- Retest: Retested Nov 10: G09 PASS (parser output TENTATIVE). Regression test passes. Mutation check: with the old keyword pattern the same reply is read as ACCEPT, safe_to_progress=True, so the test would catch a regression.
+- Retest: Retested Nov 14: G09 PASS (parser output TENTATIVE). Regression test passes. Mutation check: with the old keyword pattern the same reply is read as ACCEPT, safe_to_progress=True, so the test would catch a regression.
 
 ### F2 · Empty-court outreach does not move on to approved backups
 - Input: G16: six players approved for E21, first round of four; two say yes, two say no.

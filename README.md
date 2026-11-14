@@ -1,6 +1,6 @@
 # Rally: HW2 demo (NBAY 6170)
 
-**Live app:** https://rally-nbay6170.streamlit.app · **Evaluator guide:** [EVALUATION.md](EVALUATION.md)
+**Live app:** https://rally-nbay6170.streamlit.app · **Start here:** [START_HERE.md](START_HERE.md) · **Evaluator guide:** [EVALUATION.md](EVALUATION.md)
 
 Rally helps a padel club fill unused court capacity. It **detects** two kinds of opportunity
 automatically, **ranks** suitable players with transparent rules, waits for a **manager to approve**
@@ -158,7 +158,7 @@ scripts/                   build_fixtures.py, run_demo_sequences.py, tier_benchm
 fixtures/                  golden_cases.csv (the 20-case evaluation spec)
 outputs/golden/            golden-case results, traces, judge scores, evaluation report
 tests/                     pytest: policy/detection, workflows/invariants, reply parsing
-docs/                      PRD.md, demo_script.md, ai_use_log.md
+docs/                      PRD.md, demo_script.md, ai_use_log.md, unit_economics.md, commercial_case.md
 EVALUATION.md              short guide for evaluators
 runtime/                   SQLite files (created at run time, git-ignored)
 ```

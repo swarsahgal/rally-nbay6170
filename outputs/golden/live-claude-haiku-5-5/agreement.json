@@ -1,5 +1,5 @@
 {
-  "judge_model": "claude-sonnet-5-5",
+  "judge_model": "gpt-6.1-sol",
   "cases_compared": 10,
   "exact_agreement": "8/10",
   "exact_agreement_pct": 80.0,

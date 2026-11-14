@@ -1,5 +1,7 @@
 # Guide for evaluators (human or AI agent)
 
+The rubric-by-rubric map is in `START_HERE.md`; this page has the detail.
+
 Rally is a Python prototype for NBAY 6170 (Team 3). It finds unsold padel courts and open match
 seats, ranks players with fixed rules, waits for a manager's approval, reads player replies with
 Claude into a strict schema, and counts a booking only when the (mock) booking provider verifies it.
@@ -42,9 +44,10 @@ the manager dashboard used in the demo video.
   assertions. Results and a full trace per case:
   `outputs/golden/live-claude-haiku-5-5/` (live Claude run) and `outputs/golden/offline/`.
   Live run: 13 pass, 5 partial, 2 fail, no forbidden action in any case.
-- **Independent judge:** `scripts/golden/judge.py` scored the 10 language-heavy cases with a
-  different model (Claude Sonnet 5.5) from Rally's (Haiku 5.5): `judge_results.csv` and
-  `agreement.json` in the live run folder.
+- **Independent judges:** `scripts/golden/judge.py` scored the 10 language-heavy cases with models
+  other than Rally's Haiku 5.5: gpt-6.1-sol (`judge_results.csv`, `agreement.json`) and Claude Sonnet 5.5
+  (`judge_results_sonnet.csv`, `agreement_sonnet.json`), both in the live run folder. Both gave the same
+  scores: 8 of 10 cases match the team's score exactly and 9 of 10 within one point.
 - **Report:** `outputs/golden/Rally_Golden_Evaluation_Report.docx` (and `.md`).
 - **Model and cost comparison:** `scripts/tier_benchmark.py` (10 tasks × 3 runs × 4 models); prices
   in `data/model_pricing.yaml`.
