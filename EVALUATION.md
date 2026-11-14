@@ -15,7 +15,7 @@ visitors share one demo database, so use "Reset demo data" in the sidebar first)
 ```bash
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-pytest                                        # 57 pass, 10 live tests skipped without a key
+pytest                                        # 61 pass, 10 live tests skipped without a key
 python scripts/run_demo_sequences.py          # the three PRD demo sequences, printed as a trace
 python scripts/golden/run_golden.py           # the 20 golden cases, offline rules parser
 ```
