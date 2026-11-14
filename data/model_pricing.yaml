@@ -1,0 +1,27 @@
+# Base API prices used for the unit-economics comparison (USD per million tokens).
+# Sources (checked 2026-11-05):
+#   Claude: https://platform.claude.com/docs/en/about-claude/pricing
+#   OpenAI: https://developers.openai.com/api/docs/pricing  (standard tier, short context; model names as listed
+#           there — confirm the exact API IDs on OpenAI's models page before the run)
+# Re-check the page on the day you report numbers and update `checked` if anything changed.
+source: https://platform.claude.com/docs/en/about-claude/pricing and https://developers.openai.com/api/docs/pricing
+checked: "2026-11-05"
+models:
+  claude-haiku-5-5:            # prompts up to 100,000 tokens (Rally's prompts are ~1k)
+    input_per_mtok: 0.10
+    output_per_mtok: 0.50
+  claude-sonnet-5-5:
+    input_per_mtok: 2.00
+    output_per_mtok: 10.00
+  claude-opus-5-5:
+    input_per_mtok: 4.00
+    output_per_mtok: 20.00
+  gpt-6-luna:                  # OpenAI small tier
+    input_per_mtok: 0.10
+    output_per_mtok: 0.50
+  gpt-6.1-terra:
+    input_per_mtok: 1.00
+    output_per_mtok: 5.00
+  gpt-6.1-sol:                 # OpenAI mid tier
+    input_per_mtok: 2.00
+    output_per_mtok: 10.00

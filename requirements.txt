@@ -1,0 +1,12 @@
+streamlit>=1.66,<2
+pydantic>=2.7,<3
+pyyaml>=6.0
+anthropic>=2.0
+openai>=1.60          # optional: only for the OpenAI side of the tier benchmark
+pandas>=2.2
+altair>=5.0
+openpyxl>=3.1          # only for scripts/build_fixtures.py (reads the occupancy spreadsheet)
+python-dotenv>=1.0
+pytest>=8.0
+tzdata; sys_platform == "win32"
+python-docx>=1.1        # only for scripts/golden/build_report.py

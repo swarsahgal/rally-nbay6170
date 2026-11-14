@@ -1,0 +1,801 @@
+{
+  "case_id": "G01",
+  "title": "Firm acceptance does not equal a booking",
+  "run": "offline",
+  "generated_at": "2026-11-10T20:17:27",
+  "parser": "Offline rules (no LLM)",
+  "llm_mode": "offline",
+  "model": "rules",
+  "policy_version": "0.1.0-provisional (2026-11-05)",
+  "policy_sha256": "fc4403cb277d",
+  "fixture_mapping": {
+    "M17": "Rally demo match M-OPEN-1730-C2 (opportunity MP-M-OPEN-1730-C2): Court 2, Tue Nov 10 2026 5:30-7:00 PM ET, 3/4 seats, level 3.5 with ±0.3 tolerance (3.2-3.8). Golden spec: Thu Nov 12, band 3.0-3.6. Booking link is Rally's simulated https://booking.example.com/rally/... (spec: demo://match/M17).",
+    "E21": "Rally demo opportunity EC-20261110-1430-C1: Court 1, Tue Nov 10 2026 2:30-4:00 PM ET, typical occupancy 20%. Golden spec: Tue Nov 17.",
+    "players": "P-MAR=P006 Marcus Johnson (3.4); Priya=P005 Priya Nair (3.5); P-02=P005; P-03=P012 Jun Park (3.4, opted out) and P011 Grace Chen (3.6, no opt-in); P-04=P015 Elif Yilmaz (4.3); P-05=P010 Omar Saleh (2 invites in the last 7 days); P-A..P-F=the first six players Rally shortlists for E21; P-OLD=P005 (timed-out invitation)."
+  },
+  "fixture_actions": [
+    "provider event #1: P-MAR listed in the match, payment PENDING",
+    "provider event #2: P-MAR listed in the match, payment PAID (PAID_AND_JOINED)"
+  ],
+  "spec": {
+    "setup": "Club-managed open match M17, Court 2, Thu Nov 12, 2026, 5:30 PM ET, 3/4 seats, skill band 3.0–3.6, approved booking link demo://match/M17. Manager approved Marcus (P-MAR); invitation active. Booking initially PENDING.",
+    "input_events": "Player P-MAR: “Yes, I'm in. See you at 5:30!”; provider event #1=PENDING; provider event #2=PAID_AND_JOINED.",
+    "expected_model_output": "{\"intent\":\"ACCEPT\",\"safe_to_progress\":true,\"requires_manager\":false}",
+    "expected_system_output": "Send only the approved booking link; state AWAITING_BOOKING_VERIFICATION after reply; state CONFIRMED only after provider #2.",
+    "pass_assertions": "after_reply.confirmed=false; after_event_1.confirmed=false; after_event_2.confirmed=true; booking_confirmation_count=1.",
+    "forbidden_outputs": "Never mark CONFIRMED, paid or incremental revenue based on the reply alone."
+  },
+  "steps": [
+    {
+      "n": 1,
+      "sim_time": "2026-11-10T10:50:00-05:00",
+      "action": "manager approves campaign",
+      "detail": {
+        "opportunity": "MP-M-OPEN-1730-C2",
+        "approved_player_ids": [
+          "P006"
+        ],
+        "max_sends": 1,
+        "template": "Hi {first_name}, it's Northpoint Padel. Our open match today (Tue Nov 10) 5:30–7:00 PM on Court 2 (level 3.5) has 1 spot left. Want it? Reply YES to join or NO to pass. $30/player. Reply STOP to opt out.",
+        "template_source": "template"
+      },
+      "result": "CMP-MP-M-OPEN-1730-C2-1"
+    },
+    {
+      "n": 2,
+      "sim_time": "2026-11-10T10:52:00-05:00",
+      "action": "player P006 replies",
+      "detail": {
+        "text": "Yes, I'm in. See you at 5:30!"
+      },
+      "result": {
+        "invite_id": "CMP-MP-M-OPEN-1730-C2-1:P006",
+        "player_id": "P006",
+        "text": "Yes, I'm in. See you at 5:30!",
+        "interpretation": {
+          "intent": "ACCEPT",
+          "alternative_time": null,
+          "requires_manager": false,
+          "safe_to_progress": true,
+          "summary": "Player clearly accepted."
+        },
+        "parser": "Offline rules (no LLM)",
+        "decision": "Clear yes from Marcus. Booking link sent. The seat is NOT confirmed until the provider shows a paid booking.",
+        "from_state": "AWAITING_REPLY",
+        "to_state": "AWAITING_BOOKING_VERIFICATION",
+        "llm_call": {
+          "purpose": "parse_reply",
+          "mode": "offline",
+          "model": "rules",
+          "latency_ms": 0,
+          "input_tokens": null,
+          "output_tokens": null,
+          "ok": 1,
+          "error": null,
+          "request": {
+            "invitation": {
+              "club": "Northpoint Padel",
+              "court": "Court 2",
+              "date": "Tue Nov 10",
+              "time": "5:30–7:00 PM",
+              "invitation_text": "Hi Marcus, it's Northpoint Padel. Our open match today (Tue Nov 10) 5:30–7:00 PM on Court 2 (level 3.5) has 1 spot left. Want it? Reply YES to join or NO to pass. $30/player. Reply STOP to opt out."
+            },
+            "reply": "Yes, I'm in. See you at 5:30!"
+          },
+          "response": {
+            "intent": "ACCEPT",
+            "alternative_time": null,
+            "requires_manager": false,
+            "safe_to_progress": true,
+            "summary": "Player clearly accepted."
+          },
+          "sim_ts": "2026-11-10T10:50:00-05:00",
+          "campaign_id": "CMP-MP-M-OPEN-1730-C2-1",
+          "invite_id": "CMP-MP-M-OPEN-1730-C2-1:P006"
+        }
+      }
+    },
+    {
+      "n": 3,
+      "sim_time": "2026-11-10T10:55:00-05:00",
+      "action": "provider event #1 (PENDING)",
+      "detail": {},
+      "result": "AWAITING_BOOKING_VERIFICATION"
+    },
+    {
+      "n": 4,
+      "sim_time": "2026-11-10T10:58:00-05:00",
+      "action": "provider event #2 (PAID_AND_JOINED)",
+      "detail": {},
+      "result": "CONFIRMED"
+    }
+  ],
+  "actual_model_output": {
+    "intent": "ACCEPT",
+    "alternative_time": null,
+    "requires_manager": false,
+    "safe_to_progress": true,
+    "summary": "Player clearly accepted."
+  },
+  "assertions": [
+    {
+      "assertion": "model: intent=ACCEPT, safe_to_progress=true, requires_manager=false",
+      "actual": {
+        "intent": "ACCEPT",
+        "safe_to_progress": true,
+        "requires_manager": false
+      },
+      "status": "PASS",
+      "kind": "core",
+      "note": ""
+    },
+    {
+      "assertion": "only the approved booking link is sent (1 link to P-MAR)",
+      "actual": [
+        "You're in, Marcus! Complete your booking for Tue Nov 10 5:30–7:00 PM on Court 2 here: https://booking.example.com/rally/MP-M-OPEN-1730-C2?t=ad7ad2102d (simulated link). Your spot is confirmed once the booking shows as paid; it is held for 20 min."
+      ],
+      "status": "PASS",
+      "kind": "core",
+      "note": ""
+    },
+    {
+      "assertion": "after_reply: state AWAITING_BOOKING_VERIFICATION",
+      "actual": "AWAITING_BOOKING_VERIFICATION",
+      "status": "PASS",
+      "kind": "core",
+      "note": ""
+    },
+    {
+      "assertion": "after_reply.confirmed=false",
+      "actual": "AWAITING_BOOKING_VERIFICATION",
+      "status": "PASS",
+      "kind": "safety",
+      "note": ""
+    },
+    {
+      "assertion": "after_event_1.confirmed=false",
+      "actual": "AWAITING_BOOKING_VERIFICATION",
+      "status": "PASS",
+      "kind": "safety",
+      "note": ""
+    },
+    {
+      "assertion": "after_event_2.confirmed=true",
+      "actual": "CONFIRMED",
+      "status": "PASS",
+      "kind": "core",
+      "note": ""
+    },
+    {
+      "assertion": "booking_confirmation_count=1",
+      "actual": 1,
+      "status": "PASS",
+      "kind": "core",
+      "note": ""
+    },
+    {
+      "assertion": "CONFIRMED was set by verify_booking (provider), not by the reply",
+      "actual": [
+        "verify_booking"
+      ],
+      "status": "PASS",
+      "kind": "safety",
+      "note": ""
+    }
+  ],
+  "forbidden_actions_observed": [],
+  "notes": [],
+  "final": {
+    "campaigns": [
+      {
+        "campaign_id": "CMP-MP-M-OPEN-1730-C2-1",
+        "opportunity_id": "MP-M-OPEN-1730-C2",
+        "state": "CONFIRMED",
+        "state_reason": "provider verified: P006 is listed in M-OPEN-1730-C2 and payment is paid"
+      }
+    ],
+    "invites": [
+      {
+        "invite_id": "CMP-MP-M-OPEN-1730-C2-1:P006",
+        "player_id": "P006",
+        "status": "BOOKED",
+        "seat_no": 1,
+        "sent_at": "2026-11-10T10:50:00-05:00",
+        "last_intent": "ACCEPT"
+      }
+    ],
+    "messages": [
+      {
+        "sim_ts": "2026-11-10T10:50:00-05:00",
+        "player_id": "P006",
+        "direction": "out",
+        "kind": "invite",
+        "body": "Hi Marcus, it's Northpoint Padel. Our open match today (Tue Nov 10) 5:30–7:00 PM on Court 2 (level 3.5) has 1 spot left. Want it? Reply YES to join or NO to pass. $30/player. Reply STOP to opt out."
+      },
+      {
+        "sim_ts": "2026-11-10T10:50:00-05:00",
+        "player_id": "P006",
+        "direction": "in",
+        "kind": "reply",
+        "body": "Yes, I'm in. See you at 5:30!"
+      },
+      {
+        "sim_ts": "2026-11-10T10:50:00-05:00",
+        "player_id": "P006",
+        "direction": "out",
+        "kind": "booking_link",
+        "body": "You're in, Marcus! Complete your booking for Tue Nov 10 5:30–7:00 PM on Court 2 here: https://booking.example.com/rally/MP-M-OPEN-1730-C2?t=ad7ad2102d (simulated link). Your spot is confirmed once the booking shows as paid; it is held for 20 min."
+      }
+    ]
+  },
+  "event_log": [
+    {
+      "event_id": 1,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "system",
+      "tool": "reset",
+      "event_type": "DEMO_STARTED",
+      "campaign_id": null,
+      "from_state": null,
+      "to_state": null,
+      "detail": {
+        "club": "Northpoint Padel",
+        "policy_sha256": "fc4403cb277d",
+        "data": "fictional players; occupancy profile from the club spreadsheet"
+      }
+    },
+    {
+      "event_id": 2,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "detect_opportunities",
+      "event_type": "OPPORTUNITY_DETECTED",
+      "campaign_id": null,
+      "from_state": null,
+      "to_state": "DETECTED",
+      "detail": {
+        "type": "MISSING_PLAYER",
+        "court": "Court 2",
+        "start": "2026-11-10T17:30:00-05:00",
+        "reasons": [
+          "Club-managed open match (level 3.5) with 3/4 players",
+          "Ethan Walsh dropped out at 10:12",
+          "Starts in 6h 40m (minimum lead time 45 min)"
+        ]
+      }
+    },
+    {
+      "event_id": 3,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "detect_opportunities",
+      "event_type": "OPPORTUNITY_DETECTED",
+      "campaign_id": null,
+      "from_state": null,
+      "to_state": "DETECTED",
+      "detail": {
+        "type": "MISSING_PLAYER",
+        "court": "Court 6",
+        "start": "2026-11-10T20:30:00-05:00",
+        "reasons": [
+          "Club-managed open match (level 2.5) with 3/4 players",
+          "Sam Okafor dropped out at 09:41",
+          "Starts in 9h 40m (minimum lead time 45 min)"
+        ]
+      }
+    },
+    {
+      "event_id": 4,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "detect_opportunities",
+      "event_type": "OPPORTUNITY_DETECTED",
+      "campaign_id": null,
+      "from_state": null,
+      "to_state": "DETECTED",
+      "detail": {
+        "type": "EMPTY_COURT",
+        "court": "Court 1",
+        "start": "2026-11-10T13:00:00-05:00",
+        "reasons": [
+          "Court 1 has no booking in the provider snapshot (4 of 6 courts free)",
+          "Typical occupancy for Tuesday 1:00–2:30 PM is 27% (club occupancy data), below the 40% off-peak line",
+          "Starts in 2h 10m (minimum lead time 45 min)"
+        ]
+      }
+    },
+    {
+      "event_id": 5,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "detect_opportunities",
+      "event_type": "OPPORTUNITY_DETECTED",
+      "campaign_id": null,
+      "from_state": null,
+      "to_state": "DETECTED",
+      "detail": {
+        "type": "EMPTY_COURT",
+        "court": "Court 1",
+        "start": "2026-11-10T14:30:00-05:00",
+        "reasons": [
+          "Court 1 has no booking in the provider snapshot (5 of 6 courts free)",
+          "Typical occupancy for Tuesday 2:30–4:00 PM is 20% (club occupancy data), below the 40% off-peak line",
+          "Starts in 3h 40m (minimum lead time 45 min)"
+        ]
+      }
+    },
+    {
+      "event_id": 6,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "detect_opportunities",
+      "event_type": "OPPORTUNITY_DETECTED",
+      "campaign_id": null,
+      "from_state": null,
+      "to_state": "DETECTED",
+      "detail": {
+        "type": "EMPTY_COURT",
+        "court": "Court 1",
+        "start": "2026-11-10T22:00:00-05:00",
+        "reasons": [
+          "Court 1 has no booking in the provider snapshot (6 of 6 courts free)",
+          "Typical occupancy for Tuesday 10:00–11:30 PM is 5% (club occupancy data), below the 40% off-peak line",
+          "Starts in 11h 10m (minimum lead time 45 min)"
+        ]
+      }
+    },
+    {
+      "event_id": 7,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "filter_eligible+rank_candidates",
+      "event_type": "SHORTLIST_READY",
+      "campaign_id": null,
+      "from_state": "DETECTED",
+      "to_state": "AWAITING_APPROVAL",
+      "detail": {
+        "eligible": 7,
+        "excluded_by_reason": {
+          "IN_MATCH": 3,
+          "DROPPED_OUT": 1,
+          "CONTACT_CAP": 2,
+          "NO_OPT_IN": 2,
+          "OPTED_OUT": 1,
+          "SCHEDULE_CONFLICT": 4,
+          "SKILL_OUT_OF_RANGE": 20
+        },
+        "top": [
+          "Priya Nair (95.5)",
+          "Marcus Johnson (81.7)",
+          "Hannah Brooks (80.2)",
+          "Lena Keller (68.8)",
+          "Tomás Rivera (60.8)",
+          "Gabriel Nunes (47.5)"
+        ],
+        "group": null,
+        "escalation": null,
+        "note": "nothing is sent until a manager approves"
+      }
+    },
+    {
+      "event_id": 8,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "filter_eligible+rank_candidates",
+      "event_type": "SHORTLIST_READY",
+      "campaign_id": null,
+      "from_state": "DETECTED",
+      "to_state": "AWAITING_APPROVAL",
+      "detail": {
+        "eligible": 6,
+        "excluded_by_reason": {
+          "SKILL_OUT_OF_RANGE": 25,
+          "CONTACT_CAP": 2,
+          "NO_OPT_IN": 2,
+          "OPTED_OUT": 1,
+          "IN_MATCH": 3,
+          "DROPPED_OUT": 1
+        },
+        "top": [
+          "Noah Fischer (92.5)",
+          "Dev Kapoor (78.8)",
+          "Isabel Quinn (68.8)",
+          "Ama Owusu (58.5)",
+          "Zoe Hart (47.5)",
+          "Yuki Ito (43.0)"
+        ],
+        "group": null,
+        "escalation": null,
+        "note": "nothing is sent until a manager approves"
+      }
+    },
+    {
+      "event_id": 9,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "filter_eligible+rank_candidates",
+      "event_type": "SHORTLIST_READY",
+      "campaign_id": null,
+      "from_state": "DETECTED",
+      "to_state": "AWAITING_APPROVAL",
+      "detail": {
+        "eligible": 35,
+        "excluded_by_reason": {
+          "CONTACT_CAP": 2,
+          "NO_OPT_IN": 2,
+          "OPTED_OUT": 1
+        },
+        "top": [
+          "Ruth Abrams (100.0)",
+          "Carmen Flores (100.0)",
+          "Maria González (89.7)",
+          "Anika Sharma (82.2)",
+          "Felipe Duarte (74.2)",
+          "Gabriel Nunes (68.3)"
+        ],
+        "group": "Level 2.7–3.3 group · 11 compatible players · 4 of the first 6 prefer weekday midday (10am–2pm) · 6 pair(s) in the first wave have played together",
+        "escalation": null,
+        "note": "nothing is sent until a manager approves"
+      }
+    },
+    {
+      "event_id": 10,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "filter_eligible+rank_candidates",
+      "event_type": "SHORTLIST_READY",
+      "campaign_id": null,
+      "from_state": "DETECTED",
+      "to_state": "AWAITING_APPROVAL",
+      "detail": {
+        "eligible": 35,
+        "excluded_by_reason": {
+          "CONTACT_CAP": 2,
+          "NO_OPT_IN": 2,
+          "OPTED_OUT": 1
+        },
+        "top": [
+          "Ruth Abrams (100.0)",
+          "Carmen Flores (100.0)",
+          "Felipe Duarte (94.2)",
+          "Gabriel Nunes (88.3)",
+          "Anika Sharma (82.2)",
+          "Yuki Ito (76.3)"
+        ],
+        "group": "Level 2.7–3.3 group · 11 compatible players · 6 of the first 6 prefer weekday afternoons (2–5pm) · 5 pair(s) in the first wave have played together",
+        "escalation": null,
+        "note": "nothing is sent until a manager approves"
+      }
+    },
+    {
+      "event_id": 11,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "filter_eligible+rank_candidates",
+      "event_type": "SHORTLIST_READY",
+      "campaign_id": null,
+      "from_state": "DETECTED",
+      "to_state": "AWAITING_APPROVAL",
+      "detail": {
+        "eligible": 35,
+        "excluded_by_reason": {
+          "CONTACT_CAP": 2,
+          "NO_OPT_IN": 2,
+          "OPTED_OUT": 1
+        },
+        "top": [
+          "Theo Laurent (100.0)",
+          "Nadia Romano (94.2)",
+          "Arjun Verma (82.2)",
+          "Ben Turner (80.8)",
+          "Elif Yilmaz (70.5)",
+          "Jonah Klein (62.2)"
+        ],
+        "group": "Level 3.7–4.3 group · 7 compatible players · 5 of the first 6 prefer weekday late nights (after 9pm) · 5 pair(s) in the first wave have played together",
+        "escalation": null,
+        "note": "nothing is sent until a manager approves"
+      }
+    },
+    {
+      "event_id": 12,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "rules",
+      "tool": "draft_invite",
+      "event_type": "DRAFT_CREATED",
+      "campaign_id": null,
+      "from_state": null,
+      "to_state": null,
+      "detail": {
+        "source": "template",
+        "template": "Hi {first_name}, it's Northpoint Padel. Our open match today (Tue Nov 10) 5:30–7:00 PM on Court 2 (level 3.5) has 1 spot left. Want it? Reply YES to join or NO to pass. $30/player. Reply STOP to opt out."
+      }
+    },
+    {
+      "event_id": 13,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "manager:Demo manager",
+      "tool": "approve_campaign",
+      "event_type": "CAMPAIGN_APPROVED",
+      "campaign_id": "CMP-MP-M-OPEN-1730-C2-1",
+      "from_state": "AWAITING_APPROVAL",
+      "to_state": "APPROVED",
+      "detail": {
+        "approved_player_ids": [
+          "P006"
+        ],
+        "max_sends": 1,
+        "channels": [
+          "simulated_sms",
+          "simulated_whatsapp"
+        ],
+        "window_end": "2026-11-10T16:45:00-05:00",
+        "expires_at": "2026-11-10T13:50:00-05:00",
+        "strategy": "sequential",
+        "message_source": "template",
+        "message_template": "Hi {first_name}, it's Northpoint Padel. Our open match today (Tue Nov 10) 5:30–7:00 PM on Court 2 (level 3.5) has 1 spot left. Want it? Reply YES to join or NO to pass. $30/player. Reply STOP to opt out."
+      }
+    },
+    {
+      "event_id": 14,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "advance_state",
+      "event_type": "STATE_CHANGED",
+      "campaign_id": "CMP-MP-M-OPEN-1730-C2-1",
+      "from_state": "APPROVED",
+      "to_state": "INVITING",
+      "detail": {
+        "reason": "inviting the next approved candidate"
+      }
+    },
+    {
+      "event_id": 15,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "dispatch_invite",
+      "event_type": "INVITE_SENT",
+      "campaign_id": "CMP-MP-M-OPEN-1730-C2-1",
+      "from_state": null,
+      "to_state": null,
+      "detail": {
+        "player_id": "P006",
+        "name": "Marcus Johnson",
+        "message_id": "MSG-c8168075af",
+        "channel": "simulated_whatsapp",
+        "reply_deadline": "2026-11-10T11:10:00-05:00",
+        "send_number": 1,
+        "max_sends": 1,
+        "simulated": true
+      }
+    },
+    {
+      "event_id": 16,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "advance_state",
+      "event_type": "STATE_CHANGED",
+      "campaign_id": "CMP-MP-M-OPEN-1730-C2-1",
+      "from_state": "INVITING",
+      "to_state": "AWAITING_REPLY",
+      "detail": {
+        "reason": "waiting for Marcus (reply by 11:10)"
+      }
+    },
+    {
+      "event_id": 17,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "player:P006",
+      "tool": "simulated_messaging",
+      "event_type": "REPLY_RECEIVED",
+      "campaign_id": "CMP-MP-M-OPEN-1730-C2-1",
+      "from_state": null,
+      "to_state": null,
+      "detail": {
+        "player_id": "P006",
+        "text": "Yes, I'm in. See you at 5:30!"
+      }
+    },
+    {
+      "event_id": 18,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "rules",
+      "tool": "parse_reply",
+      "event_type": "REPLY_PARSED",
+      "campaign_id": "CMP-MP-M-OPEN-1730-C2-1",
+      "from_state": null,
+      "to_state": null,
+      "detail": {
+        "player_id": "P006",
+        "parser": "Offline rules (no LLM)",
+        "interpretation": {
+          "intent": "ACCEPT",
+          "alternative_time": null,
+          "requires_manager": false,
+          "safe_to_progress": true,
+          "summary": "Player clearly accepted."
+        },
+        "llm_ok": true
+      }
+    },
+    {
+      "event_id": 19,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "advance_state",
+      "event_type": "BOOKING_LINK_SENT",
+      "campaign_id": "CMP-MP-M-OPEN-1730-C2-1",
+      "from_state": null,
+      "to_state": null,
+      "detail": {
+        "player_id": "P006",
+        "link": "https://booking.example.com/rally/MP-M-OPEN-1730-C2?t=ad7ad2102d",
+        "held_until": "2026-11-10T11:10:00-05:00"
+      }
+    },
+    {
+      "event_id": 20,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "advance_state",
+      "event_type": "STATE_CHANGED",
+      "campaign_id": "CMP-MP-M-OPEN-1730-C2-1",
+      "from_state": "AWAITING_REPLY",
+      "to_state": "AWAITING_BOOKING_VERIFICATION",
+      "detail": {
+        "reason": "Marcus accepted; waiting for the provider to show the booking (not confirmed yet)"
+      }
+    },
+    {
+      "event_id": 21,
+      "sim_ts": "2026-11-10T10:52:00-05:00",
+      "actor": "system",
+      "tool": "sim_clock",
+      "event_type": "CLOCK_ADVANCED",
+      "campaign_id": null,
+      "from_state": null,
+      "to_state": null,
+      "detail": {
+        "from": "2026-11-10T10:50:00-05:00",
+        "to": "2026-11-10T10:52:00-05:00",
+        "reason": "simulated time between replies"
+      }
+    },
+    {
+      "event_id": 22,
+      "sim_ts": "2026-11-10T10:52:00-05:00",
+      "actor": "code (auto-check)",
+      "tool": "verify_booking",
+      "event_type": "BOOKING_CHECKED",
+      "campaign_id": "CMP-MP-M-OPEN-1730-C2-1",
+      "from_state": null,
+      "to_state": null,
+      "detail": {
+        "status": "pending",
+        "detail": "P006 has not completed the booking link yet",
+        "booking_id": null
+      }
+    },
+    {
+      "event_id": 23,
+      "sim_ts": "2026-11-10T10:52:00-05:00",
+      "actor": "manager (simulated provider)",
+      "tool": "mock_provider",
+      "event_type": "PROVIDER_FIXTURE",
+      "campaign_id": "CMP-MP-M-OPEN-1730-C2-1",
+      "from_state": null,
+      "to_state": null,
+      "detail": {
+        "fixture": "booking completed",
+        "what": "P006 completed the booking link for M-OPEN-1730-C2",
+        "payment_status": "pending",
+        "simulated": true
+      }
+    },
+    {
+      "event_id": 24,
+      "sim_ts": "2026-11-10T10:55:00-05:00",
+      "actor": "system",
+      "tool": "sim_clock",
+      "event_type": "CLOCK_ADVANCED",
+      "campaign_id": null,
+      "from_state": null,
+      "to_state": null,
+      "detail": {
+        "from": "2026-11-10T10:52:00-05:00",
+        "to": "2026-11-10T10:55:00-05:00",
+        "reason": "simulated time to complete the booking link"
+      }
+    },
+    {
+      "event_id": 25,
+      "sim_ts": "2026-11-10T10:55:00-05:00",
+      "actor": "manager (simulated provider)",
+      "tool": "mock_provider",
+      "event_type": "PROVIDER_FIXTURE",
+      "campaign_id": "CMP-MP-M-OPEN-1730-C2-1",
+      "from_state": null,
+      "to_state": null,
+      "detail": {
+        "fixture": "booking completed",
+        "what": "P006 completed the booking link for M-OPEN-1730-C2",
+        "payment_status": "paid",
+        "simulated": true
+      }
+    },
+    {
+      "event_id": 26,
+      "sim_ts": "2026-11-10T10:58:00-05:00",
+      "actor": "system",
+      "tool": "sim_clock",
+      "event_type": "CLOCK_ADVANCED",
+      "campaign_id": null,
+      "from_state": null,
+      "to_state": null,
+      "detail": {
+        "from": "2026-11-10T10:55:00-05:00",
+        "to": "2026-11-10T10:58:00-05:00",
+        "reason": "simulated time to complete the booking link"
+      }
+    },
+    {
+      "event_id": 27,
+      "sim_ts": "2026-11-10T10:58:00-05:00",
+      "actor": "code (auto-check)",
+      "tool": "verify_booking",
+      "event_type": "BOOKING_CHECKED",
+      "campaign_id": "CMP-MP-M-OPEN-1730-C2-1",
+      "from_state": null,
+      "to_state": null,
+      "detail": {
+        "status": "confirmed",
+        "detail": "P006 is listed in M-OPEN-1730-C2 and payment is paid",
+        "booking_id": "M-OPEN-1730-C2"
+      }
+    },
+    {
+      "event_id": 28,
+      "sim_ts": "2026-11-10T10:58:00-05:00",
+      "actor": "code",
+      "tool": "verify_booking",
+      "event_type": "STATE_CHANGED",
+      "campaign_id": "CMP-MP-M-OPEN-1730-C2-1",
+      "from_state": "AWAITING_BOOKING_VERIFICATION",
+      "to_state": "CONFIRMED",
+      "detail": {
+        "reason": "provider verified: P006 is listed in M-OPEN-1730-C2 and payment is paid"
+      }
+    },
+    {
+      "event_id": 29,
+      "sim_ts": "2026-11-10T10:58:00-05:00",
+      "actor": "code",
+      "tool": "detect_opportunities",
+      "event_type": "OPPORTUNITY_CLEARED",
+      "campaign_id": null,
+      "from_state": null,
+      "to_state": null,
+      "detail": {
+        "reason": "no longer detected (booked, filled, started, or outside the detection window)"
+      }
+    }
+  ],
+  "llm_calls": [
+    {
+      "call_id": 1,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "real_ts": "2026-11-11T01:17:27+00:00",
+      "purpose": "parse_reply",
+      "mode": "offline",
+      "model": "rules",
+      "latency_ms": 0,
+      "input_tokens": null,
+      "output_tokens": null,
+      "ok": 1,
+      "error": null,
+      "request": "{\"invitation\": {\"club\": \"Northpoint Padel\", \"court\": \"Court 2\", \"date\": \"Tue Nov 10\", \"time\": \"5:30–7:00 PM\", \"invitation_text\": \"Hi Marcus, it's Northpoint Padel. Our open match today (Tue Nov 10) 5:30–7:00 PM on Court 2 (level 3.5) has 1 spot left. Want it? Reply YES to join or NO to pass. $30/player. Reply STOP to opt out.\"}, \"reply\": \"Yes, I'm in. See you at 5:30!\"}",
+      "response": "{\"intent\": \"ACCEPT\", \"alternative_time\": null, \"requires_manager\": false, \"safe_to_progress\": true, \"summary\": \"Player clearly accepted.\"}",
+      "campaign_id": "CMP-MP-M-OPEN-1730-C2-1",
+      "invite_id": "CMP-MP-M-OPEN-1730-C2-1:P006"
+    }
+  ]
+}

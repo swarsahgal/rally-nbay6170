@@ -1,0 +1,89 @@
+# Rally club policy: the one wired-in knowledge source (PRD section 6).
+# Loaded when an opportunity is evaluated AND again right before any message is sent.
+# Every value below is a PROVISIONAL demo setting from PRD section 8. Nothing here has been
+# approved by the team or by a club yet. Change a value and bump policy_version.
+
+policy_version: "0.1.0-provisional (2026-11-05)"
+status: provisional
+
+club:
+  club_id: CLUB-NPT
+  name: Northpoint Padel           # fictional club
+  timezone: America/New_York
+  court_count: 6
+  court_price_per_hour_usd: 80     # illustrative only (PRD section 10), never a revenue claim
+  players_per_court: 4
+
+schedule:
+  # Opening hours and off-peak windows come from data/occupancy_profile.csv
+  # (built from the club occupancy spreadsheet by scripts/build_fixtures.py).
+  slot_minutes: 90
+  slot_grid: fixed_from_opening    # slots start at opening time and repeat every 90 minutes
+  open_hour_min_occupancy_pct: 0.5 # an hour counts as "open" if typical occupancy >= this
+  off_peak_max_occupancy_pct: 40   # a slot is off-peak if its typical occupancy is below this
+
+consent:
+  require_explicit_opt_in: true
+  allowed_channels: [simulated_sms, simulated_whatsapp]
+  stop_keywords: [STOP, UNSUBSCRIBE, "OPT OUT", "STOP ALL", CANCEL]
+
+eligibility:
+  match_types_allowed: [club_open]  # private matches are excluded by default
+  skill_tolerance: 0.3              # +/- around the match (or group) level
+  skill_mode: hard_filter           # hard_filter | rank_only  (team to decide)
+  exclude_if_pending_invite_elsewhere: true
+
+contact:
+  quiet_hours_start: "09:00"        # sends allowed only between these local times
+  quiet_hours_end: "21:00"
+  max_invites_per_player_per_7_days: 2
+
+timing:
+  min_lead_time_minutes: 45
+  reply_timeout_minutes: 20
+  booking_hold_minutes: 20          # time to complete the booking link after a clear yes
+  detection_horizon_hours: 24
+
+missing_player:
+  outreach: sequential
+  default_approved_candidates: 3
+  shortlist_size: 8
+
+empty_court:
+  outreach: batch
+  first_wave_max_candidates: 6
+  min_group_size: 4
+
+approval:
+  required_for_all_invites: true
+  approval_valid_minutes: 180       # approval also expires at the end of its outreach window
+  new_candidate_requires_fresh_approval: true
+
+booking:
+  verification: mock_provider_verified
+  required_payment_status: paid
+  booking_link_base: "https://booking.example.com/rally"   # simulated link (example.com is reserved)
+
+ranking:
+  # Transparent, rule-based weights (D05: no ML predictions in HW2). Each feature is 0..1.
+  weights:
+    skill_fit: 0.35
+    time_fit: 0.25
+    social: 0.15
+    activity: 0.15
+    freshness: 0.10
+  time_fit_when_not_preferred: 0.2
+
+escalation:
+  intents_requiring_manager: [TENTATIVE, QUESTION, ALTERNATIVE_TIME, UNKNOWN]
+  on_zero_eligible: escalate
+  on_provider_unavailable: stop_and_mark_unverified
+
+llm:
+  default_model: claude-haiku-5-5   # small/fast tier; compare with claude-sonnet-5-5 for the tier test
+  max_reply_chars: 500
+
+demo:
+  start_time: "2026-11-10T10:50:00"  # simulated clock start (club local time), a Tuesday
+  generate_days: 2                   # demo day plus the next day
+  minutes_per_player_reply: 2        # each simulated reply moves the clock forward

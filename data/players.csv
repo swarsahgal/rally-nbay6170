@@ -1,0 +1,41 @@
+player_id,name,first_name,level,phone,opt_in_status,opt_in_channel,opt_in_source,opt_in_at,prior_invites_days_ago
+P001,Daniela Moreno,Daniela,3.6,+1-212-555-0101,opted_in,simulated_sms,Club app opt-in (fictional),2026-09-14,
+P002,Kwame Asante,Kwame,3.4,+1-212-555-0102,opted_in,simulated_whatsapp,Club app opt-in (fictional),2026-09-20,
+P003,Sofia Lindqvist,Sofia,3.5,+1-212-555-0103,opted_in,simulated_sms,Front desk form (fictional),2026-10-02,
+P004,Ethan Walsh,Ethan,3.5,+1-212-555-0104,opted_in,simulated_sms,Club app opt-in (fictional),2026-09-30,
+P005,Priya Nair,Priya,3.5,+1-212-555-0105,opted_in,simulated_sms,Club app opt-in (fictional),2026-10-05,
+P006,Marcus Johnson,Marcus,3.4,+1-212-555-0106,opted_in,simulated_whatsapp,Club app opt-in (fictional),2026-09-11,3
+P007,Lena Keller,Lena,3.7,+1-212-555-0107,opted_in,simulated_sms,Front desk form (fictional),2026-10-12,
+P008,Tomás Rivera,Tomás,3.3,+1-212-555-0108,opted_in,simulated_sms,Club app opt-in (fictional),2026-08-28,
+P009,Hannah Brooks,Hannah,3.6,+1-212-555-0109,opted_in,simulated_sms,Club app opt-in (fictional),2026-09-03,6
+P010,Omar Saleh,Omar,3.5,+1-212-555-0110,opted_in,simulated_sms,Club app opt-in (fictional),2026-09-22,2;5
+P011,Grace Chen,Grace,3.6,+1-212-555-0111,none,,,,
+P012,Jun Park,Jun,3.4,+1-212-555-0112,opted_out,simulated_sms,Club app opt-in (fictional),2026-08-15,
+P013,Aisha Diallo,Aisha,3.5,+1-212-555-0113,opted_in,simulated_whatsapp,Club app opt-in (fictional),2026-10-09,
+P014,Ben Turner,Ben,4.2,+1-212-555-0114,opted_in,simulated_sms,Club app opt-in (fictional),2026-09-18,
+P015,Elif Yilmaz,Elif,4.3,+1-212-555-0115,opted_in,simulated_whatsapp,Front desk form (fictional),2026-10-01,
+P016,Maria González,Maria,3.1,+1-212-555-0116,opted_in,simulated_sms,Club app opt-in (fictional),2026-09-25,
+P017,Jonah Klein,Jonah,3.9,+1-212-555-0117,opted_in,simulated_sms,Club app opt-in (fictional),2026-10-15,
+P018,Valentina Costa,Valentina,4.4,+1-212-555-0118,opted_in,simulated_whatsapp,Club app opt-in (fictional),2026-09-09,
+P019,Sami Haddad,Sami,2.0,+1-212-555-0119,opted_in,simulated_sms,Front desk form (fictional),2026-10-20,
+P020,Chloe Vance,Chloe,2.6,+1-212-555-0120,opted_in,simulated_sms,Club app opt-in (fictional),2026-09-27,
+P021,Rafael Gómez,Rafael,2.4,+1-212-555-0121,opted_in,simulated_whatsapp,Club app opt-in (fictional),2026-10-03,
+P022,Mei Tanaka,Mei,2.5,+1-212-555-0122,opted_in,simulated_sms,Club app opt-in (fictional),2026-10-07,
+P023,Sam Okafor,Sam,2.5,+1-212-555-0123,opted_in,simulated_sms,Club app opt-in (fictional),2026-09-29,
+P024,Noah Fischer,Noah,2.5,+1-212-555-0124,opted_in,simulated_sms,Club app opt-in (fictional),2026-10-10,
+P025,Isabel Quinn,Isabel,2.7,+1-212-555-0125,opted_in,simulated_whatsapp,Front desk form (fictional),2026-09-16,
+P026,Dev Kapoor,Dev,2.3,+1-212-555-0126,opted_in,simulated_sms,Club app opt-in (fictional),2026-09-21,1
+P027,Zoe Hart,Zoe,2.8,+1-212-555-0127,opted_in,simulated_sms,Club app opt-in (fictional),2026-10-14,
+P028,Luca Marino,Luca,2.6,+1-212-555-0128,opted_in,simulated_sms,Club app opt-in (fictional),2026-09-12,1;4
+P029,Ama Owusu,Ama,2.2,+1-212-555-0129,opted_in,simulated_sms,Front desk form (fictional),2026-10-18,
+P030,Ruth Abrams,Ruth,3.0,+1-212-555-0130,opted_in,simulated_sms,Front desk form (fictional),2026-08-30,
+P031,Felipe Duarte,Felipe,3.1,+1-212-555-0131,opted_in,simulated_whatsapp,Club app opt-in (fictional),2026-09-05,
+P032,Anika Sharma,Anika,2.9,+1-212-555-0132,opted_in,simulated_sms,Club app opt-in (fictional),2026-09-19,
+P033,Gabriel Nunes,Gabriel,3.2,+1-212-555-0133,opted_in,simulated_sms,Club app opt-in (fictional),2026-10-06,
+P034,Yuki Ito,Yuki,2.8,+1-212-555-0134,opted_in,simulated_whatsapp,Club app opt-in (fictional),2026-09-24,
+P035,Carmen Flores,Carmen,3.0,+1-212-555-0135,opted_in,simulated_sms,Front desk form (fictional),2026-10-11,
+P036,Ivan Petrov,Ivan,3.3,+1-212-555-0136,opted_in,simulated_sms,Club app opt-in (fictional),2026-09-08,4
+P037,Fatima Zahra,Fatima,3.1,+1-212-555-0137,none,,,,
+P038,Theo Laurent,Theo,4.0,+1-212-555-0138,opted_in,simulated_sms,Club app opt-in (fictional),2026-09-17,
+P039,Nadia Romano,Nadia,4.1,+1-212-555-0139,opted_in,simulated_whatsapp,Club app opt-in (fictional),2026-10-04,
+P040,Arjun Verma,Arjun,3.9,+1-212-555-0140,opted_in,simulated_sms,Club app opt-in (fictional),2026-09-26,

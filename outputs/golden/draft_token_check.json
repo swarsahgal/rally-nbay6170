@@ -1,0 +1,70 @@
+{
+  "model": "claude-haiku-5-5",
+  "run_at": "2026-11-10T20:25:21",
+  "results": [
+    {
+      "opportunity": "MP-M-OPEN-1730-C2",
+      "max_tokens": 400,
+      "stop_reason": "max_tokens",
+      "output_tokens": 400,
+      "blocks": [
+        "thinking",
+        "text"
+      ],
+      "text": "{\"message\": \"Hi {first_name}, one spot is open for today (Tue Nov 10) 5:30–7:00 PM on Court 2 at Northpoint Padel. Level 3.5 open match, $30",
+      "draft": "",
+      "error": "ValidationError",
+      "rally_validation_problems": [
+        "no draft returned"
+      ],
+      "usable_by_rally": false
+    },
+    {
+      "opportunity": "MP-M-OPEN-1730-C2",
+      "max_tokens": 2000,
+      "stop_reason": "end_turn",
+      "output_tokens": 404,
+      "blocks": [
+        "thinking",
+        "text"
+      ],
+      "text": "{\"message\": \"Hi {first_name}, one spot is left in today (Tue Nov 10) 5:30–7:00 PM on Court 2 at Northpoint Padel. Level 3.5, $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out.\"}",
+      "draft": "Hi {first_name}, one spot is left in today (Tue Nov 10) 5:30–7:00 PM on Court 2 at Northpoint Padel. Level 3.5, $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out.",
+      "error": "",
+      "rally_validation_problems": [],
+      "usable_by_rally": true
+    },
+    {
+      "opportunity": "EC-20261110-1430-C1",
+      "max_tokens": 400,
+      "stop_reason": "max_tokens",
+      "output_tokens": 400,
+      "blocks": [
+        "thinking",
+        "text"
+      ],
+      "text": "{\"message\": \"Hi {first_name}, Northpoint Padel has a new game for four today (Tue Nov 10) 2:30–4:00 PM on Court 1, level 2.7–3.3. It's $30",
+      "draft": "",
+      "error": "ValidationError",
+      "rally_validation_problems": [
+        "no draft returned"
+      ],
+      "usable_by_rally": false
+    },
+    {
+      "opportunity": "EC-20261110-1430-C1",
+      "max_tokens": 2000,
+      "stop_reason": "end_turn",
+      "output_tokens": 478,
+      "blocks": [
+        "thinking",
+        "text"
+      ],
+      "text": "{\"message\": \"Hi {first_name}, you're invited to a padel game today (Tue Nov 10) 2:30–4:00 PM on Court 1 at Northpoint Padel. Level 2.7–3.3, $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out.\"}",
+      "draft": "Hi {first_name}, you're invited to a padel game today (Tue Nov 10) 2:30–4:00 PM on Court 1 at Northpoint Padel. Level 2.7–3.3, $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out.",
+      "error": "",
+      "rally_validation_problems": [],
+      "usable_by_rally": true
+    }
+  ]
+}
