@@ -41,6 +41,10 @@ def invite_facts(opp: Opportunity, policy: ClubPolicy, now: datetime, group_leve
         "game_type": "open match with one spot left" if opp.type == OpportunityType.MISSING_PLAYER
                      else "new game for four",
         "price_per_player_usd": price_per_player(policy),
+        "duration_minutes": policy.schedule.slot_minutes,
+        "booking_condition": None if opp.type == OpportunityType.MISSING_PLAYER else (
+            f"The game only goes ahead if {opp.seats_needed} players reply YES and book; it is confirmed once "
+            "the booking is paid."),
         "reply_options": "YES to join, NO to pass",
         "opt_out_line": "Reply STOP to opt out.",
     }
@@ -51,9 +55,16 @@ def template_invite(opp: Opportunity, facts: dict) -> str:
         return (f"Hi {{first_name}}, it's {facts['club']}. Our open match {facts['when']} on {facts['court']} "
                 f"(level {facts['level']}) has 1 spot left. Want it? Reply YES to join or NO to pass. "
                 f"${facts['price_per_player_usd']}/player. Reply STOP to opt out.")
-    return (f"Hi {{first_name}}, it's {facts['club']}. We're putting together a level {facts['level']} game "
-            f"{facts['when']} on {facts['court']}. The first 4 to reply YES get the spots, "
-            f"${facts['price_per_player_usd']}/player. Reply NO to pass. Reply STOP to opt out.")
+    return (f"Hi {{first_name}}, it's {facts['club']}. We're forming a level {facts['level']} game "
+            f"{facts['when']} ({facts['duration_minutes']} min) on {facts['court']}, ${facts['price_per_player_usd']}"
+            f"/player. It goes ahead only if 4 players say YES and book; we'll send a booking link then. "
+            f"Reply YES to join, NO to pass. Reply STOP to opt out.")
+
+
+# A drafted or edited invite must never sound like a booked spot before the booking is paid.
+_PROMISE = re.compile(r"guarantee|you'?re (in|booked|confirmed)\b|is confirmed|confirmed spot|reserved for you|"
+                      r"get the spots?|your spot is (yours|saved|booked)|it'?s yours|spot is held", re.I)
+_CONDITION = re.compile(r"\b(only if|if (4|four)|once (4|four)|when (4|four)|need (4|four)|(4|four) players)\b", re.I)
 
 
 def validate_invite_text(text: str, facts: dict) -> list[str]:
@@ -74,6 +85,11 @@ def validate_invite_text(text: str, facts: dict) -> list[str]:
         problems.append(f"missing the court ({facts['court']})")
     if re.search(r"https?://|www\.", text, re.I):
         problems.append("contains a link (booking links are only sent after a clear yes)")
+    promise = _PROMISE.search(text)
+    if promise:
+        problems.append(f"promises a spot before booking (\"{promise.group(0)}\")")
+    if facts.get("booking_condition") and not _CONDITION.search(text):
+        problems.append("must say the game only goes ahead if 4 players say YES and book")
     prices = {int(p) for p in re.findall(r"\$\s?(\d+)", text)}
     if prices - {facts["price_per_player_usd"]}:
         problems.append(f"mentions a price other than ${facts['price_per_player_usd']}/player")
@@ -92,12 +108,12 @@ def booking_link(policy: ClubPolicy, opportunity_id: str, invite_id: str) -> str
 def follow_up(kind: str, *, first_name: str, policy: ClubPolicy, opp: Opportunity, link: str = "") -> str:
     when = f"{day_label(opp.start)} {range_label(opp.start, opp.end)}"
     texts = {
-        "booking_link_missing": (f"You're in, {first_name}! Complete your booking for {when} on {opp.court_name} "
+        "booking_link_missing": (f"Thanks, {first_name}! Complete your booking for {when} on {opp.court_name} "
                                  f"here: {link} (simulated link). Your spot is confirmed once the booking shows as "
                                  f"paid; it is held for {policy.timing.booking_hold_minutes} min."),
-        "booking_link_group": (f"Great news, {first_name}: your group of 4 is set for {when} on {opp.court_name}. "
-                               f"Book and pay your share here: {link} (simulated link). The court is held for "
-                               f"{policy.timing.booking_hold_minutes} min."),
+        "booking_link_group": (f"Great news, {first_name}: 4 players said yes for {when} on {opp.court_name}. "
+                               f"Book and pay your share here: {link} (simulated link). The game is confirmed once "
+                               f"all 4 have paid; the court is held for {policy.timing.booking_hold_minutes} min."),
         "waitlist": (f"Thanks {first_name}! The 4 spots for {when} just filled, so you're on the waitlist. "
                      "We'll message you if a spot opens."),
         "seat_gone": f"Sorry {first_name}, that spot for {when} was just filled. Thanks for the quick reply!",

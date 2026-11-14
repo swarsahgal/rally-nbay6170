@@ -2,7 +2,7 @@
   "case_id": "G05",
   "title": "STOP persists beyond the conversation",
   "run": "offline",
-  "generated_at": "2026-11-10T20:17:27",
+  "generated_at": "2026-11-14T15:32:59",
   "parser": "Offline rules (no LLM)",
   "llm_mode": "offline",
   "model": "rules",
@@ -43,6 +43,7 @@
           "P006"
         ],
         "max_sends": 2,
+        "first_wave": null,
         "template": "Hi {first_name}, it's Northpoint Padel. Our open match today (Tue Nov 10) 5:30–7:00 PM on Court 2 (level 3.5) has 1 spot left. Want it? Reply YES to join or NO to pass. $30/player. Reply STOP to opt out.",
         "template_source": "template"
       },
@@ -567,7 +568,7 @@
       "detail": {
         "player_id": "P005",
         "name": "Priya Nair",
-        "message_id": "MSG-faaa763d32",
+        "message_id": "MSG-12ec98c040",
         "channel": "simulated_sms",
         "reply_deadline": "2026-11-10T11:10:00-05:00",
         "send_number": 1,
@@ -663,7 +664,7 @@
       "detail": {
         "player_id": "P006",
         "name": "Marcus Johnson",
-        "message_id": "MSG-e1f8233a81",
+        "message_id": "MSG-f1aff1f8be",
         "channel": "simulated_whatsapp",
         "reply_deadline": "2026-11-10T11:10:00-05:00",
         "send_number": 2,
@@ -710,7 +711,7 @@
       "to_state": null,
       "detail": {
         "source": "template",
-        "template": "Hi {first_name}, it's Northpoint Padel. We're putting together a level 2.7–3.3 game today (Tue Nov 10) 2:30–4:00 PM on Court 1. The first 4 to reply YES get the spots, $30/player. Reply NO to pass. Reply STOP to opt out."
+        "template": "Hi {first_name}, it's Northpoint Padel. We're forming a level 2.7–3.3 game today (Tue Nov 10) 2:30–4:00 PM (90 min) on Court 1, $30/player. It goes ahead only if 4 players say YES and book; we'll send a booking link then. Reply YES to join, NO to pass. Reply STOP to opt out."
       }
     }
   ],
@@ -718,7 +719,7 @@
     {
       "call_id": 1,
       "sim_ts": "2026-11-10T10:50:00-05:00",
-      "real_ts": "2026-11-11T01:17:27+00:00",
+      "real_ts": "2026-11-14T20:32:59+00:00",
       "purpose": "parse_reply",
       "mode": "offline",
       "model": "rules",

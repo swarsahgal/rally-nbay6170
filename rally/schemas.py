@@ -184,6 +184,7 @@ class CampaignApproval(BaseModel):
     strategy: Literal["sequential", "batch"]
     approved_player_ids: list[str]
     max_sends: int
+    first_wave: int | None = None  # batch only: how many to invite at once; the rest are approved backups
     channels: list[str]
     window_start: datetime
     window_end: datetime

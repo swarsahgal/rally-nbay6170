@@ -126,15 +126,16 @@ class CaseRun:
         t = OpportunityType.MISSING_PLAYER if opp_id.startswith("MP-") else OpportunityType.EMPTY_COURT
         return next(v for v in self.engine.views(t) if v.opp.opportunity_id == opp_id)
 
-    def approve(self, opp_id: str, ids: list[str], max_sends: int | None = None) -> str:
+    def approve(self, opp_id: str, ids: list[str], max_sends: int | None = None,
+                first_wave: int | None = None) -> str:
         e = self.engine
         view = self.view(opp_id)
         template, source, _ = e.draft(opp_id)
         window_end = view.opp.start - timedelta(minutes=e.policy().timing.min_lead_time_minutes)
         cid = e.approve(opp_id, ids, max_sends or len(ids), window_end, e.policy().consent.allowed_channels,
-                        template, source)
+                        template, source, first_wave=first_wave)
         self.step("manager approves campaign", cid, opportunity=opp_id, approved_player_ids=ids,
-                  max_sends=max_sends or len(ids), template=template, template_source=source)
+                  max_sends=max_sends or len(ids), first_wave=first_wave, template=template, template_source=source)
         return cid
 
     def reply(self, cid: str, pid: str, text: str):
@@ -655,10 +656,9 @@ def g15(r: CaseRun):
 def g16(r: CaseRun):
     e = r.engine
     ids = _ec_ids(r)
-    r.notes.append("Represented as: manager approves six players (P-A..P-F) with max_sends=4, so the first round "
-                   "goes to P-A..P-D and P-E, P-F stay approved and unsent. Rally's batch mode has no separate "
-                   "'round size'; with max_sends=6 all six would be messaged at once.")
-    cid = r.approve(EC, ids, max_sends=4)
+    r.notes.append("Represented as: manager approves six players (P-A..P-F), max_sends=6, first_wave=4, so the "
+                   "first round goes to P-A..P-D and P-E, P-F stay approved backups.")
+    cid = r.approve(EC, ids, max_sends=6, first_wave=4)
     first = sorted(p for p, x in r.invites(cid).items() if x["sent_at"])
     r.step("first round sent to", first)
     r.reply(cid, ids[0], "yes")

@@ -50,6 +50,8 @@ Rules:
 - Say how to reply: YES to join, NO to pass.
 - End with the exact sentence: Reply STOP to opt out.
 - You may mention the price only as given (price_per_player_usd, per player). No other numbers or promises.
+- If "booking_condition" is given, say it plainly: the game only goes ahead if 4 players say YES and book.
+  Never say or imply a spot is already theirs, booked or guaranteed.
 - No links, no emojis, no new facts. At most 300 characters. Warm and plain."""
 
 _YES = re.compile(r"\b(yes|yep|yeah|yea|yup|sure|definitely|absolutely|sounds good|count me in|i'?m in|im in|"

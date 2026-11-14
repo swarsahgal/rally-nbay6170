@@ -2,7 +2,7 @@
   "case_id": "G20",
   "title": "Revoked approval blocks the next scheduled send",
   "run": "offline",
-  "generated_at": "2026-11-10T20:17:29",
+  "generated_at": "2026-11-14T15:33:01",
   "parser": "Offline rules (no LLM)",
   "llm_mode": "offline",
   "model": "rules",
@@ -38,7 +38,8 @@
           "P034"
         ],
         "max_sends": 4,
-        "template": "Hi {first_name}, it's Northpoint Padel. We're putting together a level 2.7–3.3 game today (Tue Nov 10) 2:30–4:00 PM on Court 1. The first 4 to reply YES get the spots, $30/player. Reply NO to pass. Reply STOP to opt out.",
+        "first_wave": null,
+        "template": "Hi {first_name}, it's Northpoint Padel. We're forming a level 2.7–3.3 game today (Tue Nov 10) 2:30–4:00 PM (90 min) on Court 1, $30/player. It goes ahead only if 4 players say YES and book; we'll send a booking link then. Reply YES to join, NO to pass. Reply STOP to opt out.",
         "template_source": "template"
       },
       "result": "CMP-EC-20261110-1430-C1-1"
@@ -194,28 +195,28 @@
         "player_id": "P030",
         "direction": "out",
         "kind": "invite",
-        "body": "Hi Ruth, it's Northpoint Padel. We're putting together a level 2.7–3.3 game today (Tue Nov 10) 2:30–4:00 PM on Court 1. The first 4 to reply YES get the spots, $30/player. Reply NO to pass. Reply STOP to opt out."
+        "body": "Hi Ruth, it's Northpoint Padel. We're forming a level 2.7–3.3 game today (Tue Nov 10) 2:30–4:00 PM (90 min) on Court 1, $30/player. It goes ahead only if 4 players say YES and book; we'll send a booking link then. Reply YES to join, NO to pass. Reply STOP to opt out."
       },
       {
         "sim_ts": "2026-11-10T10:50:00-05:00",
         "player_id": "P035",
         "direction": "out",
         "kind": "invite",
-        "body": "Hi Carmen, it's Northpoint Padel. We're putting together a level 2.7–3.3 game today (Tue Nov 10) 2:30–4:00 PM on Court 1. The first 4 to reply YES get the spots, $30/player. Reply NO to pass. Reply STOP to opt out."
+        "body": "Hi Carmen, it's Northpoint Padel. We're forming a level 2.7–3.3 game today (Tue Nov 10) 2:30–4:00 PM (90 min) on Court 1, $30/player. It goes ahead only if 4 players say YES and book; we'll send a booking link then. Reply YES to join, NO to pass. Reply STOP to opt out."
       },
       {
         "sim_ts": "2026-11-10T10:50:00-05:00",
         "player_id": "P031",
         "direction": "out",
         "kind": "invite",
-        "body": "Hi Felipe, it's Northpoint Padel. We're putting together a level 2.7–3.3 game today (Tue Nov 10) 2:30–4:00 PM on Court 1. The first 4 to reply YES get the spots, $30/player. Reply NO to pass. Reply STOP to opt out."
+        "body": "Hi Felipe, it's Northpoint Padel. We're forming a level 2.7–3.3 game today (Tue Nov 10) 2:30–4:00 PM (90 min) on Court 1, $30/player. It goes ahead only if 4 players say YES and book; we'll send a booking link then. Reply YES to join, NO to pass. Reply STOP to opt out."
       },
       {
         "sim_ts": "2026-11-10T10:50:00-05:00",
         "player_id": "P033",
         "direction": "out",
         "kind": "invite",
-        "body": "Hi Gabriel, it's Northpoint Padel. We're putting together a level 2.7–3.3 game today (Tue Nov 10) 2:30–4:00 PM on Court 1. The first 4 to reply YES get the spots, $30/player. Reply NO to pass. Reply STOP to opt out."
+        "body": "Hi Gabriel, it's Northpoint Padel. We're forming a level 2.7–3.3 game today (Tue Nov 10) 2:30–4:00 PM (90 min) on Court 1, $30/player. It goes ahead only if 4 players say YES and book; we'll send a booking link then. Reply YES to join, NO to pass. Reply STOP to opt out."
       }
     ]
   },
@@ -498,7 +499,7 @@
       "to_state": null,
       "detail": {
         "source": "template",
-        "template": "Hi {first_name}, it's Northpoint Padel. We're putting together a level 2.7–3.3 game today (Tue Nov 10) 2:30–4:00 PM on Court 1. The first 4 to reply YES get the spots, $30/player. Reply NO to pass. Reply STOP to opt out."
+        "template": "Hi {first_name}, it's Northpoint Padel. We're forming a level 2.7–3.3 game today (Tue Nov 10) 2:30–4:00 PM (90 min) on Court 1, $30/player. It goes ahead only if 4 players say YES and book; we'll send a booking link then. Reply YES to join, NO to pass. Reply STOP to opt out."
       }
     },
     {
@@ -528,7 +529,7 @@
         "expires_at": "2026-11-10T13:45:00-05:00",
         "strategy": "batch",
         "message_source": "template",
-        "message_template": "Hi {first_name}, it's Northpoint Padel. We're putting together a level 2.7–3.3 game today (Tue Nov 10) 2:30–4:00 PM on Court 1. The first 4 to reply YES get the spots, $30/player. Reply NO to pass. Reply STOP to opt out."
+        "message_template": "Hi {first_name}, it's Northpoint Padel. We're forming a level 2.7–3.3 game today (Tue Nov 10) 2:30–4:00 PM (90 min) on Court 1, $30/player. It goes ahead only if 4 players say YES and book; we'll send a booking link then. Reply YES to join, NO to pass. Reply STOP to opt out."
       }
     },
     {
@@ -556,7 +557,7 @@
       "detail": {
         "player_id": "P030",
         "name": "Ruth Abrams",
-        "message_id": "MSG-1519877ded",
+        "message_id": "MSG-be240818d7",
         "channel": "simulated_sms",
         "reply_deadline": "2026-11-10T11:10:00-05:00",
         "send_number": 1,
@@ -576,7 +577,7 @@
       "detail": {
         "player_id": "P035",
         "name": "Carmen Flores",
-        "message_id": "MSG-0c6eec8336",
+        "message_id": "MSG-74ffa7d66b",
         "channel": "simulated_sms",
         "reply_deadline": "2026-11-10T11:10:00-05:00",
         "send_number": 2,
@@ -596,7 +597,7 @@
       "detail": {
         "player_id": "P031",
         "name": "Felipe Duarte",
-        "message_id": "MSG-ee14bc6a39",
+        "message_id": "MSG-f77dbaf8db",
         "channel": "simulated_whatsapp",
         "reply_deadline": "2026-11-10T11:10:00-05:00",
         "send_number": 3,
@@ -616,7 +617,7 @@
       "detail": {
         "player_id": "P033",
         "name": "Gabriel Nunes",
-        "message_id": "MSG-a0b67b93d5",
+        "message_id": "MSG-f2ed6cac24",
         "channel": "simulated_sms",
         "reply_deadline": "2026-11-10T11:10:00-05:00",
         "send_number": 4,

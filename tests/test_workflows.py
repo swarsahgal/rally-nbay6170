@@ -234,3 +234,44 @@ def test_every_event_carries_policy_version(engine):
     approve(engine, MP_MAIN, n=1)
     version = engine.policy().policy_version
     assert all(e["policy_version"] == version for e in engine.storage.events())
+
+
+def test_short_batch_invites_approved_backups_without_new_approval(engine):
+    """Golden G16: 2 yes + 2 no in the first wave; the two approved backups are invited next."""
+    cid = approve(engine, EC_MAIN, n=6, first_wave=4)
+    order = list(invites(engine, cid))
+    assert [p for p in order if invites(engine, cid)[p]["sent_at"]] == order[:4]
+    for pid, text in zip(order[:4], ["yes", "yes", "no", "no"]):
+        engine.reply(f"{cid}:{pid}", text)
+    inv = invites(engine, cid)
+    assert all(inv[p]["sent_at"] for p in order[4:])
+    assert sum(i["status"] == "ACCEPTED" for i in inv.values()) == 2
+    assert state(engine, cid) != "ESCALATED"
+    assert {m["player_id"] for m in engine.storage.messages(campaign_id=cid)} <= set(order)
+
+
+def test_short_batch_with_no_backups_still_escalates(engine):
+    cid = approve(engine, EC_MAIN, n=4)
+    for pid, text in zip(invites(engine, cid), ["yes", "yes", "no", "no"]):
+        engine.reply(f"{cid}:{pid}", text)
+    assert state(engine, cid) == "ESCALATED"
+
+
+def test_first_wave_must_fit_the_approval(engine):
+    with pytest.raises(ApprovalError):
+        approve(engine, EC_MAIN, n=6, max_sends=4, first_wave=5)
+    with pytest.raises(ApprovalError):
+        approve(engine, MP_MAIN, n=3, first_wave=2)
+
+
+def test_empty_court_invite_must_state_the_booking_condition(engine):
+    """Golden G14: no 'you get the spot' wording, and the 4-players-and-booking condition is required."""
+    from rally.messaging import validate_invite_text
+    template, _, facts = engine.draft(EC_MAIN)
+    assert validate_invite_text(template, facts) == []
+    assert "only if 4 players" in template
+    promise = template.replace("It goes ahead only if 4 players say YES and book; we'll send a booking link then. ",
+                               "The first 4 to reply YES get the spots. ")
+    problems = validate_invite_text(promise, facts)
+    assert any("promises a spot" in p for p in problems)
+    assert any("only goes ahead if 4" in p for p in problems)

@@ -2,7 +2,7 @@
   "case_id": "G09",
   "title": "Conditional yes is not a firm yes",
   "run": "offline",
-  "generated_at": "2026-11-10T20:17:28",
+  "generated_at": "2026-11-14T15:33:00",
   "parser": "Offline rules (no LLM)",
   "llm_mode": "offline",
   "model": "rules",
@@ -34,6 +34,7 @@
           "P006"
         ],
         "max_sends": 2,
+        "first_wave": null,
         "template": "Hi {first_name}, it's Northpoint Padel. Our open match today (Tue Nov 10) 5:30–7:00 PM on Court 2 (level 3.5) has 1 spot left. Want it? Reply YES to join or NO to pass. $30/player. Reply STOP to opt out.",
         "template_source": "template"
       },
@@ -529,7 +530,7 @@
       "detail": {
         "player_id": "P005",
         "name": "Priya Nair",
-        "message_id": "MSG-98ae7c6216",
+        "message_id": "MSG-bd78d25739",
         "channel": "simulated_sms",
         "reply_deadline": "2026-11-10T11:10:00-05:00",
         "send_number": 1,
@@ -636,7 +637,7 @@
     {
       "call_id": 1,
       "sim_ts": "2026-11-10T10:50:00-05:00",
-      "real_ts": "2026-11-11T01:17:28+00:00",
+      "real_ts": "2026-11-14T20:33:00+00:00",
       "purpose": "parse_reply",
       "mode": "offline",
       "model": "rules",

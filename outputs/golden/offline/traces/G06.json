@@ -2,7 +2,7 @@
   "case_id": "G06",
   "title": "No opt-in means no shortlist entry",
   "run": "offline",
-  "generated_at": "2026-11-10T20:17:27",
+  "generated_at": "2026-11-14T15:32:59",
   "parser": "Offline rules (no LLM)",
   "llm_mode": "offline",
   "model": "rules",

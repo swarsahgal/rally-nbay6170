@@ -2,7 +2,7 @@
   "case_id": "G10",
   "title": "Missing-player invite must use verified facts",
   "run": "offline",
-  "generated_at": "2026-11-10T20:17:28",
+  "generated_at": "2026-11-14T15:33:00",
   "parser": "Offline rules (no LLM)",
   "llm_mode": "offline",
   "model": "rules",
@@ -38,6 +38,8 @@
           "seats": 1,
           "game_type": "open match with one spot left",
           "price_per_player_usd": 30,
+          "duration_minutes": 90,
+          "booking_condition": null,
           "reply_options": "YES to join, NO to pass",
           "opt_out_line": "Reply STOP to opt out."
         }

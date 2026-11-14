@@ -144,7 +144,7 @@ every call. `--mock` tests the pipeline with no key; its numbers are not results
 
 `EVALUATION.md` is the short guide for evaluators: how to verify the code without an API key, where
 each part lives, the golden-case results (`fixtures/golden_cases.csv`, `scripts/golden/`,
-`outputs/golden/`) and the known open issues.
+`outputs/golden/`) and the issues found and fixed.
 
 ## Repo layout
 

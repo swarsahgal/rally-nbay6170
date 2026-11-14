@@ -30,4 +30,4 @@ python scripts/golden/run_golden.py      # the 20 golden cases on the offline pa
 streamlit run app.py                     # the same app as the live link
 ```
 
-More detail for evaluators, including known open issues: `EVALUATION.md`.
+More detail for evaluators, including the issues the golden cases found and how they were fixed: `EVALUATION.md`.

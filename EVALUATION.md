@@ -53,20 +53,24 @@ the manager dashboard used in the demo video.
 - **Model and cost comparison:** `scripts/tier_benchmark.py` (10 tasks × 3 runs × 4 models); prices
   in `data/model_pricing.yaml`.
 
-## Known open issues (found by the golden cases, not yet fixed)
+## Issues found by the golden cases
 
-1. **Empty-court outreach does not move on to approved backups** (golden case G16). After two yes and
-   two no, Rally escalates to the manager instead of inviting the remaining approved players.
-   Safe, but a court can stay unsold.
+1. ~~Empty-court outreach did not move on to approved backups~~ **(G16, fixed Nov 14).** After two yes
+   and two no, Rally escalated instead of inviting the remaining approved players. An approval now has an
+   optional `first_wave` (round size) separate from `max_sends`; when a wave falls short,
+   `_send_follow_up_wave` in `rally/coordinator.py` invites the approved backups through `dispatch_invite`,
+   which re-checks every gate. With no backups left it still escalates.
 2. ~~Live invite drafts were often cut off~~ **(fixed and retested Nov 14).** `claude-haiku-5-5` spent part
    of a 400-token output limit thinking, so 14 of 21 live drafts were truncated and Rally used its fixed
    template. The limit is now 2,000 (`rally/llm.py`, `MAX_OUTPUT_TOKENS`) with regression checks; on the
    rerun 21 of 21 drafts completed. Before/after evidence: `outputs/golden/live-claude-haiku-5-5-before-f3-fix/`
    vs `outputs/golden/live-claude-haiku-5-5/`, and `outputs/tier_benchmark_before_f3_fix_*` vs
    `outputs/tier_benchmark_*`.
-3. **Empty-court invites don't state the condition** (G14): neither the template ("the first 4 to reply
-   YES get the spots") nor the live Haiku draft says the game only happens once four players confirm and
-   the booking is paid.
+3. ~~Empty-court invites didn't state the condition~~ **(G14, fixed Nov 14).** The template said "the first
+   4 to reply YES get the spots". Now the drafting prompt and template say the game only goes ahead if 4
+   players say YES and book, and `validate_invite_text` rejects empty-court text that omits this or promises
+   a spot (an LLM draft that fails falls back to the template).
+   Pre-fix evidence for 1 and 3: `outputs/golden/live-claude-haiku-5-5-before-g14-g16-fix/`.
 4. Minor, all safe: a send requested before approval raises an error instead of being logged (G08);
    no retry limit while the provider is down (G12); no message IDs for deduplicating repeated
    replies (G18); invites state a $30 price from `club_policy.yaml`, which the golden fixtures assume

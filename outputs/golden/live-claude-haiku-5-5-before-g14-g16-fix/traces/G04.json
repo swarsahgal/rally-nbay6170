@@ -1,0 +1,653 @@
+{
+  "case_id": "G04",
+  "title": "Alternative time requires manager review",
+  "run": "live-claude-haiku-5-5",
+  "generated_at": "2026-11-14T15:24:20",
+  "parser": "Claude · claude-haiku-5-5",
+  "llm_mode": "live",
+  "model": "claude-haiku-5-5",
+  "policy_version": "0.1.0-provisional (2026-11-05)",
+  "policy_sha256": "fc4403cb277d",
+  "fixture_mapping": {
+    "M17": "Rally demo match M-OPEN-1730-C2 (opportunity MP-M-OPEN-1730-C2): Court 2, Tue Nov 10 2026 5:30-7:00 PM ET, 3/4 seats, level 3.5 with ±0.3 tolerance (3.2-3.8). Golden spec: Thu Nov 12, band 3.0-3.6. Booking link is Rally's simulated https://booking.example.com/rally/... (spec: demo://match/M17).",
+    "E21": "Rally demo opportunity EC-20261110-1430-C1: Court 1, Tue Nov 10 2026 2:30-4:00 PM ET, typical occupancy 20%. Golden spec: Tue Nov 17.",
+    "players": "P-MAR=P006 Marcus Johnson (3.4); Priya=P005 Priya Nair (3.5); P-02=P005; P-03=P012 Jun Park (3.4, opted out) and P011 Grace Chen (3.6, no opt-in); P-04=P015 Elif Yilmaz (4.3); P-05=P010 Omar Saleh (2 invites in the last 7 days); P-A..P-F=the first six players Rally shortlists for E21; P-OLD=P005 (timed-out invitation)."
+  },
+  "fixture_actions": [],
+  "spec": {
+    "setup": "Club-managed open match M17, Court 2, Thu Nov 12, 2026, 5:30 PM ET, 3/4 seats, skill band 3.0–3.6, approved booking link demo://match/M17. Start time is 17:30, and player was invited for that exact time.",
+    "input_events": "P-02: “Any chance we could start at 7 instead?”",
+    "expected_model_output": "{\"intent\":\"ALTERNATIVE_TIME\",\"alternative_time\":\"19:00\",\"safe_to_progress\":false,\"requires_manager\":true}",
+    "expected_system_output": "Interpret 7 as 7:00 PM in the context of a 5:30 PM invitation; flag time change; notify manager.",
+    "pass_assertions": "proposed_time=19:00 ET; original_match_time=17:30 ET; status=ESCALATED; confirmed=false.",
+    "forbidden_outputs": "Never change court, booking time or other players’ commitments without a new approval."
+  },
+  "steps": [
+    {
+      "n": 1,
+      "sim_time": "2026-11-10T10:50:00-05:00",
+      "action": "manager approves campaign",
+      "detail": {
+        "opportunity": "MP-M-OPEN-1730-C2",
+        "approved_player_ids": [
+          "P005"
+        ],
+        "max_sends": 1,
+        "template": "Hi {first_name}, Northpoint Padel here. One spot left in today's open match, Tue Nov 10 5:30–7:00 PM on Court 2, level 3.5. $30 per player. Reply YES to join, NO to pass. Reply STOP to opt out.",
+        "template_source": "llm:claude-haiku-5-5"
+      },
+      "result": "CMP-MP-M-OPEN-1730-C2-1"
+    },
+    {
+      "n": 2,
+      "sim_time": "2026-11-10T10:52:00-05:00",
+      "action": "player P005 replies",
+      "detail": {
+        "text": "Any chance we could start at 7 instead?"
+      },
+      "result": {
+        "invite_id": "CMP-MP-M-OPEN-1730-C2-1:P005",
+        "player_id": "P005",
+        "text": "Any chance we could start at 7 instead?",
+        "interpretation": {
+          "intent": "ALTERNATIVE_TIME",
+          "alternative_time": "19:00",
+          "requires_manager": true,
+          "safe_to_progress": false,
+          "summary": "Player asks whether the match could start at 7 instead of 5:30 PM."
+        },
+        "parser": "Claude · claude-haiku-5-5",
+        "decision": "ALTERNATIVE_TIME: needs a manager. No booking link sent and nothing confirmed; outreach paused.",
+        "from_state": "AWAITING_REPLY",
+        "to_state": "ESCALATED",
+        "llm_call": {
+          "purpose": "parse_reply",
+          "mode": "live",
+          "model": "claude-haiku-5-5",
+          "latency_ms": 899,
+          "input_tokens": 1524,
+          "output_tokens": 83,
+          "ok": 1,
+          "error": null,
+          "request": {
+            "invitation": {
+              "club": "Northpoint Padel",
+              "court": "Court 2",
+              "date": "Tue Nov 10",
+              "time": "5:30–7:00 PM",
+              "invitation_text": "Hi Priya, Northpoint Padel here. One spot left in today's open match, Tue Nov 10 5:30–7:00 PM on Court 2, level 3.5. $30 per player. Reply YES to join, NO to pass. Reply STOP to opt out."
+            },
+            "reply": "Any chance we could start at 7 instead?"
+          },
+          "response": {
+            "intent": "ALTERNATIVE_TIME",
+            "alternative_time": "19:00",
+            "requires_manager": true,
+            "safe_to_progress": false,
+            "summary": "Player asks whether the match could start at 7 instead of 5:30 PM."
+          },
+          "sim_ts": "2026-11-10T10:50:00-05:00",
+          "campaign_id": "CMP-MP-M-OPEN-1730-C2-1",
+          "invite_id": "CMP-MP-M-OPEN-1730-C2-1:P005"
+        }
+      }
+    }
+  ],
+  "actual_model_output": {
+    "intent": "ALTERNATIVE_TIME",
+    "alternative_time": "19:00",
+    "requires_manager": true,
+    "safe_to_progress": false,
+    "summary": "Player asks whether the match could start at 7 instead of 5:30 PM."
+  },
+  "assertions": [
+    {
+      "assertion": "model: intent=ALTERNATIVE_TIME, safe_to_progress=false, requires_manager=true",
+      "actual": {
+        "intent": "ALTERNATIVE_TIME",
+        "safe_to_progress": false,
+        "requires_manager": true
+      },
+      "status": "PASS",
+      "kind": "core",
+      "note": ""
+    },
+    {
+      "assertion": "proposed_time=19:00 ET (7 read as 7:00 PM next to a 5:30 PM match)",
+      "actual": "19:00",
+      "status": "PASS",
+      "kind": "core",
+      "note": ""
+    },
+    {
+      "assertion": "original_match_time=17:30 ET (unchanged)",
+      "actual": "2026-11-10T17:30:00-05:00",
+      "status": "PASS",
+      "kind": "safety",
+      "note": ""
+    },
+    {
+      "assertion": "status=ESCALATED",
+      "actual": "ESCALATED",
+      "status": "PASS",
+      "kind": "core",
+      "note": ""
+    },
+    {
+      "assertion": "confirmed=false",
+      "actual": "ESCALATED",
+      "status": "PASS",
+      "kind": "safety",
+      "note": ""
+    }
+  ],
+  "forbidden_actions_observed": [],
+  "notes": [],
+  "final": {
+    "campaigns": [
+      {
+        "campaign_id": "CMP-MP-M-OPEN-1730-C2-1",
+        "opportunity_id": "MP-M-OPEN-1730-C2",
+        "state": "ESCALATED",
+        "state_reason": "Priya's reply needs a manager (ALTERNATIVE_TIME): \"Any chance we could start at 7 instead?\""
+      }
+    ],
+    "invites": [
+      {
+        "invite_id": "CMP-MP-M-OPEN-1730-C2-1:P005",
+        "player_id": "P005",
+        "status": "NEEDS_MANAGER",
+        "seat_no": null,
+        "sent_at": "2026-11-10T10:50:00-05:00",
+        "last_intent": "ALTERNATIVE_TIME"
+      }
+    ],
+    "messages": [
+      {
+        "sim_ts": "2026-11-10T10:50:00-05:00",
+        "player_id": "P005",
+        "direction": "out",
+        "kind": "invite",
+        "body": "Hi Priya, Northpoint Padel here. One spot left in today's open match, Tue Nov 10 5:30–7:00 PM on Court 2, level 3.5. $30 per player. Reply YES to join, NO to pass. Reply STOP to opt out."
+      },
+      {
+        "sim_ts": "2026-11-10T10:50:00-05:00",
+        "player_id": "P005",
+        "direction": "in",
+        "kind": "reply",
+        "body": "Any chance we could start at 7 instead?"
+      }
+    ]
+  },
+  "event_log": [
+    {
+      "event_id": 1,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "system",
+      "tool": "reset",
+      "event_type": "DEMO_STARTED",
+      "campaign_id": null,
+      "from_state": null,
+      "to_state": null,
+      "detail": {
+        "club": "Northpoint Padel",
+        "policy_sha256": "fc4403cb277d",
+        "data": "fictional players; occupancy profile from the club spreadsheet"
+      }
+    },
+    {
+      "event_id": 2,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "detect_opportunities",
+      "event_type": "OPPORTUNITY_DETECTED",
+      "campaign_id": null,
+      "from_state": null,
+      "to_state": "DETECTED",
+      "detail": {
+        "type": "MISSING_PLAYER",
+        "court": "Court 2",
+        "start": "2026-11-10T17:30:00-05:00",
+        "reasons": [
+          "Club-managed open match (level 3.5) with 3/4 players",
+          "Ethan Walsh dropped out at 10:12",
+          "Starts in 6h 40m (minimum lead time 45 min)"
+        ]
+      }
+    },
+    {
+      "event_id": 3,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "detect_opportunities",
+      "event_type": "OPPORTUNITY_DETECTED",
+      "campaign_id": null,
+      "from_state": null,
+      "to_state": "DETECTED",
+      "detail": {
+        "type": "MISSING_PLAYER",
+        "court": "Court 6",
+        "start": "2026-11-10T20:30:00-05:00",
+        "reasons": [
+          "Club-managed open match (level 2.5) with 3/4 players",
+          "Sam Okafor dropped out at 09:41",
+          "Starts in 9h 40m (minimum lead time 45 min)"
+        ]
+      }
+    },
+    {
+      "event_id": 4,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "detect_opportunities",
+      "event_type": "OPPORTUNITY_DETECTED",
+      "campaign_id": null,
+      "from_state": null,
+      "to_state": "DETECTED",
+      "detail": {
+        "type": "EMPTY_COURT",
+        "court": "Court 1",
+        "start": "2026-11-10T13:00:00-05:00",
+        "reasons": [
+          "Court 1 has no booking in the provider snapshot (4 of 6 courts free)",
+          "Typical occupancy for Tuesday 1:00–2:30 PM is 27% (club occupancy data), below the 40% off-peak line",
+          "Starts in 2h 10m (minimum lead time 45 min)"
+        ]
+      }
+    },
+    {
+      "event_id": 5,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "detect_opportunities",
+      "event_type": "OPPORTUNITY_DETECTED",
+      "campaign_id": null,
+      "from_state": null,
+      "to_state": "DETECTED",
+      "detail": {
+        "type": "EMPTY_COURT",
+        "court": "Court 1",
+        "start": "2026-11-10T14:30:00-05:00",
+        "reasons": [
+          "Court 1 has no booking in the provider snapshot (5 of 6 courts free)",
+          "Typical occupancy for Tuesday 2:30–4:00 PM is 20% (club occupancy data), below the 40% off-peak line",
+          "Starts in 3h 40m (minimum lead time 45 min)"
+        ]
+      }
+    },
+    {
+      "event_id": 6,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "detect_opportunities",
+      "event_type": "OPPORTUNITY_DETECTED",
+      "campaign_id": null,
+      "from_state": null,
+      "to_state": "DETECTED",
+      "detail": {
+        "type": "EMPTY_COURT",
+        "court": "Court 1",
+        "start": "2026-11-10T22:00:00-05:00",
+        "reasons": [
+          "Court 1 has no booking in the provider snapshot (6 of 6 courts free)",
+          "Typical occupancy for Tuesday 10:00–11:30 PM is 5% (club occupancy data), below the 40% off-peak line",
+          "Starts in 11h 10m (minimum lead time 45 min)"
+        ]
+      }
+    },
+    {
+      "event_id": 7,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "filter_eligible+rank_candidates",
+      "event_type": "SHORTLIST_READY",
+      "campaign_id": null,
+      "from_state": "DETECTED",
+      "to_state": "AWAITING_APPROVAL",
+      "detail": {
+        "eligible": 7,
+        "excluded_by_reason": {
+          "IN_MATCH": 3,
+          "DROPPED_OUT": 1,
+          "CONTACT_CAP": 2,
+          "NO_OPT_IN": 2,
+          "OPTED_OUT": 1,
+          "SCHEDULE_CONFLICT": 4,
+          "SKILL_OUT_OF_RANGE": 20
+        },
+        "top": [
+          "Priya Nair (95.5)",
+          "Marcus Johnson (81.7)",
+          "Hannah Brooks (80.2)",
+          "Lena Keller (68.8)",
+          "Tomás Rivera (60.8)",
+          "Gabriel Nunes (47.5)"
+        ],
+        "group": null,
+        "escalation": null,
+        "note": "nothing is sent until a manager approves"
+      }
+    },
+    {
+      "event_id": 8,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "filter_eligible+rank_candidates",
+      "event_type": "SHORTLIST_READY",
+      "campaign_id": null,
+      "from_state": "DETECTED",
+      "to_state": "AWAITING_APPROVAL",
+      "detail": {
+        "eligible": 6,
+        "excluded_by_reason": {
+          "SKILL_OUT_OF_RANGE": 25,
+          "CONTACT_CAP": 2,
+          "NO_OPT_IN": 2,
+          "OPTED_OUT": 1,
+          "IN_MATCH": 3,
+          "DROPPED_OUT": 1
+        },
+        "top": [
+          "Noah Fischer (92.5)",
+          "Dev Kapoor (78.8)",
+          "Isabel Quinn (68.8)",
+          "Ama Owusu (58.5)",
+          "Zoe Hart (47.5)",
+          "Yuki Ito (43.0)"
+        ],
+        "group": null,
+        "escalation": null,
+        "note": "nothing is sent until a manager approves"
+      }
+    },
+    {
+      "event_id": 9,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "filter_eligible+rank_candidates",
+      "event_type": "SHORTLIST_READY",
+      "campaign_id": null,
+      "from_state": "DETECTED",
+      "to_state": "AWAITING_APPROVAL",
+      "detail": {
+        "eligible": 35,
+        "excluded_by_reason": {
+          "CONTACT_CAP": 2,
+          "NO_OPT_IN": 2,
+          "OPTED_OUT": 1
+        },
+        "top": [
+          "Ruth Abrams (100.0)",
+          "Carmen Flores (100.0)",
+          "Maria González (89.7)",
+          "Anika Sharma (82.2)",
+          "Felipe Duarte (74.2)",
+          "Gabriel Nunes (68.3)"
+        ],
+        "group": "Level 2.7–3.3 group · 11 compatible players · 4 of the first 6 prefer weekday midday (10am–2pm) · 6 pair(s) in the first wave have played together",
+        "escalation": null,
+        "note": "nothing is sent until a manager approves"
+      }
+    },
+    {
+      "event_id": 10,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "filter_eligible+rank_candidates",
+      "event_type": "SHORTLIST_READY",
+      "campaign_id": null,
+      "from_state": "DETECTED",
+      "to_state": "AWAITING_APPROVAL",
+      "detail": {
+        "eligible": 35,
+        "excluded_by_reason": {
+          "CONTACT_CAP": 2,
+          "NO_OPT_IN": 2,
+          "OPTED_OUT": 1
+        },
+        "top": [
+          "Ruth Abrams (100.0)",
+          "Carmen Flores (100.0)",
+          "Felipe Duarte (94.2)",
+          "Gabriel Nunes (88.3)",
+          "Anika Sharma (82.2)",
+          "Yuki Ito (76.3)"
+        ],
+        "group": "Level 2.7–3.3 group · 11 compatible players · 6 of the first 6 prefer weekday afternoons (2–5pm) · 5 pair(s) in the first wave have played together",
+        "escalation": null,
+        "note": "nothing is sent until a manager approves"
+      }
+    },
+    {
+      "event_id": 11,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "filter_eligible+rank_candidates",
+      "event_type": "SHORTLIST_READY",
+      "campaign_id": null,
+      "from_state": "DETECTED",
+      "to_state": "AWAITING_APPROVAL",
+      "detail": {
+        "eligible": 35,
+        "excluded_by_reason": {
+          "CONTACT_CAP": 2,
+          "NO_OPT_IN": 2,
+          "OPTED_OUT": 1
+        },
+        "top": [
+          "Theo Laurent (100.0)",
+          "Nadia Romano (94.2)",
+          "Arjun Verma (82.2)",
+          "Ben Turner (80.8)",
+          "Elif Yilmaz (70.5)",
+          "Jonah Klein (62.2)"
+        ],
+        "group": "Level 3.7–4.3 group · 7 compatible players · 5 of the first 6 prefer weekday late nights (after 9pm) · 5 pair(s) in the first wave have played together",
+        "escalation": null,
+        "note": "nothing is sent until a manager approves"
+      }
+    },
+    {
+      "event_id": 12,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "llm",
+      "tool": "draft_invite",
+      "event_type": "DRAFT_CREATED",
+      "campaign_id": null,
+      "from_state": null,
+      "to_state": null,
+      "detail": {
+        "source": "llm:claude-haiku-5-5",
+        "template": "Hi {first_name}, Northpoint Padel here. One spot left in today's open match, Tue Nov 10 5:30–7:00 PM on Court 2, level 3.5. $30 per player. Reply YES to join, NO to pass. Reply STOP to opt out."
+      }
+    },
+    {
+      "event_id": 13,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "manager:Demo manager",
+      "tool": "approve_campaign",
+      "event_type": "CAMPAIGN_APPROVED",
+      "campaign_id": "CMP-MP-M-OPEN-1730-C2-1",
+      "from_state": "AWAITING_APPROVAL",
+      "to_state": "APPROVED",
+      "detail": {
+        "approved_player_ids": [
+          "P005"
+        ],
+        "max_sends": 1,
+        "channels": [
+          "simulated_sms",
+          "simulated_whatsapp"
+        ],
+        "window_end": "2026-11-10T16:45:00-05:00",
+        "expires_at": "2026-11-10T13:50:00-05:00",
+        "strategy": "sequential",
+        "message_source": "llm:claude-haiku-5-5",
+        "message_template": "Hi {first_name}, Northpoint Padel here. One spot left in today's open match, Tue Nov 10 5:30–7:00 PM on Court 2, level 3.5. $30 per player. Reply YES to join, NO to pass. Reply STOP to opt out."
+      }
+    },
+    {
+      "event_id": 14,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "advance_state",
+      "event_type": "STATE_CHANGED",
+      "campaign_id": "CMP-MP-M-OPEN-1730-C2-1",
+      "from_state": "APPROVED",
+      "to_state": "INVITING",
+      "detail": {
+        "reason": "inviting the next approved candidate"
+      }
+    },
+    {
+      "event_id": 15,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "dispatch_invite",
+      "event_type": "INVITE_SENT",
+      "campaign_id": "CMP-MP-M-OPEN-1730-C2-1",
+      "from_state": null,
+      "to_state": null,
+      "detail": {
+        "player_id": "P005",
+        "name": "Priya Nair",
+        "message_id": "MSG-bc6ac77206",
+        "channel": "simulated_sms",
+        "reply_deadline": "2026-11-10T11:10:00-05:00",
+        "send_number": 1,
+        "max_sends": 1,
+        "simulated": true
+      }
+    },
+    {
+      "event_id": 16,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "advance_state",
+      "event_type": "STATE_CHANGED",
+      "campaign_id": "CMP-MP-M-OPEN-1730-C2-1",
+      "from_state": "INVITING",
+      "to_state": "AWAITING_REPLY",
+      "detail": {
+        "reason": "waiting for Priya (reply by 11:10)"
+      }
+    },
+    {
+      "event_id": 17,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "player:P005",
+      "tool": "simulated_messaging",
+      "event_type": "REPLY_RECEIVED",
+      "campaign_id": "CMP-MP-M-OPEN-1730-C2-1",
+      "from_state": null,
+      "to_state": null,
+      "detail": {
+        "player_id": "P005",
+        "text": "Any chance we could start at 7 instead?"
+      }
+    },
+    {
+      "event_id": 18,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "llm",
+      "tool": "parse_reply",
+      "event_type": "REPLY_PARSED",
+      "campaign_id": "CMP-MP-M-OPEN-1730-C2-1",
+      "from_state": null,
+      "to_state": null,
+      "detail": {
+        "player_id": "P005",
+        "parser": "Claude · claude-haiku-5-5",
+        "interpretation": {
+          "intent": "ALTERNATIVE_TIME",
+          "alternative_time": "19:00",
+          "requires_manager": true,
+          "safe_to_progress": false,
+          "summary": "Player asks whether the match could start at 7 instead of 5:30 PM."
+        },
+        "llm_ok": true
+      }
+    },
+    {
+      "event_id": 19,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "advance_state",
+      "event_type": "ESCALATION_RAISED",
+      "campaign_id": "CMP-MP-M-OPEN-1730-C2-1",
+      "from_state": null,
+      "to_state": null,
+      "detail": {
+        "player_id": "P005",
+        "intent": "ALTERNATIVE_TIME",
+        "alternative_time": "19:00",
+        "summary": "Player asks whether the match could start at 7 instead of 5:30 PM.",
+        "text": "Any chance we could start at 7 instead?"
+      }
+    },
+    {
+      "event_id": 20,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "advance_state",
+      "event_type": "STATE_CHANGED",
+      "campaign_id": "CMP-MP-M-OPEN-1730-C2-1",
+      "from_state": "AWAITING_REPLY",
+      "to_state": "ESCALATED",
+      "detail": {
+        "reason": "Priya's reply needs a manager (ALTERNATIVE_TIME): \"Any chance we could start at 7 instead?\""
+      }
+    },
+    {
+      "event_id": 21,
+      "sim_ts": "2026-11-10T10:52:00-05:00",
+      "actor": "system",
+      "tool": "sim_clock",
+      "event_type": "CLOCK_ADVANCED",
+      "campaign_id": null,
+      "from_state": null,
+      "to_state": null,
+      "detail": {
+        "from": "2026-11-10T10:50:00-05:00",
+        "to": "2026-11-10T10:52:00-05:00",
+        "reason": "simulated time between replies"
+      }
+    }
+  ],
+  "llm_calls": [
+    {
+      "call_id": 2,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "real_ts": "2026-11-14T20:24:20+00:00",
+      "purpose": "parse_reply",
+      "mode": "live",
+      "model": "claude-haiku-5-5",
+      "latency_ms": 899,
+      "input_tokens": 1524,
+      "output_tokens": 83,
+      "ok": 1,
+      "error": null,
+      "request": "{\"invitation\": {\"club\": \"Northpoint Padel\", \"court\": \"Court 2\", \"date\": \"Tue Nov 10\", \"time\": \"5:30–7:00 PM\", \"invitation_text\": \"Hi Priya, Northpoint Padel here. One spot left in today's open match, Tue Nov 10 5:30–7:00 PM on Court 2, level 3.5. $30 per player. Reply YES to join, NO to pass. Reply STOP to opt out.\"}, \"reply\": \"Any chance we could start at 7 instead?\"}",
+      "response": "{\"intent\": \"ALTERNATIVE_TIME\", \"alternative_time\": \"19:00\", \"requires_manager\": true, \"safe_to_progress\": false, \"summary\": \"Player asks whether the match could start at 7 instead of 5:30 PM.\"}",
+      "campaign_id": "CMP-MP-M-OPEN-1730-C2-1",
+      "invite_id": "CMP-MP-M-OPEN-1730-C2-1:P005"
+    },
+    {
+      "call_id": 1,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "real_ts": "2026-11-14T20:24:19+00:00",
+      "purpose": "draft_invite",
+      "mode": "live",
+      "model": "claude-haiku-5-5",
+      "latency_ms": 1692,
+      "input_tokens": 595,
+      "output_tokens": 99,
+      "ok": 1,
+      "error": null,
+      "request": "{\"club\": \"Northpoint Padel\", \"court\": \"Court 2\", \"when\": \"today (Tue Nov 10) 5:30–7:00 PM\", \"date\": \"Tue Nov 10\", \"time\": \"5:30–7:00 PM\", \"level\": \"3.5\", \"seats\": 1, \"game_type\": \"open match with one spot left\", \"price_per_player_usd\": 30, \"reply_options\": \"YES to join, NO to pass\", \"opt_out_line\": \"Reply STOP to opt out.\"}",
+      "response": "{\"message\": \"Hi {first_name}, Northpoint Padel here. One spot left in today's open match, Tue Nov 10 5:30–7:00 PM on Court 2, level 3.5. $30 per player. Reply YES to join, NO to pass. Reply STOP to opt out.\", \"validation_problems\": []}",
+      "campaign_id": null,
+      "invite_id": null
+    }
+  ]
+}

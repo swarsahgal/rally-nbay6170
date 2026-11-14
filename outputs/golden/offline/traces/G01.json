@@ -2,7 +2,7 @@
   "case_id": "G01",
   "title": "Firm acceptance does not equal a booking",
   "run": "offline",
-  "generated_at": "2026-11-10T20:17:27",
+  "generated_at": "2026-11-14T15:32:59",
   "parser": "Offline rules (no LLM)",
   "llm_mode": "offline",
   "model": "rules",
@@ -36,6 +36,7 @@
           "P006"
         ],
         "max_sends": 1,
+        "first_wave": null,
         "template": "Hi {first_name}, it's Northpoint Padel. Our open match today (Tue Nov 10) 5:30–7:00 PM on Court 2 (level 3.5) has 1 spot left. Want it? Reply YES to join or NO to pass. $30/player. Reply STOP to opt out.",
         "template_source": "template"
       },
@@ -132,7 +133,7 @@
     {
       "assertion": "only the approved booking link is sent (1 link to P-MAR)",
       "actual": [
-        "You're in, Marcus! Complete your booking for Tue Nov 10 5:30–7:00 PM on Court 2 here: https://booking.example.com/rally/MP-M-OPEN-1730-C2?t=ad7ad2102d (simulated link). Your spot is confirmed once the booking shows as paid; it is held for 20 min."
+        "Thanks, Marcus! Complete your booking for Tue Nov 10 5:30–7:00 PM on Court 2 here: https://booking.example.com/rally/MP-M-OPEN-1730-C2?t=ad7ad2102d (simulated link). Your spot is confirmed once the booking shows as paid; it is held for 20 min."
       ],
       "status": "PASS",
       "kind": "core",
@@ -224,7 +225,7 @@
         "player_id": "P006",
         "direction": "out",
         "kind": "booking_link",
-        "body": "You're in, Marcus! Complete your booking for Tue Nov 10 5:30–7:00 PM on Court 2 here: https://booking.example.com/rally/MP-M-OPEN-1730-C2?t=ad7ad2102d (simulated link). Your spot is confirmed once the booking shows as paid; it is held for 20 min."
+        "body": "Thanks, Marcus! Complete your booking for Tue Nov 10 5:30–7:00 PM on Court 2 here: https://booking.example.com/rally/MP-M-OPEN-1730-C2?t=ad7ad2102d (simulated link). Your spot is confirmed once the booking shows as paid; it is held for 20 min."
       }
     ]
   },
@@ -560,7 +561,7 @@
       "detail": {
         "player_id": "P006",
         "name": "Marcus Johnson",
-        "message_id": "MSG-c8168075af",
+        "message_id": "MSG-59122e24f0",
         "channel": "simulated_whatsapp",
         "reply_deadline": "2026-11-10T11:10:00-05:00",
         "send_number": 1,
@@ -783,7 +784,7 @@
     {
       "call_id": 1,
       "sim_ts": "2026-11-10T10:50:00-05:00",
-      "real_ts": "2026-11-11T01:17:27+00:00",
+      "real_ts": "2026-11-14T20:32:59+00:00",
       "purpose": "parse_reply",
       "mode": "offline",
       "model": "rules",

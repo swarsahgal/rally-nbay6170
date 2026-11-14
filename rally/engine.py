@@ -300,7 +300,7 @@ class RallyEngine:
         return text, source, facts
 
     def approve(self, opp_id: str, selected_ids: list[str], max_sends: int, window_end: datetime,
-                channels: list[str], template: str, source: str) -> str:
+                channels: list[str], template: str, source: str, first_wave: int | None = None) -> str:
         if self.provider.health() != "ok":
             raise ApprovalError("Provider unavailable: approvals are blocked until a fresh snapshot is available.")
         now, policy = self.now(), self.policy()
@@ -310,7 +310,7 @@ class RallyEngine:
         approval = approve_campaign(
             opp=opp, shortlist=shortlist, selected_ids=selected_ids, max_sends=max_sends, window_end=window_end,
             channels=channels, message_template=template, message_source=source, facts=facts, manager=self.MANAGER,
-            policy=policy, now=now, attempt=len(self.storage.campaigns(opp_id)) + 1)
+            policy=policy, now=now, attempt=len(self.storage.campaigns(opp_id)) + 1, first_wave=first_wave)
         cid = self.coordinator.start_campaign(approval, now)
         self.refresh()
         return cid

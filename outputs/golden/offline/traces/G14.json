@@ -2,7 +2,7 @@
   "case_id": "G14",
   "title": "Empty-court invitation does not guarantee a game",
   "run": "offline",
-  "generated_at": "2026-11-10T20:17:28",
+  "generated_at": "2026-11-14T15:33:00",
   "parser": "Offline rules (no LLM)",
   "llm_mode": "offline",
   "model": "rules",
@@ -38,64 +38,64 @@
           "seats": 4,
           "game_type": "new game for four",
           "price_per_player_usd": 30,
+          "duration_minutes": 90,
+          "booking_condition": "The game only goes ahead if 4 players reply YES and book; it is confirmed once the booking is paid.",
           "reply_options": "YES to join, NO to pass",
           "opt_out_line": "Reply STOP to opt out."
         }
       },
       "result": {
-        "text": "Hi {first_name}, it's Northpoint Padel. We're putting together a level 2.7–3.3 game today (Tue Nov 10) 2:30–4:00 PM on Court 1. The first 4 to reply YES get the spots, $30/player. Reply NO to pass. Reply STOP to opt out.",
+        "text": "Hi {first_name}, it's Northpoint Padel. We're forming a level 2.7–3.3 game today (Tue Nov 10) 2:30–4:00 PM (90 min) on Court 1, $30/player. It goes ahead only if 4 players say YES and book; we'll send a booking link then. Reply YES to join, NO to pass. Reply STOP to opt out.",
         "source": "template"
       }
     }
   ],
   "actual_model_output": {
-    "draft": "Hi {first_name}, it's Northpoint Padel. We're putting together a level 2.7–3.3 game today (Tue Nov 10) 2:30–4:00 PM on Court 1. The first 4 to reply YES get the spots, $30/player. Reply NO to pass. Reply STOP to opt out.",
+    "draft": "Hi {first_name}, it's Northpoint Padel. We're forming a level 2.7–3.3 game today (Tue Nov 10) 2:30–4:00 PM (90 min) on Court 1, $30/player. It goes ahead only if 4 players say YES and book; we'll send a booking link then. Reply YES to join, NO to pass. Reply STOP to opt out.",
     "source": "template"
   },
   "assertions": [
     {
       "assertion": "mentions_day_time=true (Tuesday, 2:30 PM)",
-      "actual": "Hi {first_name}, it's Northpoint Padel. We're putting together a level 2.7–3.3 game today (Tue Nov 10) 2:30–4:00 PM on Court 1. The first 4 to reply YES get the spots, $30/player. Reply NO to pass. Reply STOP to opt out.",
+      "actual": "Hi {first_name}, it's Northpoint Padel. We're forming a level 2.7–3.3 game today (Tue Nov 10) 2:30–4:00 PM (90 min) on Court 1, $30/player. It goes ahead only if 4 players say YES and book; we'll send a booking link then. Reply YES to join, NO to pass. Reply STOP to opt out.",
       "status": "PASS",
       "kind": "core",
       "note": ""
     },
     {
       "assertion": "mentions Court 1",
-      "actual": "Hi {first_name}, it's Northpoint Padel. We're putting together a level 2.7–3.3 game today (Tue Nov 10) 2:30–4:00 PM on Court 1. The first 4 to reply YES get the spots, $30/player. Reply NO to pass. Reply STOP to opt out.",
+      "actual": "Hi {first_name}, it's Northpoint Padel. We're forming a level 2.7–3.3 game today (Tue Nov 10) 2:30–4:00 PM (90 min) on Court 1, $30/player. It goes ahead only if 4 players say YES and book; we'll send a booking link then. Reply YES to join, NO to pass. Reply STOP to opt out.",
       "status": "PASS",
       "kind": "core",
       "note": ""
     },
     {
       "assertion": "mentions_90_minutes=true",
-      "actual": "Hi {first_name}, it's Northpoint Padel. We're putting together a level 2.7–3.3 game today (Tue Nov 10) 2:30–4:00 PM on Court 1. The first 4 to reply YES get the spots, $30/player. Reply NO to pass. Reply STOP to opt out.",
-      "status": "EQUIVALENT",
+      "actual": "Hi {first_name}, it's Northpoint Padel. We're forming a level 2.7–3.3 game today (Tue Nov 10) 2:30–4:00 PM (90 min) on Court 1, $30/player. It goes ahead only if 4 players say YES and book; we'll send a booking link then. Reply YES to join, NO to pass. Reply STOP to opt out.",
+      "status": "PASS",
       "kind": "minor",
-      "note": "States the 2:30–4:00 PM range (90 minutes) but not '90 minutes'"
+      "note": ""
     },
     {
       "assertion": "asks for interest in forming the group",
-      "actual": "Hi {first_name}, it's Northpoint Padel. We're putting together a level 2.7–3.3 game today (Tue Nov 10) 2:30–4:00 PM on Court 1. The first 4 to reply YES get the spots, $30/player. Reply NO to pass. Reply STOP to opt out.",
+      "actual": "Hi {first_name}, it's Northpoint Padel. We're forming a level 2.7–3.3 game today (Tue Nov 10) 2:30–4:00 PM (90 min) on Court 1, $30/player. It goes ahead only if 4 players say YES and book; we'll send a booking link then. Reply YES to join, NO to pass. Reply STOP to opt out.",
       "status": "PASS",
       "kind": "core",
       "note": ""
     },
     {
       "assertion": "clearly says the game depends on enough players and on booking confirmation",
-      "actual": "Hi {first_name}, it's Northpoint Padel. We're putting together a level 2.7–3.3 game today (Tue Nov 10) 2:30–4:00 PM on Court 1. The first 4 to reply YES get the spots, $30/player. Reply NO to pass. Reply STOP to opt out.",
-      "status": "FAIL",
+      "actual": "Hi {first_name}, it's Northpoint Padel. We're forming a level 2.7–3.3 game today (Tue Nov 10) 2:30–4:00 PM (90 min) on Court 1, $30/player. It goes ahead only if 4 players say YES and book; we'll send a booking link then. Reply YES to join, NO to pass. Reply STOP to opt out.",
+      "status": "PASS",
       "kind": "core",
-      "note": "No condition is stated: the text does not say the game only goes ahead once four players confirm and the booking is completed"
+      "note": ""
     },
     {
       "assertion": "guaranteed_booking=false",
-      "actual": [
-        "get the spots"
-      ],
-      "status": "FAIL",
+      "actual": [],
+      "status": "PASS",
       "kind": "core",
-      "note": "Wording promises spots before any booking is made"
+      "note": ""
     },
     {
       "assertion": "no invented confirmed teammates",
@@ -400,7 +400,7 @@
       "to_state": null,
       "detail": {
         "source": "template",
-        "template": "Hi {first_name}, it's Northpoint Padel. We're putting together a level 2.7–3.3 game today (Tue Nov 10) 2:30–4:00 PM on Court 1. The first 4 to reply YES get the spots, $30/player. Reply NO to pass. Reply STOP to opt out."
+        "template": "Hi {first_name}, it's Northpoint Padel. We're forming a level 2.7–3.3 game today (Tue Nov 10) 2:30–4:00 PM (90 min) on Court 1, $30/player. It goes ahead only if 4 players say YES and book; we'll send a booking link then. Reply YES to join, NO to pass. Reply STOP to opt out."
       }
     }
   ],

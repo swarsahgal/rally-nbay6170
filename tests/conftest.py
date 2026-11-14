@@ -30,13 +30,13 @@ def get_view(engine, opp_id):
     return next(v for v in engine.views(t) if v.opp.opportunity_id == opp_id)
 
 
-def approve(engine, opp_id, n=3, max_sends=None, ids=None):
+def approve(engine, opp_id, n=3, max_sends=None, ids=None, first_wave=None):
     view = get_view(engine, opp_id)
     template, source, _ = engine.draft(opp_id)
     ids = ids or [c.player_id for c in view.shortlist.candidates[:n]]
     window_end = view.opp.start - timedelta(minutes=engine.policy().timing.min_lead_time_minutes)
     return engine.approve(opp_id, ids, max_sends or len(ids), window_end,
-                          engine.policy().consent.allowed_channels, template, source)
+                          engine.policy().consent.allowed_channels, template, source, first_wave=first_wave)
 
 
 def state(engine, cid):

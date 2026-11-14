@@ -19,7 +19,8 @@ class ApprovalError(ValueError):
 
 def approve_campaign(*, opp: Opportunity, shortlist: Shortlist, selected_ids: list[str], max_sends: int,
                      window_end: datetime, channels: list[str], message_template: str, message_source: str,
-                     facts: dict, manager: str, policy: ClubPolicy, now: datetime, attempt: int) -> CampaignApproval:
+                     facts: dict, manager: str, policy: ClubPolicy, now: datetime, attempt: int,
+                     first_wave: int | None = None) -> CampaignApproval:
     ranked = shortlist.candidates + shortlist.reserve
     order = {c.player_id: c.rank for c in ranked}
     unknown = [pid for pid in selected_ids if pid not in order]
@@ -36,6 +37,12 @@ def approve_campaign(*, opp: Opportunity, shortlist: Shortlist, selected_ids: li
             raise ApprovalError(f"First wave is capped at {policy.empty_court.first_wave_max_candidates} players.")
     if not 1 <= max_sends <= len(selected_ids):
         raise ApprovalError("Max sends must be between 1 and the number of approved candidates.")
+    if first_wave is not None:
+        if opp.type != OpportunityType.EMPTY_COURT:
+            raise ApprovalError("A first wave only applies to empty-court (batch) outreach.")
+        if not policy.empty_court.min_group_size <= first_wave <= max_sends:
+            raise ApprovalError(f"First wave must be between {policy.empty_court.min_group_size} and the max sends "
+                                f"({max_sends}).")
     bad_channels = set(channels) - set(policy.consent.allowed_channels)
     if not channels or bad_channels:
         raise ApprovalError(f"Channels must be a non-empty subset of {policy.consent.allowed_channels}.")
@@ -54,7 +61,8 @@ def approve_campaign(*, opp: Opportunity, shortlist: Shortlist, selected_ids: li
     return CampaignApproval(
         campaign_id=f"CMP-{opp.opportunity_id}-{attempt}", opportunity_id=opp.opportunity_id,
         opportunity_type=opp.type, strategy="sequential" if opp.type == OpportunityType.MISSING_PLAYER else "batch",
-        approved_player_ids=ordered_ids, max_sends=max_sends, channels=list(channels), window_start=now,
+        approved_player_ids=ordered_ids, max_sends=max_sends, first_wave=first_wave, channels=list(channels),
+        window_start=now,
         window_end=window_end, expires_at=expires_at, message_template=message_template,
         message_source=message_source, approved_by=manager, approved_at=now, policy_version=policy.policy_version)
 

@@ -354,10 +354,17 @@ def approval_panel(v: OpportunityView) -> None:
         if is_mp:
             st.markdown("Invite order: " + (" → ".join(names) if names else "_nobody selected_"))
         else:
-            st.markdown(f"First wave ({len(names)}): " + (", ".join(names) if names else "_nobody selected_"))
+            st.markdown(f"Approved players ({len(names)}): " + (", ".join(names) if names else "_nobody selected_"))
         c1, c2 = st.columns(2)
         max_sends = c1.number_input("Max invitations", min_value=1, max_value=max(1, len(selected)),
                                     value=max(1, len(selected)))
+        first_wave = None
+        if not is_mp:
+            need = policy.empty_court.min_group_size
+            first_wave = c1.number_input("First wave (the rest are backups)", min_value=need,
+                                         max_value=max(need, len(selected)), value=max(need, min(4, len(selected))),
+                                         help="Invited first. If the wave falls short, Rally invites the approved "
+                                              "backups automatically, still within this approval.")
         end_time = c2.time_input("Outreach window ends", value=latest_end.time(), step=300,
                                  help=f"Must be at least {policy.timing.min_lead_time_minutes} min before the game")
         channels = st.multiselect("Channels (simulated)", policy.consent.allowed_channels,
@@ -377,7 +384,8 @@ def approval_panel(v: OpportunityView) -> None:
         window_end = v.opp.start.replace(hour=end_time.hour, minute=end_time.minute, second=0, microsecond=0)
         msg_source = source if message == template else f"manager_edited (from {source})"
         cid = act(engine.approve, v.opp.opportunity_id, selected, int(max_sends), window_end, channels, message,
-                  msg_source, scope=v.opp.opportunity_id,
+                  msg_source, first_wave=None if first_wave is None else min(int(first_wave), int(max_sends)),
+                  scope=v.opp.opportunity_id,
                   success="Approved. Rally is sending only within that scope.")
         if cid:
             st.session_state["chat_campaign"] = cid

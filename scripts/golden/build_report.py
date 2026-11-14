@@ -112,23 +112,33 @@ def failures(c: dict) -> list[dict]:
          "fix": "Added if/unless/as long as to the TENTATIVE rule; regression test added to tests/test_llm_cases.py; "
                 "golden case G09 covers it end to end.",
          "retest": retest_f1},
-        {"id": "F2", "name": "Empty-court outreach does not move on to approved backups",
+        {"id": "F2", "name": "Empty-court outreach did not move on to approved backups",
          "input": "G16: six players approved for E21, first round of four; two say yes, two say no.",
-         "failure": f"In the {obs_label} run Rally escalated to the manager "
-                    f"({obs['G16']['final_campaign_states'].split(': ', 1)[-1]}) and "
-                    "left the two approved, unsent players QUEUED. The escalated campaign cannot be resumed, so "
-                    "a new approval is needed.",
-         "cause": "Batch mode sends one wave capped by max_sends; _check_batch escalates once no reply is pending; "
-                  "manager_resume only supports missing-player campaigns.",
+         "failure": "Before the fix (Nov 10 and first Nov 14 runs) Rally escalated to the manager (“too few players "
+                    "confirmed (2/4) and no replies pending”) and left the two approved, unsent players QUEUED. The "
+                    "escalated campaign could not be resumed, so a new approval was needed. Evidence: "
+                    "outputs/golden/live-claude-haiku-5-5-before-g14-g16-fix/.",
+         "cause": "Batch mode sent one wave capped by max_sends and had no idea of approved backups; _check_batch "
+                  "escalated once no reply was pending; manager_resume only supports missing-player campaigns.",
          "consequence": "Safe (no unapproved contact), but the court can stay unsold while approved backups are "
                         "never asked, and the manager has to redo an approval.",
-         "fix": "Proposed, not applied: separate the wave size from the approval's send limit, and when a wave falls "
-                "short, dispatch the remaining approved players through dispatch_invite (which re-checks consent, "
-                "cap, window and court).",
-         "retest": f"Not fixed yet. G16 in the {c['primary']['label']} run: {g['G16']['overall_result']}, "
-                   f"suggested score {g['G16']['suggested_team_score']}."},
+         "fix": "Fixed Nov 14: the approval now has an optional first_wave (round size) separate from max_sends. "
+                "When a wave falls short with no replies pending, _send_follow_up_wave invites the remaining "
+                "approved backups through dispatch_invite, which re-checks consent, contact cap, quiet hours, the "
+                "send limit, expiry and that the court is still free. With no backups left it still escalates. "
+                "Regression tests in tests/test_workflows.py.",
+         "retest": f"G16 after the fix: offline run {g_off(c, 'G16')}; {c['primary']['label']} run "
+                   f"{g['G16']['overall_result']} (suggested score {g['G16']['suggested_team_score']})."},
         f3(c),
     ]
+
+
+def g_off(c: dict, case: str) -> str:
+    off = c.get("offline")
+    if not off:
+        return "not run"
+    row = off["by"].get(case)
+    return f"{row['overall_result']} (score {row['suggested_team_score']})" if row else "not run"
 
 
 def _draft_calls(run: dict) -> list[dict]:
@@ -174,10 +184,12 @@ def f3(c: dict) -> dict:
 
 
 OTHER_GAPS = [
-    ("G14", "Empty-court invites do not say the game depends on four players confirming and the booking being "
-            "paid: the template says the first 4 YES replies “get the spots”, and the live Haiku draft simply "
-            "invites the player (runner: FAIL; judge: 2/5). Proposed: require the condition in the drafting prompt "
-            "and add a validation rule for it."),
+    ("G14 (fixed Nov 14)", "Empty-court invites did not say the game depends on four players saying yes and "
+            "booking: the template said the first 4 YES replies “get the spots”, and the live Haiku draft simply "
+            "invited the player (runner: FAIL; judge: 2/5; evidence in "
+            "live-claude-haiku-5-5-before-g14-g16-fix/). Now the drafting prompt requires the condition, the "
+            "template states it, and validate_invite_text rejects an empty-court invite that omits it or promises a "
+            "spot, so a non-compliant LLM draft falls back to the template."),
     ("G04", "Offline backup parser only: “start at 7” is escalated without a proposed time. The live LLM returned "
             "19:00 and passed."),
     ("G08", "A send requested before approval is impossible, but the denied attempt raises an error and is not "

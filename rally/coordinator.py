@@ -287,13 +287,17 @@ class Coordinator:
                                  "approved candidates or send limit used up; a fresh approval is needed")
             return results
 
-        # batch (empty court): one approved wave, sent together
+        # batch (empty court): the approved first wave, sent together; any other approved players stay
+        # queued as backups for a follow-up wave (see _check_batch)
         if state != S.APPROVED:
             return []
         with self.storage.connect() as conn:
             self._transition(conn, campaign, S.INVITING, now, "sending the approved first wave")
+        wave = approval.first_wave or approval.max_sends
         sent, last_block = 0, ""
-        for inv in [i for i in invites if i["status"] == IS.QUEUED.value][: approval.max_sends]:
+        for inv in [i for i in invites if i["status"] == IS.QUEUED.value]:
+            if sent >= wave:
+                break
             res = self.dispatch_invite(campaign_id, inv["player_id"], now)
             results.append(res)
             if res.sent:
@@ -596,9 +600,37 @@ class Coordinator:
         seats = self.policy_fn().club.players_per_court
         held = sum(1 for i in invites if i["status"] == IS.ACCEPTED.value)
         if held < seats and not any(i["status"] == IS.SENT.value for i in invites):
+            if self._send_follow_up_wave(cid, now, held, seats):
+                return
             with self.storage.connect() as conn:
                 self._transition(conn, campaign, S.ESCALATED, now,
                                  f"too few players confirmed ({held}/{seats}) and no replies pending; no booking")
+
+    def _send_follow_up_wave(self, cid: str, now: datetime, held: int, seats: int) -> bool:
+        """The first wave fell short: invite the remaining approved backups, within the same approval.
+
+        Every send still goes through dispatch_invite, so consent, contact cap, quiet hours, the approval's
+        send limit and expiry, and a fresh check that the court is still free are re-checked one by one.
+        Returns True if at least one backup was invited."""
+        queued = [i for i in self.storage.invites(cid) if i["status"] == IS.QUEUED.value]
+        if not queued:
+            return False
+        campaign = self.storage.get_campaign(cid)
+        with self.storage.connect() as conn:
+            self._event(conn, now, "FOLLOW_UP_WAVE", campaign, tool="dispatch",
+                        detail={"held": held, "seats": seats, "backups": [i["player_id"] for i in queued],
+                                "reason": "first wave fell short; inviting approved backups within the same approval"})
+        sent = 0
+        for inv in queued:
+            res = self.dispatch_invite(cid, inv["player_id"], now)
+            if res.sent:
+                sent += 1
+            elif res.level in ("player", "duplicate"):
+                with self.storage.connect() as conn:
+                    self.storage.update_invite(conn, inv["invite_id"], status=IS.NOT_SENT.value)
+            else:
+                break
+        return sent > 0
 
     # ---- time-based checks ----------------------------------------------------------------------
     @_guarded

@@ -1,0 +1,593 @@
+{
+  "case_id": "G11",
+  "title": "Fresh booking data stops stale outreach",
+  "run": "live-claude-haiku-5-5",
+  "generated_at": "2026-11-14T15:24:44",
+  "parser": "Claude · claude-haiku-5-5",
+  "llm_mode": "live",
+  "model": "claude-haiku-5-5",
+  "policy_version": "0.1.0-provisional (2026-11-05)",
+  "policy_sha256": "fc4403cb277d",
+  "fixture_mapping": {
+    "M17": "Rally demo match M-OPEN-1730-C2 (opportunity MP-M-OPEN-1730-C2): Court 2, Tue Nov 10 2026 5:30-7:00 PM ET, 3/4 seats, level 3.5 with ±0.3 tolerance (3.2-3.8). Golden spec: Thu Nov 12, band 3.0-3.6. Booking link is Rally's simulated https://booking.example.com/rally/... (spec: demo://match/M17).",
+    "E21": "Rally demo opportunity EC-20261110-1430-C1: Court 1, Tue Nov 10 2026 2:30-4:00 PM ET, typical occupancy 20%. Golden spec: Tue Nov 17.",
+    "players": "P-MAR=P006 Marcus Johnson (3.4); Priya=P005 Priya Nair (3.5); P-02=P005; P-03=P012 Jun Park (3.4, opted out) and P011 Grace Chen (3.6, no opt-in); P-04=P015 Elif Yilmaz (4.3); P-05=P010 Omar Saleh (2 invites in the last 7 days); P-A..P-F=the first six players Rally shortlists for E21; P-OLD=P005 (timed-out invitation)."
+  },
+  "fixture_actions": [
+    "provider (not Rally's cached snapshot) now shows E21 booked outside Rally: B-EXT-20261110-1430-C1"
+  ],
+  "spec": {
+    "setup": "Unsold slot E21, Court 1, Tue Nov 17, 2026, 2:30–4:00 PM ET, four-player game, approved booking link demo://court/E21. Earlier snapshot empty; new provider read says slot BOOKED by someone outside Rally.",
+    "input_events": "Detect E21 as potential opportunity; immediately before manager-approved dispatch, refresh provider state to BOOKED.",
+    "expected_model_output": "N/A: code-only step.",
+    "expected_system_output": "Cancel scheduled campaign, preserve booking, record status CANCELLED_UNAVAILABLE; send no messages.",
+    "pass_assertions": "provider_refreshed=true; outbound_message_count=0; campaign.status=CANCELLED_UNAVAILABLE.",
+    "forbidden_outputs": "Never invite players for a slot already taken."
+  },
+  "steps": [
+    {
+      "n": 1,
+      "sim_time": "2026-11-10T10:50:00-05:00",
+      "action": "E21 detected from the earlier snapshot",
+      "detail": {},
+      "result": {
+        "active_opportunity": true,
+        "court": "Court 1"
+      }
+    },
+    {
+      "n": 2,
+      "sim_time": "2026-11-10T10:50:00-05:00",
+      "action": "someone outside Rally books E21 (Rally's snapshot is now stale)",
+      "detail": {},
+      "result": "B-EXT-20261110-1430-C1"
+    },
+    {
+      "n": 3,
+      "sim_time": "2026-11-10T10:50:00-05:00",
+      "action": "manager approves campaign",
+      "detail": {
+        "opportunity": "EC-20261110-1430-C1",
+        "approved_player_ids": [
+          "P030",
+          "P035",
+          "P031",
+          "P033",
+          "P032",
+          "P034"
+        ],
+        "max_sends": 6,
+        "template": "Hi {first_name}, you're invited to a padel game today (Tue Nov 10) 2:30–4:00 PM on Court 1 at Northpoint Padel. Level 2.7–3.3. $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out.",
+        "template_source": "llm:claude-haiku-5-5"
+      },
+      "result": "CMP-EC-20261110-1430-C1-1"
+    }
+  ],
+  "actual_model_output": null,
+  "assertions": [
+    {
+      "assertion": "provider_refreshed=true (fresh read before dispatch)",
+      "actual": [
+        {
+          "player_id": "P030",
+          "reason": "opportunity is no longer open in the provider (stale-data guard)",
+          "level": "gone"
+        }
+      ],
+      "status": "PASS",
+      "kind": "core",
+      "note": ""
+    },
+    {
+      "assertion": "outbound_message_count=0",
+      "actual": 0,
+      "status": "PASS",
+      "kind": "safety",
+      "note": ""
+    },
+    {
+      "assertion": "campaign.status=CANCELLED_UNAVAILABLE",
+      "actual": {
+        "state": "ESCALATED",
+        "reason": "only 0 invite(s) could be sent, a court needs 4 (last block: opportunity is no longer open in the provider (stale-data guard))"
+      },
+      "status": "EQUIVALENT",
+      "kind": "minor",
+      "note": "Rally escalates to the manager (ESCALATED) with the reason instead of auto-cancelling; it has no CANCELLED_UNAVAILABLE state"
+    },
+    {
+      "assertion": "external booking preserved",
+      "actual": [
+        "B-EXT-20261110-1430-C1"
+      ],
+      "status": "PASS",
+      "kind": "safety",
+      "note": ""
+    }
+  ],
+  "forbidden_actions_observed": [],
+  "notes": [],
+  "final": {
+    "campaigns": [
+      {
+        "campaign_id": "CMP-EC-20261110-1430-C1-1",
+        "opportunity_id": "EC-20261110-1430-C1",
+        "state": "ESCALATED",
+        "state_reason": "only 0 invite(s) could be sent, a court needs 4 (last block: opportunity is no longer open in the provider (stale-data guard))"
+      }
+    ],
+    "invites": [
+      {
+        "invite_id": "CMP-EC-20261110-1430-C1-1:P030",
+        "player_id": "P030",
+        "status": "NOT_SENT",
+        "seat_no": null,
+        "sent_at": null,
+        "last_intent": null
+      },
+      {
+        "invite_id": "CMP-EC-20261110-1430-C1-1:P035",
+        "player_id": "P035",
+        "status": "NOT_SENT",
+        "seat_no": null,
+        "sent_at": null,
+        "last_intent": null
+      },
+      {
+        "invite_id": "CMP-EC-20261110-1430-C1-1:P031",
+        "player_id": "P031",
+        "status": "NOT_SENT",
+        "seat_no": null,
+        "sent_at": null,
+        "last_intent": null
+      },
+      {
+        "invite_id": "CMP-EC-20261110-1430-C1-1:P033",
+        "player_id": "P033",
+        "status": "NOT_SENT",
+        "seat_no": null,
+        "sent_at": null,
+        "last_intent": null
+      },
+      {
+        "invite_id": "CMP-EC-20261110-1430-C1-1:P032",
+        "player_id": "P032",
+        "status": "NOT_SENT",
+        "seat_no": null,
+        "sent_at": null,
+        "last_intent": null
+      },
+      {
+        "invite_id": "CMP-EC-20261110-1430-C1-1:P034",
+        "player_id": "P034",
+        "status": "NOT_SENT",
+        "seat_no": null,
+        "sent_at": null,
+        "last_intent": null
+      }
+    ],
+    "messages": []
+  },
+  "event_log": [
+    {
+      "event_id": 1,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "system",
+      "tool": "reset",
+      "event_type": "DEMO_STARTED",
+      "campaign_id": null,
+      "from_state": null,
+      "to_state": null,
+      "detail": {
+        "club": "Northpoint Padel",
+        "policy_sha256": "fc4403cb277d",
+        "data": "fictional players; occupancy profile from the club spreadsheet"
+      }
+    },
+    {
+      "event_id": 2,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "detect_opportunities",
+      "event_type": "OPPORTUNITY_DETECTED",
+      "campaign_id": null,
+      "from_state": null,
+      "to_state": "DETECTED",
+      "detail": {
+        "type": "MISSING_PLAYER",
+        "court": "Court 2",
+        "start": "2026-11-10T17:30:00-05:00",
+        "reasons": [
+          "Club-managed open match (level 3.5) with 3/4 players",
+          "Ethan Walsh dropped out at 10:12",
+          "Starts in 6h 40m (minimum lead time 45 min)"
+        ]
+      }
+    },
+    {
+      "event_id": 3,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "detect_opportunities",
+      "event_type": "OPPORTUNITY_DETECTED",
+      "campaign_id": null,
+      "from_state": null,
+      "to_state": "DETECTED",
+      "detail": {
+        "type": "MISSING_PLAYER",
+        "court": "Court 6",
+        "start": "2026-11-10T20:30:00-05:00",
+        "reasons": [
+          "Club-managed open match (level 2.5) with 3/4 players",
+          "Sam Okafor dropped out at 09:41",
+          "Starts in 9h 40m (minimum lead time 45 min)"
+        ]
+      }
+    },
+    {
+      "event_id": 4,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "detect_opportunities",
+      "event_type": "OPPORTUNITY_DETECTED",
+      "campaign_id": null,
+      "from_state": null,
+      "to_state": "DETECTED",
+      "detail": {
+        "type": "EMPTY_COURT",
+        "court": "Court 1",
+        "start": "2026-11-10T13:00:00-05:00",
+        "reasons": [
+          "Court 1 has no booking in the provider snapshot (4 of 6 courts free)",
+          "Typical occupancy for Tuesday 1:00–2:30 PM is 27% (club occupancy data), below the 40% off-peak line",
+          "Starts in 2h 10m (minimum lead time 45 min)"
+        ]
+      }
+    },
+    {
+      "event_id": 5,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "detect_opportunities",
+      "event_type": "OPPORTUNITY_DETECTED",
+      "campaign_id": null,
+      "from_state": null,
+      "to_state": "DETECTED",
+      "detail": {
+        "type": "EMPTY_COURT",
+        "court": "Court 1",
+        "start": "2026-11-10T14:30:00-05:00",
+        "reasons": [
+          "Court 1 has no booking in the provider snapshot (5 of 6 courts free)",
+          "Typical occupancy for Tuesday 2:30–4:00 PM is 20% (club occupancy data), below the 40% off-peak line",
+          "Starts in 3h 40m (minimum lead time 45 min)"
+        ]
+      }
+    },
+    {
+      "event_id": 6,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "detect_opportunities",
+      "event_type": "OPPORTUNITY_DETECTED",
+      "campaign_id": null,
+      "from_state": null,
+      "to_state": "DETECTED",
+      "detail": {
+        "type": "EMPTY_COURT",
+        "court": "Court 1",
+        "start": "2026-11-10T22:00:00-05:00",
+        "reasons": [
+          "Court 1 has no booking in the provider snapshot (6 of 6 courts free)",
+          "Typical occupancy for Tuesday 10:00–11:30 PM is 5% (club occupancy data), below the 40% off-peak line",
+          "Starts in 11h 10m (minimum lead time 45 min)"
+        ]
+      }
+    },
+    {
+      "event_id": 7,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "filter_eligible+rank_candidates",
+      "event_type": "SHORTLIST_READY",
+      "campaign_id": null,
+      "from_state": "DETECTED",
+      "to_state": "AWAITING_APPROVAL",
+      "detail": {
+        "eligible": 7,
+        "excluded_by_reason": {
+          "IN_MATCH": 3,
+          "DROPPED_OUT": 1,
+          "CONTACT_CAP": 2,
+          "NO_OPT_IN": 2,
+          "OPTED_OUT": 1,
+          "SCHEDULE_CONFLICT": 4,
+          "SKILL_OUT_OF_RANGE": 20
+        },
+        "top": [
+          "Priya Nair (95.5)",
+          "Marcus Johnson (81.7)",
+          "Hannah Brooks (80.2)",
+          "Lena Keller (68.8)",
+          "Tomás Rivera (60.8)",
+          "Gabriel Nunes (47.5)"
+        ],
+        "group": null,
+        "escalation": null,
+        "note": "nothing is sent until a manager approves"
+      }
+    },
+    {
+      "event_id": 8,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "filter_eligible+rank_candidates",
+      "event_type": "SHORTLIST_READY",
+      "campaign_id": null,
+      "from_state": "DETECTED",
+      "to_state": "AWAITING_APPROVAL",
+      "detail": {
+        "eligible": 6,
+        "excluded_by_reason": {
+          "SKILL_OUT_OF_RANGE": 25,
+          "CONTACT_CAP": 2,
+          "NO_OPT_IN": 2,
+          "OPTED_OUT": 1,
+          "IN_MATCH": 3,
+          "DROPPED_OUT": 1
+        },
+        "top": [
+          "Noah Fischer (92.5)",
+          "Dev Kapoor (78.8)",
+          "Isabel Quinn (68.8)",
+          "Ama Owusu (58.5)",
+          "Zoe Hart (47.5)",
+          "Yuki Ito (43.0)"
+        ],
+        "group": null,
+        "escalation": null,
+        "note": "nothing is sent until a manager approves"
+      }
+    },
+    {
+      "event_id": 9,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "filter_eligible+rank_candidates",
+      "event_type": "SHORTLIST_READY",
+      "campaign_id": null,
+      "from_state": "DETECTED",
+      "to_state": "AWAITING_APPROVAL",
+      "detail": {
+        "eligible": 35,
+        "excluded_by_reason": {
+          "CONTACT_CAP": 2,
+          "NO_OPT_IN": 2,
+          "OPTED_OUT": 1
+        },
+        "top": [
+          "Ruth Abrams (100.0)",
+          "Carmen Flores (100.0)",
+          "Maria González (89.7)",
+          "Anika Sharma (82.2)",
+          "Felipe Duarte (74.2)",
+          "Gabriel Nunes (68.3)"
+        ],
+        "group": "Level 2.7–3.3 group · 11 compatible players · 4 of the first 6 prefer weekday midday (10am–2pm) · 6 pair(s) in the first wave have played together",
+        "escalation": null,
+        "note": "nothing is sent until a manager approves"
+      }
+    },
+    {
+      "event_id": 10,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "filter_eligible+rank_candidates",
+      "event_type": "SHORTLIST_READY",
+      "campaign_id": null,
+      "from_state": "DETECTED",
+      "to_state": "AWAITING_APPROVAL",
+      "detail": {
+        "eligible": 35,
+        "excluded_by_reason": {
+          "CONTACT_CAP": 2,
+          "NO_OPT_IN": 2,
+          "OPTED_OUT": 1
+        },
+        "top": [
+          "Ruth Abrams (100.0)",
+          "Carmen Flores (100.0)",
+          "Felipe Duarte (94.2)",
+          "Gabriel Nunes (88.3)",
+          "Anika Sharma (82.2)",
+          "Yuki Ito (76.3)"
+        ],
+        "group": "Level 2.7–3.3 group · 11 compatible players · 6 of the first 6 prefer weekday afternoons (2–5pm) · 5 pair(s) in the first wave have played together",
+        "escalation": null,
+        "note": "nothing is sent until a manager approves"
+      }
+    },
+    {
+      "event_id": 11,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "filter_eligible+rank_candidates",
+      "event_type": "SHORTLIST_READY",
+      "campaign_id": null,
+      "from_state": "DETECTED",
+      "to_state": "AWAITING_APPROVAL",
+      "detail": {
+        "eligible": 35,
+        "excluded_by_reason": {
+          "CONTACT_CAP": 2,
+          "NO_OPT_IN": 2,
+          "OPTED_OUT": 1
+        },
+        "top": [
+          "Theo Laurent (100.0)",
+          "Nadia Romano (94.2)",
+          "Arjun Verma (82.2)",
+          "Ben Turner (80.8)",
+          "Elif Yilmaz (70.5)",
+          "Jonah Klein (62.2)"
+        ],
+        "group": "Level 3.7–4.3 group · 7 compatible players · 5 of the first 6 prefer weekday late nights (after 9pm) · 5 pair(s) in the first wave have played together",
+        "escalation": null,
+        "note": "nothing is sent until a manager approves"
+      }
+    },
+    {
+      "event_id": 12,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "llm",
+      "tool": "draft_invite",
+      "event_type": "DRAFT_CREATED",
+      "campaign_id": null,
+      "from_state": null,
+      "to_state": null,
+      "detail": {
+        "source": "llm:claude-haiku-5-5",
+        "template": "Hi {first_name}, you're invited to a padel game today (Tue Nov 10) 2:30–4:00 PM on Court 1 at Northpoint Padel. Level 2.7–3.3. $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out."
+      }
+    },
+    {
+      "event_id": 13,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "manager:Demo manager",
+      "tool": "approve_campaign",
+      "event_type": "CAMPAIGN_APPROVED",
+      "campaign_id": "CMP-EC-20261110-1430-C1-1",
+      "from_state": "AWAITING_APPROVAL",
+      "to_state": "APPROVED",
+      "detail": {
+        "approved_player_ids": [
+          "P030",
+          "P035",
+          "P031",
+          "P033",
+          "P032",
+          "P034"
+        ],
+        "max_sends": 6,
+        "channels": [
+          "simulated_sms",
+          "simulated_whatsapp"
+        ],
+        "window_end": "2026-11-10T13:45:00-05:00",
+        "expires_at": "2026-11-10T13:45:00-05:00",
+        "strategy": "batch",
+        "message_source": "llm:claude-haiku-5-5",
+        "message_template": "Hi {first_name}, you're invited to a padel game today (Tue Nov 10) 2:30–4:00 PM on Court 1 at Northpoint Padel. Level 2.7–3.3. $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out."
+      }
+    },
+    {
+      "event_id": 14,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "advance_state",
+      "event_type": "STATE_CHANGED",
+      "campaign_id": "CMP-EC-20261110-1430-C1-1",
+      "from_state": "APPROVED",
+      "to_state": "INVITING",
+      "detail": {
+        "reason": "sending the approved first wave"
+      }
+    },
+    {
+      "event_id": 15,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "dispatch_invite",
+      "event_type": "INVITE_BLOCKED",
+      "campaign_id": "CMP-EC-20261110-1430-C1-1",
+      "from_state": null,
+      "to_state": null,
+      "detail": {
+        "player_id": "P030",
+        "reason": "opportunity is no longer open in the provider (stale-data guard)",
+        "level": "gone"
+      }
+    },
+    {
+      "event_id": 16,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "advance_state",
+      "event_type": "STATE_CHANGED",
+      "campaign_id": "CMP-EC-20261110-1430-C1-1",
+      "from_state": "INVITING",
+      "to_state": "ESCALATED",
+      "detail": {
+        "reason": "only 0 invite(s) could be sent, a court needs 4 (last block: opportunity is no longer open in the provider (stale-data guard))"
+      }
+    },
+    {
+      "event_id": 17,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "detect_opportunities",
+      "event_type": "OPPORTUNITY_DETECTED",
+      "campaign_id": null,
+      "from_state": null,
+      "to_state": "DETECTED",
+      "detail": {
+        "type": "EMPTY_COURT",
+        "court": "Court 2",
+        "start": "2026-11-10T14:30:00-05:00",
+        "reasons": [
+          "Court 2 has no booking in the provider snapshot (4 of 6 courts free)",
+          "Typical occupancy for Tuesday 2:30–4:00 PM is 20% (club occupancy data), below the 40% off-peak line",
+          "Starts in 3h 40m (minimum lead time 45 min)"
+        ]
+      }
+    },
+    {
+      "event_id": 18,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "actor": "code",
+      "tool": "filter_eligible+rank_candidates",
+      "event_type": "SHORTLIST_READY",
+      "campaign_id": null,
+      "from_state": "DETECTED",
+      "to_state": "AWAITING_APPROVAL",
+      "detail": {
+        "eligible": 35,
+        "excluded_by_reason": {
+          "CONTACT_CAP": 2,
+          "NO_OPT_IN": 2,
+          "OPTED_OUT": 1
+        },
+        "top": [
+          "Ruth Abrams (100.0)",
+          "Carmen Flores (100.0)",
+          "Felipe Duarte (94.2)",
+          "Gabriel Nunes (88.3)",
+          "Anika Sharma (82.2)",
+          "Yuki Ito (76.3)"
+        ],
+        "group": "Level 2.7–3.3 group · 11 compatible players · 6 of the first 6 prefer weekday afternoons (2–5pm) · 5 pair(s) in the first wave have played together",
+        "escalation": null,
+        "note": "nothing is sent until a manager approves"
+      }
+    }
+  ],
+  "llm_calls": [
+    {
+      "call_id": 1,
+      "sim_ts": "2026-11-10T10:50:00-05:00",
+      "real_ts": "2026-11-14T20:24:44+00:00",
+      "purpose": "draft_invite",
+      "mode": "live",
+      "model": "claude-haiku-5-5",
+      "latency_ms": 2914,
+      "input_tokens": 596,
+      "output_tokens": 428,
+      "ok": 1,
+      "error": null,
+      "request": "{\"club\": \"Northpoint Padel\", \"court\": \"Court 1\", \"when\": \"today (Tue Nov 10) 2:30–4:00 PM\", \"date\": \"Tue Nov 10\", \"time\": \"2:30–4:00 PM\", \"level\": \"2.7–3.3\", \"seats\": 4, \"game_type\": \"new game for four\", \"price_per_player_usd\": 30, \"reply_options\": \"YES to join, NO to pass\", \"opt_out_line\": \"Reply STOP to opt out.\"}",
+      "response": "{\"message\": \"Hi {first_name}, you're invited to a padel game today (Tue Nov 10) 2:30–4:00 PM on Court 1 at Northpoint Padel. Level 2.7–3.3. $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out.\", \"validation_problems\": []}",
+      "campaign_id": null,
+      "invite_id": null
+    }
+  ]
+}
