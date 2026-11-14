@@ -2,7 +2,7 @@
   "case_id": "G11",
   "title": "Fresh booking data stops stale outreach",
   "run": "live-claude-haiku-5-5",
-  "generated_at": "2026-11-10T20:23:00",
+  "generated_at": "2026-11-14T15:24:44",
   "parser": "Claude · claude-haiku-5-5",
   "llm_mode": "live",
   "model": "claude-haiku-5-5",
@@ -57,8 +57,8 @@
           "P034"
         ],
         "max_sends": 6,
-        "template": "Hi {first_name}, it's Northpoint Padel. We're putting together a level 2.7–3.3 game today (Tue Nov 10) 2:30–4:00 PM on Court 1. The first 4 to reply YES get the spots, $30/player. Reply NO to pass. Reply STOP to opt out.",
-        "template_source": "template (LLM draft rejected: no draft returned)"
+        "template": "Hi {first_name}, you're invited to a padel game today (Tue Nov 10) 2:30–4:00 PM on Court 1 at Northpoint Padel. Level 2.7–3.3. $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out.",
+        "template_source": "llm:claude-haiku-5-5"
       },
       "result": "CMP-EC-20261110-1430-C1-1"
     }
@@ -446,8 +446,8 @@
       "from_state": null,
       "to_state": null,
       "detail": {
-        "source": "template (LLM draft rejected: no draft returned)",
-        "template": "Hi {first_name}, it's Northpoint Padel. We're putting together a level 2.7–3.3 game today (Tue Nov 10) 2:30–4:00 PM on Court 1. The first 4 to reply YES get the spots, $30/player. Reply NO to pass. Reply STOP to opt out."
+        "source": "llm:claude-haiku-5-5",
+        "template": "Hi {first_name}, you're invited to a padel game today (Tue Nov 10) 2:30–4:00 PM on Court 1 at Northpoint Padel. Level 2.7–3.3. $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out."
       }
     },
     {
@@ -476,8 +476,8 @@
         "window_end": "2026-11-10T13:45:00-05:00",
         "expires_at": "2026-11-10T13:45:00-05:00",
         "strategy": "batch",
-        "message_source": "template (LLM draft rejected: no draft returned)",
-        "message_template": "Hi {first_name}, it's Northpoint Padel. We're putting together a level 2.7–3.3 game today (Tue Nov 10) 2:30–4:00 PM on Court 1. The first 4 to reply YES get the spots, $30/player. Reply NO to pass. Reply STOP to opt out."
+        "message_source": "llm:claude-haiku-5-5",
+        "message_template": "Hi {first_name}, you're invited to a padel game today (Tue Nov 10) 2:30–4:00 PM on Court 1 at Northpoint Padel. Level 2.7–3.3. $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out."
       }
     },
     {
@@ -575,17 +575,17 @@
     {
       "call_id": 1,
       "sim_ts": "2026-11-10T10:50:00-05:00",
-      "real_ts": "2026-11-11T01:23:00+00:00",
+      "real_ts": "2026-11-14T20:24:44+00:00",
       "purpose": "draft_invite",
       "mode": "live",
       "model": "claude-haiku-5-5",
-      "latency_ms": 2697,
-      "input_tokens": null,
-      "output_tokens": null,
-      "ok": 0,
-      "error": "ValidationError: 1 validation error for DraftedInvite\n  Invalid JSON: EOF while parsing a string at line 1 column 174 [type=json_invalid, input_value='{\"message\": \"Hi {first_n...ayer. Reply YES to join', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/json_invalid",
+      "latency_ms": 2914,
+      "input_tokens": 596,
+      "output_tokens": 428,
+      "ok": 1,
+      "error": null,
       "request": "{\"club\": \"Northpoint Padel\", \"court\": \"Court 1\", \"when\": \"today (Tue Nov 10) 2:30–4:00 PM\", \"date\": \"Tue Nov 10\", \"time\": \"2:30–4:00 PM\", \"level\": \"2.7–3.3\", \"seats\": 4, \"game_type\": \"new game for four\", \"price_per_player_usd\": 30, \"reply_options\": \"YES to join, NO to pass\", \"opt_out_line\": \"Reply STOP to opt out.\"}",
-      "response": "{\"message\": \"\", \"validation_problems\": [\"no draft returned\"]}",
+      "response": "{\"message\": \"Hi {first_name}, you're invited to a padel game today (Tue Nov 10) 2:30–4:00 PM on Court 1 at Northpoint Padel. Level 2.7–3.3. $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out.\", \"validation_problems\": []}",
       "campaign_id": null,
       "invite_id": null
     }

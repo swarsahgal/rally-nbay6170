@@ -1,0 +1,10 @@
+{
+  "judge_model": "gpt-6.1-sol",
+  "cases_compared": 10,
+  "exact_agreement": "8/10",
+  "exact_agreement_pct": 80.0,
+  "within_one_agreement": "9/10",
+  "within_one_agreement_pct": 90.0,
+  "team_scores": "UNCONFIRMED: at least one team score is still the runner's suggestion",
+  "judge_errors": []
+}

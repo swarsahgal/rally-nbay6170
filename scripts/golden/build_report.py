@@ -131,48 +131,53 @@ def failures(c: dict) -> list[dict]:
     ]
 
 
+def _draft_calls(run: dict) -> list[dict]:
+    return [x for t in run["traces"].values() for x in t["llm_calls"] if x["purpose"] == "draft_invite"]
+
+
 def f3(c: dict) -> dict:
-    live = c["live"]
+    before, live = c.get("before_fix"), c["live"]
     chk_path = OUT / "draft_token_check.json"
     chk = json.loads(chk_path.read_text()) if chk_path.exists() else None
-    if live:
-        drafts = [x for t in live["traces"].values() for x in t["llm_calls"] if x["purpose"] == "draft_invite"]
-        failed = [x for x in drafts if not x["ok"]]
-        seen = (f"In the {live['label']} run, {len(failed)} of {len(drafts)} live invite drafts failed (cut off "
-                "before the JSON closed) and Rally silently used its fixed template instead, including both drafting "
-                "cases (G10, G14). The fallback is safe, but the LLM drafting step mostly does not happen.")
+    if before:
+        d = _draft_calls(before)
+        seen = (f"In the first live run (Nov 10, {before['label']}), {sum(not x['ok'] for x in d)} of {len(d)} live "
+                "invite drafts were cut off before the JSON closed, and Rally silently used its fixed template "
+                "instead, including both drafting cases (G10, G14). In the first Nov 14 benchmark "
+                "(outputs/tier_benchmark_before_f3_fix_*), Haiku scored 1.0 and 2.3 on the two drafting tasks for the same reason. The fallback is safe, but the LLM drafting step "
+                "mostly did not happen.")
     else:
-        seen = "Requires a live run; not observable with the offline parser."
+        seen = "Observed in the first live run; that run's files are not present."
+    parts = []
     if chk:
-        rows = chk["results"]
-        r400 = [r for r in rows if r["max_tokens"] == 400]
-        r2k = [r for r in rows if r["max_tokens"] == 2000]
-        retest = (f"Diagnosis rerun {chk['run_at'][:10]} (scripts/golden/check_draft_tokens.py): at 400 tokens "
-                  f"{sum(not r['usable_by_rally'] for r in r400)}/{len(r400)} drafts stopped at max_tokens; at 2000 "
-                  f"tokens {sum(r['usable_by_rally'] for r in r2k)}/{len(r2k)} returned a valid draft that passes "
-                  f"Rally's checks (output {', '.join(str(r['output_tokens']) for r in r2k)} tokens). Fix not yet "
-                  "applied in rally/llm.py; G10/G14 not yet rerun with it.")
-    else:
-        retest = "Not retested."
-    return {"id": "F3", "name": "Live invite drafts are cut off, so Rally falls back to its template",
+        r400 = [r for r in chk["results"] if r["max_tokens"] == 400]
+        r2k = [r for r in chk["results"] if r["max_tokens"] == 2000]
+        parts.append(f"Diagnosis (scripts/golden/check_draft_tokens.py): at 400 tokens "
+                     f"{sum(not r['usable_by_rally'] for r in r400)}/{len(r400)} drafts stopped at max_tokens; at 2,000 "
+                     f"{sum(r['usable_by_rally'] for r in r2k)}/{len(r2k)} were valid.")
+    if live:
+        d = _draft_calls(live)
+        parts.append(f"Fixed Nov 14 (rally/llm.py MAX_OUTPUT_TOKENS = 2000, regression checks in "
+                     f"tests/test_llm_cases.py). Retest on the fixed code: {sum(x['ok'] for x in d)} of {len(d)} live "
+                     "drafts completed and were used; Haiku scored 5.0 on both drafting tasks in the rerun benchmark "
+                     "(10 of 10 tasks, mean 5.00).")
+    return {"id": "F3", "name": "Live invite drafts were cut off, so Rally fell back to its template",
             "input": "Live draft_invite calls to claude-haiku-5-5 (every case drafts once when the manager opens it).",
             "failure": seen,
-            "cause": "claude-haiku-5-5 returns a thinking block before the answer, and both use the same output "
-                     "budget. Rally's _structured() call sets max_tokens=400, so the JSON draft is often truncated. "
-                     "Reply parsing fits (largest parse used 174 tokens) but shares the same limit.",
-            "consequence": "Players usually get the fixed template, including the empty-court wording the judge and "
-                           "runner flagged (G14). The deck's claim that Claude drafts invites is true only some of the "
-                           "time. The 120-call benchmark's drafting tasks (T09, T10) used the same limit and may "
-                           "have been affected.",
-            "fix": "Raise the Anthropic output limit in rally/llm.py _structured() (e.g. max_tokens=2000; the OpenAI "
-                   "path was already raised to 2000), then rerun G10, G14 and the benchmark drafting tasks.",
-            "retest": retest}
+            "cause": "claude-haiku-5-5 returns a thinking block before the answer, and both share the output budget. "
+                     "Rally's _structured() call set max_tokens=400, so the JSON draft was often truncated.",
+            "consequence": "Players got the fixed template, and the benchmark scored Haiku below the quality bar, so "
+                           "the model trade-off briefly pointed to the 20× more expensive Sonnet.",
+            "fix": "Raised the output limit to 2,000 tokens for both providers (only tokens used are billed) and added "
+                   "regression assertions on both providers' request shapes.",
+            "retest": " ".join(parts) or "Not retested."}
 
 
 OTHER_GAPS = [
-    ("G14", "Empty-court template says the first 4 to reply YES “get the spots” and never says the game depends on "
-            "four players confirming and the booking being paid (runner: FAIL; judge: 2/5). Proposed: reword the "
-            "template and add a validation rule for the condition."),
+    ("G14", "Empty-court invites do not say the game depends on four players confirming and the booking being "
+            "paid: the template says the first 4 YES replies “get the spots”, and the live Haiku draft simply "
+            "invites the player (runner: FAIL; judge: 2/5). Proposed: require the condition in the drafting prompt "
+            "and add a validation rule for it."),
     ("G04", "Offline backup parser only: “start at 7” is escalated without a proposed time. The live LLM returned "
             "19:00 and passed."),
     ("G08", "A send requested before approval is impossible, but the denied attempt raises an error and is not "
@@ -375,13 +380,16 @@ def docx(c: dict, path: Path):
 
 
 def main() -> None:
-    live_dirs = sorted(OUT.glob("live-*"), key=lambda d: d.stat().st_mtime)
-    live = load_run(live_dirs[-1]) if live_dirs else None
+    live = load_run(OUT / "live-claude-haiku-5-5")
+    if live is None:
+        live_dirs = sorted((d for d in OUT.glob("live-*") if "before" not in d.name), key=lambda d: d.stat().st_mtime)
+        live = load_run(live_dirs[-1]) if live_dirs else None
     offline = load_run(OUT / "offline")
     primary = live or offline
     if primary is None:
         raise SystemExit("No run found. Run scripts/golden/run_golden.py first.")
     c = content(primary, offline, live)
+    c["before_fix"] = load_run(OUT / "live-claude-haiku-5-5-before-f3-fix")
     (OUT / "Rally_Golden_Evaluation_Report.md").write_text(markdown(c), encoding="utf-8")
     docx(c, OUT / "Rally_Golden_Evaluation_Report.docx")
     shutil.copy(primary["dir"] / "results.csv", OUT / "Rally_Golden20_Results.csv")

@@ -1,5 +1,5 @@
 case_id,benchmark_task,team_score,team_score_source,judge_score,abs_difference,exact,within_one
-G01,T01,5,SUGGESTED (unconfirmed),5,0,1,1
+G01,T01,5,SUGGESTED (unconfirmed),4,1,0,1
 G02,T02,5,SUGGESTED (unconfirmed),5,0,1,1
 G03,T03,5,SUGGESTED (unconfirmed),5,0,1,1
 G04,T04,5,SUGGESTED (unconfirmed),5,0,1,1

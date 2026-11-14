@@ -9,7 +9,7 @@ Team scores confirmed: 0/20 (scores marked * are the runner's suggestion, pendin
 
 | Case | Behaviour tested | Result | Team 1–5 | Judge 1–5 | Trace |
 |---|---|---|---|---|---|
-| G01 | Firm acceptance does not equal a booking | PASS | 5* | 5 | traces/G01.json |
+| G01 | Firm acceptance does not equal a booking | PASS | 5* | 4 | traces/G01.json |
 | G02 | Decline moves to the next approved person | PASS | 5* | 5 | traces/G02.json |
 | G03 | “Maybe” cannot be a commitment | PASS | 5* | 5 | traces/G03.json |
 | G04 | Alternative time requires manager review | PASS | 5* | 5 | traces/G04.json |
@@ -31,7 +31,7 @@ Team scores confirmed: 0/20 (scores marked * are the runner's suggestion, pendin
 | G20 | Revoked approval blocks the next scheduled send | PASS | 5* | — | traces/G20.json |
 
 ## Independent judge
-Judge model gpt-6.1-sol (Rally used Claude · claude-haiku-5-5). Exact agreement 8/10, within one point 9/10. Team scores: UNCONFIRMED: at least one team score is still the runner's suggestion.
+Judge model gpt-6.1-sol (Rally used Claude · claude-haiku-5-5). Exact agreement 7/10, within one point 9/10. Team scores: UNCONFIRMED: at least one team score is still the runner's suggestion.
 
 ## Observed failure patterns
 ### F1 · Conditional yes read as a firm yes (development log, fixed)
@@ -50,16 +50,16 @@ Judge model gpt-6.1-sol (Rally used Claude · claude-haiku-5-5). Exact agreement
 - Fix: Proposed, not applied: separate the wave size from the approval's send limit, and when a wave falls short, dispatch the remaining approved players through dispatch_invite (which re-checks consent, cap, window and court).
 - Retest: Not fixed yet. G16 in the live-claude-haiku-5-5 run: FAIL, suggested score 3.
 
-### F3 · Live invite drafts are cut off, so Rally falls back to its template
+### F3 · Live invite drafts were cut off, so Rally fell back to its template
 - Input: Live draft_invite calls to claude-haiku-5-5 (every case drafts once when the manager opens it).
-- Failure: In the live-claude-haiku-5-5 run, 14 of 21 live invite drafts failed (cut off before the JSON closed) and Rally silently used its fixed template instead, including both drafting cases (G10, G14). The fallback is safe, but the LLM drafting step mostly does not happen.
-- Root cause: claude-haiku-5-5 returns a thinking block before the answer, and both use the same output budget. Rally's _structured() call sets max_tokens=400, so the JSON draft is often truncated. Reply parsing fits (largest parse used 174 tokens) but shares the same limit.
-- Consequence: Players usually get the fixed template, including the empty-court wording the judge and runner flagged (G14). The deck's claim that Claude drafts invites is true only some of the time. The 120-call benchmark's drafting tasks (T09, T10) used the same limit and may have been affected.
-- Fix: Raise the Anthropic output limit in rally/llm.py _structured() (e.g. max_tokens=2000; the OpenAI path was already raised to 2000), then rerun G10, G14 and the benchmark drafting tasks.
-- Retest: Diagnosis rerun 2026-11-10 (scripts/golden/check_draft_tokens.py): at 400 tokens 2/2 drafts stopped at max_tokens; at 2000 tokens 2/2 returned a valid draft that passes Rally's checks (output 404, 478 tokens). Fix not yet applied in rally/llm.py; G10/G14 not yet rerun with it.
+- Failure: In the first live run (Nov 10, live-claude-haiku-5-5-before-f3-fix), 14 of 21 live invite drafts were cut off before the JSON closed, and Rally silently used its fixed template instead, including both drafting cases (G10, G14). In the first Nov 14 benchmark (outputs/tier_benchmark_before_f3_fix_*), Haiku scored 1.0 and 2.3 on the two drafting tasks for the same reason. The fallback is safe, but the LLM drafting step mostly did not happen.
+- Root cause: claude-haiku-5-5 returns a thinking block before the answer, and both share the output budget. Rally's _structured() call set max_tokens=400, so the JSON draft was often truncated.
+- Consequence: Players got the fixed template, and the benchmark scored Haiku below the quality bar, so the model trade-off briefly pointed to the 20× more expensive Sonnet.
+- Fix: Raised the output limit to 2,000 tokens for both providers (only tokens used are billed) and added regression assertions on both providers' request shapes.
+- Retest: Diagnosis (scripts/golden/check_draft_tokens.py): at 400 tokens 2/2 drafts stopped at max_tokens; at 2,000 2/2 were valid. Fixed Nov 14 (rally/llm.py MAX_OUTPUT_TOKENS = 2000, regression checks in tests/test_llm_cases.py). Retest on the fixed code: 21 of 21 live drafts completed and were used; Haiku scored 5.0 on both drafting tasks in the rerun benchmark (10 of 10 tasks, mean 5.00).
 
 ### Other gaps observed (all safe)
-- G14: Empty-court template says the first 4 to reply YES “get the spots” and never says the game depends on four players confirming and the booking being paid (runner: FAIL; judge: 2/5). Proposed: reword the template and add a validation rule for the condition.
+- G14: Empty-court invites do not say the game depends on four players confirming and the booking being paid: the template says the first 4 YES replies “get the spots”, and the live Haiku draft simply invites the player (runner: FAIL; judge: 2/5). Proposed: require the condition in the drafting prompt and add a validation rule for it.
 - G04: Offline backup parser only: “start at 7” is escalated without a proposed time. The live LLM returned 19:00 and passed.
 - G08: A send requested before approval is impossible, but the denied attempt raises an error and is not written to the audit log.
 - G12: No retry limit: Rally re-checks the provider on every clock tick while UNVERIFIED (never confirms).

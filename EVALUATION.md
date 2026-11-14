@@ -44,10 +44,11 @@ the manager dashboard used in the demo video.
   assertions. Results and a full trace per case:
   `outputs/golden/live-claude-haiku-5-5/` (live Claude run) and `outputs/golden/offline/`.
   Live run: 13 pass, 5 partial, 2 fail, no forbidden action in any case.
-- **Independent judges:** `scripts/golden/judge.py` scored the 10 language-heavy cases with models
-  other than Rally's Haiku 5.5: gpt-6.1-sol (`judge_results.csv`, `agreement.json`) and Claude Sonnet 5.5
-  (`judge_results_sonnet.csv`, `agreement_sonnet.json`), both in the live run folder. Both gave the same
-  scores: 8 of 10 cases match the team's score exactly and 9 of 10 within one point.
+- **Independent judge:** `scripts/golden/judge.py` scored the 10 language-heavy cases with gpt-6.1-sol, a
+  different model and provider from Rally's Haiku 5.5 (`judge_results.csv`, `agreement.json` in the live run
+  folder): 7 of 10 match the team's score exactly, 9 of 10 within one point. The pre-fix run was also judged
+  by gpt-6.1-sol and by Claude Sonnet 5.5, which agreed with each other on every case (files in
+  `live-claude-haiku-5-5-before-f3-fix/`).
 - **Report:** `outputs/golden/Rally_Golden_Evaluation_Report.docx` (and `.md`).
 - **Model and cost comparison:** `scripts/tier_benchmark.py` (10 tasks × 3 runs × 4 models); prices
   in `data/model_pricing.yaml`.
@@ -57,13 +58,15 @@ the manager dashboard used in the demo video.
 1. **Empty-court outreach does not move on to approved backups** (golden case G16). After two yes and
    two no, Rally escalates to the manager instead of inviting the remaining approved players.
    Safe, but a court can stay unsold.
-2. **Live invite drafts were often cut off** (G10, G14). `claude-haiku-5-5` spent part of the 400-token
-   output limit on thinking, so 14 of 21 live drafts were truncated and Rally fell back to its fixed
-   template (a safe fallback). **Fixed Nov 14:** the limit is now 2,000 tokens (`rally/llm.py`,
-   `MAX_OUTPUT_TOKENS`), with a regression check in `tests/test_llm_cases.py`. The benchmark and golden
-   cases are being rerun on the fixed code.
-3. **Empty-court template wording** says the first four YES replies "get the spots" without saying
-   the game depends on four players booking (G14).
+2. ~~Live invite drafts were often cut off~~ **(fixed and retested Nov 14).** `claude-haiku-5-5` spent part
+   of a 400-token output limit thinking, so 14 of 21 live drafts were truncated and Rally used its fixed
+   template. The limit is now 2,000 (`rally/llm.py`, `MAX_OUTPUT_TOKENS`) with regression checks; on the
+   rerun 21 of 21 drafts completed. Before/after evidence: `outputs/golden/live-claude-haiku-5-5-before-f3-fix/`
+   vs `outputs/golden/live-claude-haiku-5-5/`, and `outputs/tier_benchmark_before_f3_fix_*` vs
+   `outputs/tier_benchmark_*`.
+3. **Empty-court invites don't state the condition** (G14): neither the template ("the first 4 to reply
+   YES get the spots") nor the live Haiku draft says the game only happens once four players confirm and
+   the booking is paid.
 4. Minor, all safe: a send requested before approval raises an error instead of being logged (G08);
    no retry limit while the provider is down (G12); no message IDs for deduplicating repeated
    replies (G18); invites state a $30 price from `club_policy.yaml`, which the golden fixtures assume

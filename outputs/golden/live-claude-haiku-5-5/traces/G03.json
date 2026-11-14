@@ -2,7 +2,7 @@
   "case_id": "G03",
   "title": "“Maybe” cannot be a commitment",
   "run": "live-claude-haiku-5-5",
-  "generated_at": "2026-11-10T20:22:35",
+  "generated_at": "2026-11-14T15:24:17",
   "parser": "Claude · claude-haiku-5-5",
   "llm_mode": "live",
   "model": "claude-haiku-5-5",
@@ -34,7 +34,7 @@
           "P006"
         ],
         "max_sends": 2,
-        "template": "Hi {first_name}, one spot is open for today (Tue Nov 10) 5:30–7:00 PM on Court 2 at Northpoint Padel. Level 3.5 open match, $30 per player. Reply YES to join, NO to pass. Reply STOP to opt out.",
+        "template": "Hi {first_name}, Northpoint Padel has one spot left in an open match today (Tue Nov 10) 5:30–7:00 PM on Court 2, level 3.5. It's $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out.",
         "template_source": "llm:claude-haiku-5-5"
       },
       "result": "CMP-MP-M-OPEN-1730-C2-1"
@@ -55,7 +55,7 @@
           "alternative_time": null,
           "requires_manager": true,
           "safe_to_progress": false,
-          "summary": "Player is unsure and says attendance depends on when they finish work."
+          "summary": "Player is unsure and says it depends on when they finish work."
         },
         "parser": "Claude · claude-haiku-5-5",
         "decision": "TENTATIVE: needs a manager. No booking link sent and nothing confirmed; outreach paused.",
@@ -65,9 +65,9 @@
           "purpose": "parse_reply",
           "mode": "live",
           "model": "claude-haiku-5-5",
-          "latency_ms": 1336,
-          "input_tokens": 1534,
-          "output_tokens": 137,
+          "latency_ms": 1200,
+          "input_tokens": 1525,
+          "output_tokens": 68,
           "ok": 1,
           "error": null,
           "request": {
@@ -76,7 +76,7 @@
               "court": "Court 2",
               "date": "Tue Nov 10",
               "time": "5:30–7:00 PM",
-              "invitation_text": "Hi Priya, one spot is open for today (Tue Nov 10) 5:30–7:00 PM on Court 2 at Northpoint Padel. Level 3.5 open match, $30 per player. Reply YES to join, NO to pass. Reply STOP to opt out."
+              "invitation_text": "Hi Priya, Northpoint Padel has one spot left in an open match today (Tue Nov 10) 5:30–7:00 PM on Court 2, level 3.5. It's $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out."
             },
             "reply": "Maybe? Depends when I get off work"
           },
@@ -85,7 +85,7 @@
             "alternative_time": null,
             "requires_manager": true,
             "safe_to_progress": false,
-            "summary": "Player is unsure and says attendance depends on when they finish work."
+            "summary": "Player is unsure and says it depends on when they finish work."
           },
           "sim_ts": "2026-11-10T10:50:00-05:00",
           "campaign_id": "CMP-MP-M-OPEN-1730-C2-1",
@@ -99,7 +99,7 @@
     "alternative_time": null,
     "requires_manager": true,
     "safe_to_progress": false,
-    "summary": "Player is unsure and says attendance depends on when they finish work."
+    "summary": "Player is unsure and says it depends on when they finish work."
   },
   "assertions": [
     {
@@ -177,7 +177,7 @@
         "player_id": "P005",
         "direction": "out",
         "kind": "invite",
-        "body": "Hi Priya, one spot is open for today (Tue Nov 10) 5:30–7:00 PM on Court 2 at Northpoint Padel. Level 3.5 open match, $30 per player. Reply YES to join, NO to pass. Reply STOP to opt out."
+        "body": "Hi Priya, Northpoint Padel has one spot left in an open match today (Tue Nov 10) 5:30–7:00 PM on Court 2, level 3.5. It's $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out."
       },
       {
         "sim_ts": "2026-11-10T10:50:00-05:00",
@@ -467,7 +467,7 @@
       "to_state": null,
       "detail": {
         "source": "llm:claude-haiku-5-5",
-        "template": "Hi {first_name}, one spot is open for today (Tue Nov 10) 5:30–7:00 PM on Court 2 at Northpoint Padel. Level 3.5 open match, $30 per player. Reply YES to join, NO to pass. Reply STOP to opt out."
+        "template": "Hi {first_name}, Northpoint Padel has one spot left in an open match today (Tue Nov 10) 5:30–7:00 PM on Court 2, level 3.5. It's $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out."
       }
     },
     {
@@ -493,7 +493,7 @@
         "expires_at": "2026-11-10T13:50:00-05:00",
         "strategy": "sequential",
         "message_source": "llm:claude-haiku-5-5",
-        "message_template": "Hi {first_name}, one spot is open for today (Tue Nov 10) 5:30–7:00 PM on Court 2 at Northpoint Padel. Level 3.5 open match, $30 per player. Reply YES to join, NO to pass. Reply STOP to opt out."
+        "message_template": "Hi {first_name}, Northpoint Padel has one spot left in an open match today (Tue Nov 10) 5:30–7:00 PM on Court 2, level 3.5. It's $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out."
       }
     },
     {
@@ -521,7 +521,7 @@
       "detail": {
         "player_id": "P005",
         "name": "Priya Nair",
-        "message_id": "MSG-c241313da3",
+        "message_id": "MSG-5cb6bb0a93",
         "channel": "simulated_sms",
         "reply_deadline": "2026-11-10T11:10:00-05:00",
         "send_number": 1,
@@ -573,7 +573,7 @@
           "alternative_time": null,
           "requires_manager": true,
           "safe_to_progress": false,
-          "summary": "Player is unsure and says attendance depends on when they finish work."
+          "summary": "Player is unsure and says it depends on when they finish work."
         },
         "llm_ok": true
       }
@@ -591,7 +591,7 @@
         "player_id": "P005",
         "intent": "TENTATIVE",
         "alternative_time": null,
-        "summary": "Player is unsure and says attendance depends on when they finish work.",
+        "summary": "Player is unsure and says it depends on when they finish work.",
         "text": "Maybe? Depends when I get off work"
       }
     },
@@ -628,34 +628,34 @@
     {
       "call_id": 2,
       "sim_ts": "2026-11-10T10:50:00-05:00",
-      "real_ts": "2026-11-11T01:22:35+00:00",
+      "real_ts": "2026-11-14T20:24:17+00:00",
       "purpose": "parse_reply",
       "mode": "live",
       "model": "claude-haiku-5-5",
-      "latency_ms": 1336,
-      "input_tokens": 1534,
-      "output_tokens": 137,
+      "latency_ms": 1200,
+      "input_tokens": 1525,
+      "output_tokens": 68,
       "ok": 1,
       "error": null,
-      "request": "{\"invitation\": {\"club\": \"Northpoint Padel\", \"court\": \"Court 2\", \"date\": \"Tue Nov 10\", \"time\": \"5:30–7:00 PM\", \"invitation_text\": \"Hi Priya, one spot is open for today (Tue Nov 10) 5:30–7:00 PM on Court 2 at Northpoint Padel. Level 3.5 open match, $30 per player. Reply YES to join, NO to pass. Reply STOP to opt out.\"}, \"reply\": \"Maybe? Depends when I get off work\"}",
-      "response": "{\"intent\": \"TENTATIVE\", \"alternative_time\": null, \"requires_manager\": true, \"safe_to_progress\": false, \"summary\": \"Player is unsure and says attendance depends on when they finish work.\"}",
+      "request": "{\"invitation\": {\"club\": \"Northpoint Padel\", \"court\": \"Court 2\", \"date\": \"Tue Nov 10\", \"time\": \"5:30–7:00 PM\", \"invitation_text\": \"Hi Priya, Northpoint Padel has one spot left in an open match today (Tue Nov 10) 5:30–7:00 PM on Court 2, level 3.5. It's $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out.\"}, \"reply\": \"Maybe? Depends when I get off work\"}",
+      "response": "{\"intent\": \"TENTATIVE\", \"alternative_time\": null, \"requires_manager\": true, \"safe_to_progress\": false, \"summary\": \"Player is unsure and says it depends on when they finish work.\"}",
       "campaign_id": "CMP-MP-M-OPEN-1730-C2-1",
       "invite_id": "CMP-MP-M-OPEN-1730-C2-1:P005"
     },
     {
       "call_id": 1,
       "sim_ts": "2026-11-10T10:50:00-05:00",
-      "real_ts": "2026-11-11T01:22:34+00:00",
+      "real_ts": "2026-11-14T20:24:16+00:00",
       "purpose": "draft_invite",
       "mode": "live",
       "model": "claude-haiku-5-5",
-      "latency_ms": 2106,
+      "latency_ms": 2920,
       "input_tokens": 595,
-      "output_tokens": 389,
+      "output_tokens": 374,
       "ok": 1,
       "error": null,
       "request": "{\"club\": \"Northpoint Padel\", \"court\": \"Court 2\", \"when\": \"today (Tue Nov 10) 5:30–7:00 PM\", \"date\": \"Tue Nov 10\", \"time\": \"5:30–7:00 PM\", \"level\": \"3.5\", \"seats\": 1, \"game_type\": \"open match with one spot left\", \"price_per_player_usd\": 30, \"reply_options\": \"YES to join, NO to pass\", \"opt_out_line\": \"Reply STOP to opt out.\"}",
-      "response": "{\"message\": \"Hi {first_name}, one spot is open for today (Tue Nov 10) 5:30–7:00 PM on Court 2 at Northpoint Padel. Level 3.5 open match, $30 per player. Reply YES to join, NO to pass. Reply STOP to opt out.\", \"validation_problems\": []}",
+      "response": "{\"message\": \"Hi {first_name}, Northpoint Padel has one spot left in an open match today (Tue Nov 10) 5:30–7:00 PM on Court 2, level 3.5. It's $30 per player. Reply YES to join or NO to pass. Reply STOP to opt out.\", \"validation_problems\": []}",
       "campaign_id": null,
       "invite_id": null
     }

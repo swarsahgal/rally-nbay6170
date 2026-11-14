@@ -2,7 +2,7 @@
   "case_id": "G10",
   "title": "Missing-player invite must use verified facts",
   "run": "live-claude-haiku-5-5",
-  "generated_at": "2026-11-10T20:22:57",
+  "generated_at": "2026-11-14T15:24:41",
   "parser": "Claude · claude-haiku-5-5",
   "llm_mode": "live",
   "model": "claude-haiku-5-5",
@@ -43,40 +43,40 @@
         }
       },
       "result": {
-        "text": "Hi {first_name}, it's Northpoint Padel. Our open match today (Tue Nov 10) 5:30–7:00 PM on Court 2 (level 3.5) has 1 spot left. Want it? Reply YES to join or NO to pass. $30/player. Reply STOP to opt out.",
-        "source": "template (LLM draft rejected: no draft returned)"
+        "text": "Hi {first_name}, Northpoint Padel has one spot left in today's game (Tue Nov 10, 5:30–7:00 PM) on Court 2, level 3.5. It's $30 per player. Reply YES to join, NO to pass. Reply STOP to opt out.",
+        "source": "llm:claude-haiku-5-5"
       }
     }
   ],
   "actual_model_output": {
-    "draft": "Hi {first_name}, it's Northpoint Padel. Our open match today (Tue Nov 10) 5:30–7:00 PM on Court 2 (level 3.5) has 1 spot left. Want it? Reply YES to join or NO to pass. $30/player. Reply STOP to opt out.",
-    "source": "template (LLM draft rejected: no draft returned)"
+    "draft": "Hi {first_name}, Northpoint Padel has one spot left in today's game (Tue Nov 10, 5:30–7:00 PM) on Court 2, level 3.5. It's $30 per player. Reply YES to join, NO to pass. Reply STOP to opt out.",
+    "source": "llm:claude-haiku-5-5"
   },
   "assertions": [
     {
       "assertion": "mentions_time_17_30=true",
-      "actual": "Hi {first_name}, it's Northpoint Padel. Our open match today (Tue Nov 10) 5:30–7:00 PM on Court 2 (level 3.5) has 1 spot left. Want it? Reply YES to join or NO to pass. $30/player. Reply STOP to opt out.",
+      "actual": "Hi {first_name}, Northpoint Padel has one spot left in today's game (Tue Nov 10, 5:30–7:00 PM) on Court 2, level 3.5. It's $30 per player. Reply YES to join, NO to pass. Reply STOP to opt out.",
       "status": "PASS",
       "kind": "core",
       "note": ""
     },
     {
       "assertion": "mentions_court_2=true",
-      "actual": "Hi {first_name}, it's Northpoint Padel. Our open match today (Tue Nov 10) 5:30–7:00 PM on Court 2 (level 3.5) has 1 spot left. Want it? Reply YES to join or NO to pass. $30/player. Reply STOP to opt out.",
+      "actual": "Hi {first_name}, Northpoint Padel has one spot left in today's game (Tue Nov 10, 5:30–7:00 PM) on Court 2, level 3.5. It's $30 per player. Reply YES to join, NO to pass. Reply STOP to opt out.",
       "status": "PASS",
       "kind": "core",
       "note": ""
     },
     {
       "assertion": "mentions the open seat",
-      "actual": "Hi {first_name}, it's Northpoint Padel. Our open match today (Tue Nov 10) 5:30–7:00 PM on Court 2 (level 3.5) has 1 spot left. Want it? Reply YES to join or NO to pass. $30/player. Reply STOP to opt out.",
+      "actual": "Hi {first_name}, Northpoint Padel has one spot left in today's game (Tue Nov 10, 5:30–7:00 PM) on Court 2, level 3.5. It's $30 per player. Reply YES to join, NO to pass. Reply STOP to opt out.",
       "status": "PASS",
       "kind": "core",
       "note": ""
     },
     {
       "assertion": "asks whether the player is interested",
-      "actual": "Hi {first_name}, it's Northpoint Padel. Our open match today (Tue Nov 10) 5:30–7:00 PM on Court 2 (level 3.5) has 1 spot left. Want it? Reply YES to join or NO to pass. $30/player. Reply STOP to opt out.",
+      "actual": "Hi {first_name}, Northpoint Padel has one spot left in today's game (Tue Nov 10, 5:30–7:00 PM) on Court 2, level 3.5. It's $30 per player. Reply YES to join, NO to pass. Reply STOP to opt out.",
       "status": "PASS",
       "kind": "core",
       "note": ""
@@ -390,8 +390,8 @@
       "from_state": null,
       "to_state": null,
       "detail": {
-        "source": "template (LLM draft rejected: no draft returned)",
-        "template": "Hi {first_name}, it's Northpoint Padel. Our open match today (Tue Nov 10) 5:30–7:00 PM on Court 2 (level 3.5) has 1 spot left. Want it? Reply YES to join or NO to pass. $30/player. Reply STOP to opt out."
+        "source": "llm:claude-haiku-5-5",
+        "template": "Hi {first_name}, Northpoint Padel has one spot left in today's game (Tue Nov 10, 5:30–7:00 PM) on Court 2, level 3.5. It's $30 per player. Reply YES to join, NO to pass. Reply STOP to opt out."
       }
     }
   ],
@@ -399,17 +399,17 @@
     {
       "call_id": 1,
       "sim_ts": "2026-11-10T10:50:00-05:00",
-      "real_ts": "2026-11-11T01:22:57+00:00",
+      "real_ts": "2026-11-14T20:24:41+00:00",
       "purpose": "draft_invite",
       "mode": "live",
       "model": "claude-haiku-5-5",
-      "latency_ms": 2262,
-      "input_tokens": null,
-      "output_tokens": null,
-      "ok": 0,
-      "error": "ValueError: no parsed output (stop_reason=max_tokens)",
+      "latency_ms": 1893,
+      "input_tokens": 595,
+      "output_tokens": 101,
+      "ok": 1,
+      "error": null,
       "request": "{\"club\": \"Northpoint Padel\", \"court\": \"Court 2\", \"when\": \"today (Tue Nov 10) 5:30–7:00 PM\", \"date\": \"Tue Nov 10\", \"time\": \"5:30–7:00 PM\", \"level\": \"3.5\", \"seats\": 1, \"game_type\": \"open match with one spot left\", \"price_per_player_usd\": 30, \"reply_options\": \"YES to join, NO to pass\", \"opt_out_line\": \"Reply STOP to opt out.\"}",
-      "response": "{\"message\": \"\", \"validation_problems\": [\"no draft returned\"]}",
+      "response": "{\"message\": \"Hi {first_name}, Northpoint Padel has one spot left in today's game (Tue Nov 10, 5:30–7:00 PM) on Court 2, level 3.5. It's $30 per player. Reply YES to join, NO to pass. Reply STOP to opt out.\", \"validation_problems\": []}",
       "campaign_id": null,
       "invite_id": null
     }

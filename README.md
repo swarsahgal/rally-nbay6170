@@ -118,8 +118,8 @@ These are demo settings, written down so the team can confirm or change them (PR
 
 ## LLM details
 
-- Model default: `claude-haiku-5-5` (fast tier). The Nov 14 benchmark picks `claude-sonnet-5-5` until the
-  drafting token limit is fixed (see `docs/unit_economics.md`). Switch in the sidebar or set `RALLY_MODEL` for the
+- Model default: `claude-haiku-5-5` (fast tier), confirmed as the pick by the Nov 14 benchmark
+  (`docs/unit_economics.md`). Switch in the sidebar or set `RALLY_MODEL` for the
   live tests; compare with `claude-sonnet-5-5` for the two-tier run.
 - Parsing uses structured outputs through `client.messages.parse(..., output_format=ReplyInterpretation)`.
   The model sees only the invitation it is answering, the reply, and a policy excerpt; never the

@@ -2,7 +2,7 @@
   "case_id": "G01",
   "title": "Firm acceptance does not equal a booking",
   "run": "live-claude-haiku-5-5",
-  "generated_at": "2026-11-10T20:22:28",
+  "generated_at": "2026-11-14T15:24:09",
   "parser": "Claude · claude-haiku-5-5",
   "llm_mode": "live",
   "model": "claude-haiku-5-5",
@@ -36,8 +36,8 @@
           "P006"
         ],
         "max_sends": 1,
-        "template": "Hi {first_name}, it's Northpoint Padel. Our open match today (Tue Nov 10) 5:30–7:00 PM on Court 2 (level 3.5) has 1 spot left. Want it? Reply YES to join or NO to pass. $30/player. Reply STOP to opt out.",
-        "template_source": "template (LLM draft rejected: no draft returned)"
+        "template": "Hi {first_name}, Northpoint Padel has one spot left in today's game (Tue Nov 10) 5:30–7:00 PM on Court 2, level 3.5. It's $30 per player. Reply YES to join, NO to pass. Reply STOP to opt out.",
+        "template_source": "llm:claude-haiku-5-5"
       },
       "result": "CMP-MP-M-OPEN-1730-C2-1"
     },
@@ -57,7 +57,7 @@
           "alternative_time": null,
           "requires_manager": false,
           "safe_to_progress": true,
-          "summary": "Player clearly accepts the 5:30 PM game today on Court 2."
+          "summary": "Player clearly accepts the 5:30 PM spot for this game."
         },
         "parser": "Claude · claude-haiku-5-5",
         "decision": "Clear yes from Marcus. Booking link sent. The seat is NOT confirmed until the provider shows a paid booking.",
@@ -67,9 +67,9 @@
           "purpose": "parse_reply",
           "mode": "live",
           "model": "claude-haiku-5-5",
-          "latency_ms": 1540,
-          "input_tokens": 1546,
-          "output_tokens": 73,
+          "latency_ms": 1339,
+          "input_tokens": 1529,
+          "output_tokens": 71,
           "ok": 1,
           "error": null,
           "request": {
@@ -78,7 +78,7 @@
               "court": "Court 2",
               "date": "Tue Nov 10",
               "time": "5:30–7:00 PM",
-              "invitation_text": "Hi Marcus, it's Northpoint Padel. Our open match today (Tue Nov 10) 5:30–7:00 PM on Court 2 (level 3.5) has 1 spot left. Want it? Reply YES to join or NO to pass. $30/player. Reply STOP to opt out."
+              "invitation_text": "Hi Marcus, Northpoint Padel has one spot left in today's game (Tue Nov 10) 5:30–7:00 PM on Court 2, level 3.5. It's $30 per player. Reply YES to join, NO to pass. Reply STOP to opt out."
             },
             "reply": "Yes, I'm in. See you at 5:30!"
           },
@@ -87,7 +87,7 @@
             "alternative_time": null,
             "requires_manager": false,
             "safe_to_progress": true,
-            "summary": "Player clearly accepts the 5:30 PM game today on Court 2."
+            "summary": "Player clearly accepts the 5:30 PM spot for this game."
           },
           "sim_ts": "2026-11-10T10:50:00-05:00",
           "campaign_id": "CMP-MP-M-OPEN-1730-C2-1",
@@ -115,7 +115,7 @@
     "alternative_time": null,
     "requires_manager": false,
     "safe_to_progress": true,
-    "summary": "Player clearly accepts the 5:30 PM game today on Court 2."
+    "summary": "Player clearly accepts the 5:30 PM spot for this game."
   },
   "assertions": [
     {
@@ -210,7 +210,7 @@
         "player_id": "P006",
         "direction": "out",
         "kind": "invite",
-        "body": "Hi Marcus, it's Northpoint Padel. Our open match today (Tue Nov 10) 5:30–7:00 PM on Court 2 (level 3.5) has 1 spot left. Want it? Reply YES to join or NO to pass. $30/player. Reply STOP to opt out."
+        "body": "Hi Marcus, Northpoint Padel has one spot left in today's game (Tue Nov 10) 5:30–7:00 PM on Court 2, level 3.5. It's $30 per player. Reply YES to join, NO to pass. Reply STOP to opt out."
       },
       {
         "sim_ts": "2026-11-10T10:50:00-05:00",
@@ -506,8 +506,8 @@
       "from_state": null,
       "to_state": null,
       "detail": {
-        "source": "template (LLM draft rejected: no draft returned)",
-        "template": "Hi {first_name}, it's Northpoint Padel. Our open match today (Tue Nov 10) 5:30–7:00 PM on Court 2 (level 3.5) has 1 spot left. Want it? Reply YES to join or NO to pass. $30/player. Reply STOP to opt out."
+        "source": "llm:claude-haiku-5-5",
+        "template": "Hi {first_name}, Northpoint Padel has one spot left in today's game (Tue Nov 10) 5:30–7:00 PM on Court 2, level 3.5. It's $30 per player. Reply YES to join, NO to pass. Reply STOP to opt out."
       }
     },
     {
@@ -531,8 +531,8 @@
         "window_end": "2026-11-10T16:45:00-05:00",
         "expires_at": "2026-11-10T13:50:00-05:00",
         "strategy": "sequential",
-        "message_source": "template (LLM draft rejected: no draft returned)",
-        "message_template": "Hi {first_name}, it's Northpoint Padel. Our open match today (Tue Nov 10) 5:30–7:00 PM on Court 2 (level 3.5) has 1 spot left. Want it? Reply YES to join or NO to pass. $30/player. Reply STOP to opt out."
+        "message_source": "llm:claude-haiku-5-5",
+        "message_template": "Hi {first_name}, Northpoint Padel has one spot left in today's game (Tue Nov 10) 5:30–7:00 PM on Court 2, level 3.5. It's $30 per player. Reply YES to join, NO to pass. Reply STOP to opt out."
       }
     },
     {
@@ -560,7 +560,7 @@
       "detail": {
         "player_id": "P006",
         "name": "Marcus Johnson",
-        "message_id": "MSG-e71a13aa6d",
+        "message_id": "MSG-0128f06130",
         "channel": "simulated_whatsapp",
         "reply_deadline": "2026-11-10T11:10:00-05:00",
         "send_number": 1,
@@ -612,7 +612,7 @@
           "alternative_time": null,
           "requires_manager": false,
           "safe_to_progress": true,
-          "summary": "Player clearly accepts the 5:30 PM game today on Court 2."
+          "summary": "Player clearly accepts the 5:30 PM spot for this game."
         },
         "llm_ok": true
       }
@@ -783,34 +783,34 @@
     {
       "call_id": 2,
       "sim_ts": "2026-11-10T10:50:00-05:00",
-      "real_ts": "2026-11-11T01:22:28+00:00",
+      "real_ts": "2026-11-14T20:24:09+00:00",
       "purpose": "parse_reply",
       "mode": "live",
       "model": "claude-haiku-5-5",
-      "latency_ms": 1540,
-      "input_tokens": 1546,
-      "output_tokens": 73,
+      "latency_ms": 1339,
+      "input_tokens": 1529,
+      "output_tokens": 71,
       "ok": 1,
       "error": null,
-      "request": "{\"invitation\": {\"club\": \"Northpoint Padel\", \"court\": \"Court 2\", \"date\": \"Tue Nov 10\", \"time\": \"5:30–7:00 PM\", \"invitation_text\": \"Hi Marcus, it's Northpoint Padel. Our open match today (Tue Nov 10) 5:30–7:00 PM on Court 2 (level 3.5) has 1 spot left. Want it? Reply YES to join or NO to pass. $30/player. Reply STOP to opt out.\"}, \"reply\": \"Yes, I'm in. See you at 5:30!\"}",
-      "response": "{\"intent\": \"ACCEPT\", \"alternative_time\": null, \"requires_manager\": false, \"safe_to_progress\": true, \"summary\": \"Player clearly accepts the 5:30 PM game today on Court 2.\"}",
+      "request": "{\"invitation\": {\"club\": \"Northpoint Padel\", \"court\": \"Court 2\", \"date\": \"Tue Nov 10\", \"time\": \"5:30–7:00 PM\", \"invitation_text\": \"Hi Marcus, Northpoint Padel has one spot left in today's game (Tue Nov 10) 5:30–7:00 PM on Court 2, level 3.5. It's $30 per player. Reply YES to join, NO to pass. Reply STOP to opt out.\"}, \"reply\": \"Yes, I'm in. See you at 5:30!\"}",
+      "response": "{\"intent\": \"ACCEPT\", \"alternative_time\": null, \"requires_manager\": false, \"safe_to_progress\": true, \"summary\": \"Player clearly accepts the 5:30 PM spot for this game.\"}",
       "campaign_id": "CMP-MP-M-OPEN-1730-C2-1",
       "invite_id": "CMP-MP-M-OPEN-1730-C2-1:P006"
     },
     {
       "call_id": 1,
       "sim_ts": "2026-11-10T10:50:00-05:00",
-      "real_ts": "2026-11-11T01:22:27+00:00",
+      "real_ts": "2026-11-14T20:24:08+00:00",
       "purpose": "draft_invite",
       "mode": "live",
       "model": "claude-haiku-5-5",
-      "latency_ms": 3686,
-      "input_tokens": null,
-      "output_tokens": null,
-      "ok": 0,
-      "error": "ValidationError: 1 validation error for DraftedInvite\n  Invalid JSON: EOF while parsing a string at line 1 column 145 [type=json_invalid, input_value='{\"message\":\"Hi {first_na...rthpoint Padel. It\\'s $', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/json_invalid",
+      "latency_ms": 2634,
+      "input_tokens": 595,
+      "output_tokens": 100,
+      "ok": 1,
+      "error": null,
       "request": "{\"club\": \"Northpoint Padel\", \"court\": \"Court 2\", \"when\": \"today (Tue Nov 10) 5:30–7:00 PM\", \"date\": \"Tue Nov 10\", \"time\": \"5:30–7:00 PM\", \"level\": \"3.5\", \"seats\": 1, \"game_type\": \"open match with one spot left\", \"price_per_player_usd\": 30, \"reply_options\": \"YES to join, NO to pass\", \"opt_out_line\": \"Reply STOP to opt out.\"}",
-      "response": "{\"message\": \"\", \"validation_problems\": [\"no draft returned\"]}",
+      "response": "{\"message\": \"Hi {first_name}, Northpoint Padel has one spot left in today's game (Tue Nov 10) 5:30–7:00 PM on Court 2, level 3.5. It's $30 per player. Reply YES to join, NO to pass. Reply STOP to opt out.\", \"validation_problems\": []}",
       "campaign_id": null,
       "invite_id": null
     }

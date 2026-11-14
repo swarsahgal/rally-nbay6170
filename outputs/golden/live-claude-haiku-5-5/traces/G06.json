@@ -2,7 +2,7 @@
   "case_id": "G06",
   "title": "No opt-in means no shortlist entry",
   "run": "live-claude-haiku-5-5",
-  "generated_at": "2026-11-10T20:22:47",
+  "generated_at": "2026-11-14T15:24:30",
   "parser": "Claude · claude-haiku-5-5",
   "llm_mode": "live",
   "model": "claude-haiku-5-5",
@@ -427,8 +427,8 @@
       "from_state": null,
       "to_state": null,
       "detail": {
-        "source": "template (LLM draft rejected: no draft returned)",
-        "template": "Hi {first_name}, it's Northpoint Padel. Our open match today (Tue Nov 10) 5:30–7:00 PM on Court 2 (level 3.5) has 1 spot left. Want it? Reply YES to join or NO to pass. $30/player. Reply STOP to opt out."
+        "source": "llm:claude-haiku-5-5",
+        "template": "Hi {first_name}, one spot is open for today (Tue Nov 10) 5:30–7:00 PM on Court 2 at Northpoint Padel. Level 3.5 open match, $30 per player. Reply YES to join, NO to pass. Reply STOP to opt out."
       }
     }
   ],
@@ -436,17 +436,17 @@
     {
       "call_id": 1,
       "sim_ts": "2026-11-10T10:50:00-05:00",
-      "real_ts": "2026-11-11T01:22:47+00:00",
+      "real_ts": "2026-11-14T20:24:30+00:00",
       "purpose": "draft_invite",
       "mode": "live",
       "model": "claude-haiku-5-5",
-      "latency_ms": 2106,
-      "input_tokens": null,
-      "output_tokens": null,
-      "ok": 0,
-      "error": "ValidationError: 1 validation error for DraftedInvite\n  Invalid JSON: EOF while parsing a string at line 1 column 164 [type=json_invalid, input_value='{\"message\": \"Hi {first_n...t\\'s $30 per player. Re', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/json_invalid",
+      "latency_ms": 3564,
+      "input_tokens": 595,
+      "output_tokens": 568,
+      "ok": 1,
+      "error": null,
       "request": "{\"club\": \"Northpoint Padel\", \"court\": \"Court 2\", \"when\": \"today (Tue Nov 10) 5:30–7:00 PM\", \"date\": \"Tue Nov 10\", \"time\": \"5:30–7:00 PM\", \"level\": \"3.5\", \"seats\": 1, \"game_type\": \"open match with one spot left\", \"price_per_player_usd\": 30, \"reply_options\": \"YES to join, NO to pass\", \"opt_out_line\": \"Reply STOP to opt out.\"}",
-      "response": "{\"message\": \"\", \"validation_problems\": [\"no draft returned\"]}",
+      "response": "{\"message\": \"Hi {first_name}, one spot is open for today (Tue Nov 10) 5:30–7:00 PM on Court 2 at Northpoint Padel. Level 3.5 open match, $30 per player. Reply YES to join, NO to pass. Reply STOP to opt out.\", \"validation_problems\": []}",
       "campaign_id": null,
       "invite_id": null
     }
